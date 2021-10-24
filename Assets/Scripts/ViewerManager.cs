@@ -6,34 +6,34 @@ using UnityEngine.UI;
 public class ViewerManager : MonoBehaviour {
     public Text globalMinutes, globalSeconds;
     public GameObject viewer;
-    private float time = 0, hours=0, minutes=0, seconds=0;
+    private float time = 0, hours = 0, minutes = 0, seconds = 0;
     private List<GameObject> medias;
     private bool hide = true;
     static float minutesLocal = -1, secondsLocal = -1;
 
     void Update() {
-        hideAllMedias();
+        hideAllMedias(); // da pra melhorar chamando somente uma vez pelo botão
         updateGlobalTime();
         showMidiasInTime();
     }
-    public void switchViewerMode() {
+    //controla a exibição ou não da tela de preview
+    public void switchPreviewerModeOnOff() {
         viewer.SetActive(!viewer.activeSelf);
     }
-    public void hideAllMedias() {
+    //esconde todas as midias para exibir somente as agendadas para o modo preview
+    public void hideAllMedias() { //da pra melhorar
         if(viewer.activeSelf && hide) {
             medias = this.GetComponent<SceneManagement>().getMidias();
-            foreach(GameObject localMedias in medias) {
+            foreach(GameObject localMedias in medias)
                 localMedias.SetActive(false);
-            }
             Camera.main.clearFlags = CameraClearFlags.Color;
             Camera.main.backgroundColor = Color.black;
             hide = false;
-        } else {
-            if(!viewer.activeSelf) {
+        } else
+            if(!viewer.activeSelf)
                 hide = true;
-            }
-        }
     }
+    //exibi todas as mídias que estejam instanciadas, mesmo que ocultas para o modo autoria
     public void showAllMedias() {
         if(!viewer.activeSelf) {
             medias = this.GetComponent<SceneManagement>().getMidias();
@@ -43,19 +43,23 @@ public class ViewerManager : MonoBehaviour {
             }
         }
     }
+    //realiza calculos para exibir o tempo
     private void updateGlobalTime() {
         if(viewer.activeSelf) {
             time += Time.deltaTime;
             seconds = (int)(time % 60);
             minutes = (int)((time / 60) % 60);
             //hours = (int)(time / 3600);
-            globalMinutes.text = minutes.ToString();
-            globalSeconds.text = seconds.ToString();
+            if (minutes >= 0 && minutes <= 9) globalMinutes.text = "0"+minutes.ToString();
+            else globalMinutes.text = minutes.ToString();
+            if (seconds >= 0 && seconds <= 9) globalSeconds.text = "0" + seconds.ToString();
+            else globalSeconds.text = seconds.ToString();
         } else {
             time = hours = minutes = seconds = 0;
             minutesLocal = secondsLocal = 0;
         }
     }
+    //nucleo do controlador de agendamento de exibição de midias
     private void showMidiasInTime() {
         if((secondsLocal+(minutesLocal*60)) < (seconds+(minutes*60))) {
             minutesLocal = minutes;
@@ -78,7 +82,9 @@ public class ViewerManager : MonoBehaviour {
                     if(tempStartMinutes == minutes && tempStartSecunds == seconds && !localMedias.activeSelf) {
                         //Debug.Log("Start: " + localMedias.name);
                         //Debug.Log("Sminutes: " + tempStartMinutes + " Sseconds: " + tempStartSecunds + " Eminutes: " + tempEndMinutes + " Eseconds: " + tempEndSeconds);
+                        //ativa a midia ativa no foreach
                         localMedias.SetActive(true);
+                        //startar midias especiais ou que precisem de play
                         if(localMedias.name.Equals("Image360")) {
                             Camera.main.clearFlags = CameraClearFlags.Skybox;
                             Camera.main.backgroundColor = Color.white;
@@ -95,20 +101,28 @@ public class ViewerManager : MonoBehaviour {
                         if(localMedias.name.StartsWith("Video2D")) {
                             localMedias.GetComponentInChildren<Video2DSettings>().setVideo2D();
                         }
+
+                        //veridicar se falta startar as mídias de audio
+
+                        //oculta todos os menus de edição
                         localMedias.transform.Find("EditMenu").gameObject.SetActive(false);
                     } else {
                         //gerencia o termino da midia
                         if(tempEndMinutes == minutes && tempEndSeconds == seconds && localMedias.activeSelf) {
                             //Debug.Log("End: " + localMedias.name);
                             //Debug.Log("Sminutes: " + tempStartMinutes + " Sseconds: " + tempStartSecunds + " Eminutes: " + tempEndMinutes + " Eseconds: " + tempEndSeconds);
+                            //oculta as midias especiais e limpa da apresentação
                             if(localMedias.name.Equals("Image360") || localMedias.name.Equals("Video360")) {
                                 Camera.main.clearFlags = CameraClearFlags.Color;
                                 Camera.main.backgroundColor = Color.black;
+
+                                //falta dar stop mo video
+
                             }
+                            //termina a midia comum
                             localMedias.SetActive(false);
                         }
                     }
-
                 }
             }
         }

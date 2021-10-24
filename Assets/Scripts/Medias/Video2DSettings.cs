@@ -9,8 +9,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-public class Video2DSettings: MonoBehaviour
-{
+public class Video2DSettings: MonoBehaviour {
     /// <summary>
     /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
     /// </summary>
@@ -35,15 +34,14 @@ public class Video2DSettings: MonoBehaviour
     private Button playButton, uploadButton;
     private Text duration;
     private Stepper stepperDelayMinutes, stepperDelaySecond;
-    private Toggle loopToggle, isLinkToggle, muteToggle, startTargetToggle, endTargetToggle, isInteractToggle;
+    private Toggle lookAt, loopToggle, isLinkToggle, muteToggle, startTargetToggle, endTargetToggle, isInteractToggle;
     private Dropdown chooseTargetDropdown, folderDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider scaleSlider, volumeSlider;
     private Vector3 originalMenuScale;
     private SerializerManager serializerManager;
     private Text buttonMessage;
 
-    void Start()
-    {
+    void Start() {
         //Settings Getters
         folderMidia = "Video2D/";
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
@@ -53,6 +51,7 @@ public class Video2DSettings: MonoBehaviour
         videoPlayer = canvas.GetComponent<VideoPlayer>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         interactiveIcon = canvas.transform.Find("InteractiveIcon").gameObject;
         startTargetToggle = setings.transform.Find("Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>();
         endTargetToggle = setings.transform.Find("Interact/ToggleGroup/EndTargetToggle").GetComponent<Toggle>();
@@ -94,6 +93,10 @@ public class Video2DSettings: MonoBehaviour
         updateShowComponents();
         updateTimes();
         updateHideTimes();
+        if (lookAt.isOn) {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
     public void setVideo2D() {
         if (folderDropdown.value > 0) {

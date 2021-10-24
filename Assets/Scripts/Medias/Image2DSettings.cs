@@ -8,8 +8,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-public class Image2DSettings: MonoBehaviour
-{
+public class Image2DSettings: MonoBehaviour {
     /// <summary>
     /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
     /// </summary>
@@ -32,7 +31,7 @@ public class Image2DSettings: MonoBehaviour
     private RawImage rawImage;
     private Button uploadButton;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
-    private Toggle loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
+    private Toggle lookAt, loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
     private Dropdown folderDropdown, chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider slider;
     private Vector3 originalMenuScale;
@@ -47,6 +46,7 @@ public class Image2DSettings: MonoBehaviour
         rawImage = canvas.GetComponentInChildren<RawImage>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         interactiveIcon = canvas.transform.Find("InteractiveIcon").gameObject;
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
         startTargetToggle = setings.transform.Find("Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>();
@@ -80,6 +80,10 @@ public class Image2DSettings: MonoBehaviour
         updateShowComponents();
         updateTimes();
         updateHideTimes();
+        if (lookAt.isOn) {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
     public void setMenuActive() {
         this.gameObject.SetActive(true);

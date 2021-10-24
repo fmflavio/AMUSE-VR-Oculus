@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InstantiateMidia: MonoBehaviour
-{
+public class InstantiateMidia: MonoBehaviour {
     private GameObject ob;
     public GameObject sceneManger, parentMidias, front, image2DPrefab, video2DPrefab, textMessagePrefab,
         audioPrefab, interactPrefab, sEWindPrefab, sESteamPrefab, sELightPrefab;
-    private float x = 0, y = 1, z = 5;
+    private float distance = 5;
 
     public void Start() {
         Camera.main.clearFlags = CameraClearFlags.Color;
@@ -39,8 +38,7 @@ public class InstantiateMidia: MonoBehaviour
     }
 
     public void intantiateVideo2D() {
-        x++;
-        ob = Instantiate(video2DPrefab, new Vector3(x, y, z), Quaternion.identity);    
+        ob = Instantiate(video2DPrefab, Camera.main.transform.forward * distance, Quaternion.identity);    
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().video2D;
         ob.name = "Video2D - " + (list.Count + 1);
@@ -49,8 +47,8 @@ public class InstantiateMidia: MonoBehaviour
     }
 
     public void intantiateImage2D() {
-        x++;
-        ob = Instantiate(image2DPrefab, new Vector3(x, y, z), Quaternion.identity);
+        ob = Instantiate(image2DPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
+        //ob = Instantiate(image2DPrefab, new Vector3(x, y, z), Quaternion.identity);
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().images2D;
         ob.name = "Image2D - "+(list.Count+1);
@@ -59,8 +57,7 @@ public class InstantiateMidia: MonoBehaviour
     }
 
     public void intantiateAudio3D() {
-        x++;
-        ob = Instantiate(audioPrefab, new Vector3(x, y, z), Quaternion.identity);
+        ob = Instantiate(audioPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().audio3D;
         ob.name = "Audio3D - " + (list.Count + 1);
@@ -69,8 +66,7 @@ public class InstantiateMidia: MonoBehaviour
     }
 
     public void intantiateInteract() {
-        x++;
-        ob = Instantiate(interactPrefab, new Vector3(x, y, z), Quaternion.identity);
+        ob = Instantiate(interactPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().interact;
         ob.name = "Interact - " + (list.Count + 1);
@@ -78,8 +74,7 @@ public class InstantiateMidia: MonoBehaviour
         sceneManger.GetComponent<SceneManagement>().interact.Add(ob);
     }
     public void intantiateSESteam() {
-        x++;
-        ob = Instantiate(sESteamPrefab, new Vector3(x, y, z), Quaternion.identity);
+        ob = Instantiate(sESteamPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().sESteam;
         ob.name = "SESteam - " + (list.Count + 1);
@@ -87,8 +82,7 @@ public class InstantiateMidia: MonoBehaviour
         sceneManger.GetComponent<SceneManagement>().sESteam.Add(ob);
     }
     public void intantiateSEWind() {
-        x++;
-        ob = Instantiate(sEWindPrefab, new Vector3(x, y, z), Quaternion.identity);
+        ob = Instantiate(sEWindPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().sEWind;
         ob.name = "SEWind - " + (list.Count + 1);
@@ -96,8 +90,7 @@ public class InstantiateMidia: MonoBehaviour
         sceneManger.GetComponent<SceneManagement>().sEWind.Add(ob);
     }
     public void intantiateSELight() {
-        x++;
-        ob = Instantiate(sELightPrefab, new Vector3(x, y, z), Quaternion.identity);
+        ob = Instantiate(sELightPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().sELight;
         ob.name = "SELight - " + (list.Count + 1);
@@ -105,8 +98,7 @@ public class InstantiateMidia: MonoBehaviour
         sceneManger.GetComponent<SceneManagement>().sELight.Add(ob);
     }
     public void intantiateTextMessage() {
-        x++;
-        ob = Instantiate(textMessagePrefab, new Vector3(x, y, z), Quaternion.identity);
+        ob = Instantiate(textMessagePrefab, Camera.main.transform.forward * distance, Quaternion.identity);
         ob.transform.SetParent(parentMidias.transform, false);
         List<GameObject> list = sceneManger.GetComponent<SceneManagement>().textMessage;
         ob.name = "TextMessage - " + (list.Count + 1);

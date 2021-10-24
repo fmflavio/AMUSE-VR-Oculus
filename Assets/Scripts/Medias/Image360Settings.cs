@@ -9,8 +9,7 @@ using System.Linq;
 using System;
 using UnityEditor;
 
-public class Image360Settings: MonoBehaviour
-{
+public class Image360Settings: MonoBehaviour {
     string mediaType = "IMAGE360";
     private FileInfo[] files;
     private string folderMidia, path, pathFile, uploadFile = "";
@@ -31,8 +30,7 @@ public class Image360Settings: MonoBehaviour
     private Toggle loopToggle;
     private Dropdown folderDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
 
-    void Start()
-    {
+    void Start() {
         //Settings Getters
         folderMidia = "Image360/";
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();

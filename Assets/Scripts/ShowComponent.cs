@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShowComponent: MonoBehaviour
-{
+public class ShowComponent: MonoBehaviour {
     public GameObject[] ShowMyObject;
 
     public void ToggleShowComponents(bool visible) {
@@ -19,5 +18,19 @@ public class ShowComponent: MonoBehaviour
         foreach (GameObject components in ShowMyObject) {
             components.SetActive(!components.activeSelf);
         }
+    }
+    //exibir texto no botão prewiew
+    public void switchButtonText(Text textoButton) {
+        if(textoButton.text.Equals("Preview Mode"))
+            textoButton.text = "Author Mode";
+        else
+            textoButton.text = "Preview Mode";
+    }
+    //exibir texto no header
+    public void switchHeaderText(Text textoHeader) {
+        if (textoHeader.text.Equals("CHOOSE YOUR OPTION"))
+            textoHeader.text = "PREVIEW MODE";
+        else
+            textoHeader.text = "CHOOSE YOUR OPTION";
     }
 }

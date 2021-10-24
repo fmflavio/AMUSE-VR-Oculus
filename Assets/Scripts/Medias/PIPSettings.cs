@@ -8,8 +8,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 
-public class PIPSettings: MonoBehaviour
-{
+public class PIPSettings: MonoBehaviour {
     string mediaType = "PIP";
     private FileInfo[] files;
     private string path, folderMidia, uploadFile = "";
@@ -34,8 +33,7 @@ public class PIPSettings: MonoBehaviour
     private Dropdown folderDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider volumeSlider;
 
-    void Start()
-    {
+    void Start() {
         //Settings Getters
         folderMidia = "PIP/";
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();

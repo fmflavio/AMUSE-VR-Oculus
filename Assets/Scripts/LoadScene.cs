@@ -4,8 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoadScene: MonoBehaviour
-{
+public class LoadScene: MonoBehaviour {
     private string path;
     public SerializerManager serializerManager;
 
@@ -14,6 +13,7 @@ public class LoadScene: MonoBehaviour
         if(!serializerManager.isEmptyList())
             serializerManager.serializeLoader();
     }
+    //carrega a proxima cena
     public void nextScene() {
         serializerManager.serializeSave();
         if(path.Equals("Scene 1"))
@@ -25,6 +25,7 @@ public class LoadScene: MonoBehaviour
         if(path.Equals("Scene 4"))
             SceneManager.LoadScene("Scene 5");
     }
+    //carrega a cena anterior
     public void previousScene() {
         serializerManager.serializeSave();
         if(path.Equals("Scene 5"))

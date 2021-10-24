@@ -9,8 +9,7 @@ using System.Linq;
 using UnityEditor;
 using System;
 
-public class AudioSettings: MonoBehaviour
-{
+public class AudioSettings: MonoBehaviour {
     /// <summary>
     /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
     /// </summary>
@@ -35,12 +34,11 @@ public class AudioSettings: MonoBehaviour
     private Button playButton, uploadButton;
     private Text duration;
     private Stepper stepperDelayMinutes, stepperDelaySecond;
-    private Toggle loopToggle, muteToggle;
+    private Toggle lookAt, loopToggle, muteToggle;
     private Dropdown folderDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider volumeSlider;
 
-    void Start()
-    {
+    void Start() {
         //Settings Getters
         folderMidia = "Audio/";
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
@@ -49,6 +47,7 @@ public class AudioSettings: MonoBehaviour
         audioSource = canvas.GetComponent<AudioSource>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         playButton = setings.transform.Find("PlayButton").GetComponent<Button>();
         uploadButton = setings.transform.Find("UploadFileButton").GetComponent<Button>();
         folderDropdown = setings.transform.Find("FolderDropdown").GetComponent<Dropdown>();
@@ -79,6 +78,10 @@ public class AudioSettings: MonoBehaviour
         updateShowComponents();
         updateTimes();
         updateHideTimes();
+        if (lookAt.isOn) {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
     public void setAudio() {
         audioSource.Stop();

@@ -11,12 +11,12 @@ using UnityEngine.SceneManagement;
 
 public class ControllerMode : MonoBehaviour {
     
-    public GameObject MiniMenuEdit, MiniMenuDelete, ViwerMenu;
+    public GameObject MiniMenuEdit, MiniMenuDelete, ViwerMenu, LeftControl, RightControl;
     public Canvas rightMessage;
     public Text sceneTitleMenu1, sceneTitleMenu2;
     public Button previus1, previus2, next1, next2;
     public int NOME = 0, EDIT = 1, DELETE = 2, VIEWER = 3;
-    private bool controllerHand = true;
+    public bool controllerHand = true;
 
     public void Start() {
         string scene = SceneManager.GetActiveScene().name;
@@ -56,19 +56,34 @@ public class ControllerMode : MonoBehaviour {
             }
         }
     }
+    //mensagens para exibir no controle
     public void getModeMessage(int mode) {
-        if (mode == 1) {
+        if (mode == 1) 
             rightMessage.GetComponentInChildren<Text>().text = "Edit Mode";
-        } else {
-            if (mode == 2) {
+        else
+            if (mode == 2)
                 rightMessage.GetComponentInChildren<Text>().text = "Delete Mode";
-            } else {
-                if (mode == 3) {
+            else
+                if (mode == 3)
                     rightMessage.GetComponentInChildren<Text>().text = "Preview Mode";
-                } else {
+                else
                     rightMessage.GetComponentInChildren<Text>().text = "Author Mode";
-                }
-            }
-        }
+    }
+    //referente a desligar e ligar os lazers
+    public void controllerLeftOnOff() {
+        if(LeftControl.activeSelf)
+            LeftControl.SetActive(false);
+        else
+            LeftControl.SetActive(true);
+    }
+    public void controllerRightOnOff() {
+        if (RightControl.activeSelf)
+            RightControl.SetActive(false);
+        else
+            RightControl.SetActive(true);
+    }
+    //referente a determinar em que posição fica o menu principal
+    public void controllerOnHand(bool value) {
+        controllerHand = value;
     }
 }

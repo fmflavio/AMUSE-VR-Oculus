@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-public class SELightSettings: MonoBehaviour
-{
+public class SELightSettings: MonoBehaviour {
     /// <summary>
     /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
     /// </summary>
@@ -24,14 +23,13 @@ public class SELightSettings: MonoBehaviour
     private SceneManagement sceneManager;
     private GameObject start, end;
     private RawImage rawImage;
-    private Toggle loopToggle;
+    private Toggle lookAt, loopToggle;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Dropdown chooseSceneDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider intensitySlider;
     private Vector3 originalMenuScale;
 
-    void Start()
-    {
+    void Start() {
         //Settings Getters
         folderMidia = "Icon/";
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
@@ -39,6 +37,7 @@ public class SELightSettings: MonoBehaviour
         rawImage = canvas.GetComponentInChildren<RawImage>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         intensitySlider = setings.transform.Find("IntensitySlider").GetComponent<Slider>();
         stepperDurationMinutes = setings.transform.Find("DurationSteppers/StepperMinutes").GetComponent<Stepper>();
         stepperDurationSeconds = setings.transform.Find("DurationSteppers/StepperSeconds").GetComponent<Stepper>();
@@ -55,6 +54,10 @@ public class SELightSettings: MonoBehaviour
         updateShowComponents();
         updateTimes();
         updateHideTimes();
+        if (lookAt.isOn) {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
     public void updateShowComponents() {
         if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia

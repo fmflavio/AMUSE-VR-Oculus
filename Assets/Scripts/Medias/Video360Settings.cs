@@ -8,8 +8,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 
-public class Video360Settings: MonoBehaviour
-{
+public class Video360Settings: MonoBehaviour {
     string mediaType = "VIDEO360";
     private FileInfo[] files;
     private string path, folderMidia, uploadFile = "";
@@ -32,8 +31,7 @@ public class Video360Settings: MonoBehaviour
     private Dropdown folderDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider volumeSlider;
 
-    void Start()
-    { 
+    void Start() { 
         //Settings Getters
         folderMidia = "Video360/";
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();

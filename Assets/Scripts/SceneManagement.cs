@@ -9,6 +9,7 @@ public class SceneManagement: MonoBehaviour
 {
     public List<GameObject> audio3D, images2D, image360, interact, pip, sELight,
         sESteam, sEWind, video2D, video360, textMessage = new List<GameObject>();
+    public InstantiateMidia instantiateMidia;
     public List<GameObject> getMidias() {
         List<GameObject> tempList = new List<GameObject>();
         if (video360.Count > 0) tempList.Add(video360[0]);
@@ -24,15 +25,6 @@ public class SceneManagement: MonoBehaviour
         if (interact.Count > 0) foreach (GameObject midia in interact) tempList.Add(midia);
         return tempList;
     }
-    public void mediaAttach() {
-        //observar aqui!!!!!!!!!!
-        //List<GameObject> tempList = getMidias();
-        //if(tempList.Count > 0) 
-            //foreach(GameObject localMedias in tempList) {
-            //if(!localMedias.name.Equals("Video360") && !localMedias.name.Equals("Image360") && !localMedias.name.Equals("PIP"))
-                //localMedias.transform.Find("Canvas/Button").GetComponent<DragDrop>().enabled = !localMedias.transform.Find("Canvas/Button").GetComponent<DragDrop>().enabled;
-        //} 
-    }
     public void deleteSpecial(string midia) {
         if (midia.Equals("Video360")) {
             video360.Clear(); 
@@ -44,9 +36,8 @@ public class SceneManagement: MonoBehaviour
             Camera.main.clearFlags = CameraClearFlags.Color;
             Camera.main.backgroundColor = Color.black;
         }
-        if (midia.Equals("PIP")) {
+        if (midia.Equals("PIP"))
             pip.Clear();
-        }
     }
     public bool deleteMidia(GameObject obj) {
             audio3D.Remove(obj);
@@ -58,5 +49,14 @@ public class SceneManagement: MonoBehaviour
             video2D.Remove(obj);
             textMessage.Remove(obj);
             return true;
+    }
+    //editar midias especiais
+    public void editSpecial(string midia) {
+        if (midia.Equals("Video360"))
+            if (video360.Count == 0) instantiateMidia.intantiateVideo360();
+        if (midia.Equals("Image360"))
+            if (image360.Count == 0) instantiateMidia.intantiateImage360();
+        if (midia.Equals("PIP"))
+            if (pip.Count == 0) instantiateMidia.intantiatePIP();
     }
 }

@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-public class InteractSettings : MonoBehaviour
-{
+public class InteractSettings : MonoBehaviour {
     /// <summary>
     /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
     /// </summary>
@@ -21,7 +20,7 @@ public class InteractSettings : MonoBehaviour
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
     private GameObject start, end;
-    private Toggle loopToggle, openTargetToggle, closeTargetToggle, isInteractToggle;
+    private Toggle lookAt, loopToggle, openTargetToggle, closeTargetToggle, isInteractToggle;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Dropdown chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
 
@@ -31,6 +30,7 @@ public class InteractSettings : MonoBehaviour
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
         openTargetToggle = setings.transform.Find("Interact/ToggleGroup/OpenTargetToggle").GetComponent<Toggle>();
         closeTargetToggle = setings.transform.Find("Interact/ToggleGroup/CloseTargetToggle").GetComponent<Toggle>();
@@ -49,6 +49,10 @@ public class InteractSettings : MonoBehaviour
         updateShowComponents();
         updateTimes();
         updateHideTimes();
+        if (lookAt.isOn) {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
     public void updateShowComponents() {
         if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia

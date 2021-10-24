@@ -8,8 +8,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-public class TextMessageSettings: MonoBehaviour
-{
+public class TextMessageSettings: MonoBehaviour {
     /// <summary>
     /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
     /// </summary>
@@ -28,14 +27,13 @@ public class TextMessageSettings: MonoBehaviour
     private GameObject start, end, canvasKeyboard, interactiveIcon;
     private RawImage rawImage;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
-    private Toggle loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
+    private Toggle lookAt, loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
     private Dropdown chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider slider;
     private Vector3 originalMenuScale;
     private SerializerManager serializerManager;
 
-    void Start()
-    {
+    void Start() {
         //Settings Getters
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
@@ -44,6 +42,7 @@ public class TextMessageSettings: MonoBehaviour
         rawImage = canvas.GetComponentInChildren<RawImage>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         interactiveIcon = canvas.transform.Find("InteractiveIcon").gameObject;
         startTargetToggle = setings.transform.Find("Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>();
         endTargetToggle = setings.transform.Find("Interact/ToggleGroup/EndTargetToggle").GetComponent<Toggle>();
@@ -67,6 +66,10 @@ public class TextMessageSettings: MonoBehaviour
         updateShowComponents();
         updateTimes();
         updateHideTimes();
+        if (lookAt.isOn) {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
     public void showKeyBoard() {
         canvasKeyboard.SetActive(!canvasKeyboard.activeSelf);
