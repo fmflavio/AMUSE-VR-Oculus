@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
+using UnityEngine.SceneManagement;
 
 public class InteractSettings : MonoBehaviour {
     /// <summary>
@@ -20,20 +21,24 @@ public class InteractSettings : MonoBehaviour {
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
     private GameObject start, end;
-    private Toggle lookAt, loopToggle, openTargetToggle, closeTargetToggle, isInteractToggle;
+    private Toggle lookAt, loopToggle, openTargetToggle, closeTargetToggle, isInteractToggle, startTargetToggle, endTargetToggle;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Dropdown chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
+    private SerializerManager serializerManager;
 
     void Start() {
         //Settings Getters
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
+        serializerManager = GameObject.Find("/Management/Data Management").GetComponent<SerializerManager>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
         lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
         openTargetToggle = setings.transform.Find("Interact/ToggleGroup/OpenTargetToggle").GetComponent<Toggle>();
         closeTargetToggle = setings.transform.Find("Interact/ToggleGroup/CloseTargetToggle").GetComponent<Toggle>();
+        startTargetToggle = setings.transform.Find("Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>();
+        endTargetToggle = setings.transform.Find("Interact/ToggleGroup/EndTargetToggle").GetComponent<Toggle>();
         chooseTargetDropdown = setings.transform.Find("Interact/ChooseTargetDropdown").GetComponent<Dropdown>();
         stepperDurationMinutes = setings.transform.Find("DurationSteppers/StepperMinutes").GetComponent<Stepper>();
         stepperDurationSeconds = setings.transform.Find("DurationSteppers/StepperSeconds").GetComponent<Stepper>();
@@ -246,15 +251,36 @@ public class InteractSettings : MonoBehaviour {
         setings.transform.Find("Hide/MediaType").GetComponent<Text>().text = mediaType;
     }
     public void interact() {
-        //respostas aos cliques
+        //feedback condicionado aos cliques
         if (controller.getMode() == controller.EDIT)
             setings.gameObject.SetActive(true);
-        else
-            if (controller.getMode() == controller.DELETE)
+        if (controller.getMode() == controller.DELETE)
             foreach (GameObject namesMedia in sceneManager.getMidias())
                 if (namesMedia.name.Equals(gameObject.name)) {
                     sceneManager.deleteMidia(namesMedia);
                     Destroy(gameObject);
                 }
+        if (controller.getMode() == controller.VIEWER) {
+            string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
+            if (target.StartsWith("Scene")) { //se tratar-se de interação com cena
+                serializerManager.serializeSave(); //salva a cena atual
+                SceneManager.LoadScene(target); //carrega a cena
+            } else
+                foreach (GameObject namesMedia in sceneManager.getMidias())
+                    if (target.Equals(namesMedia.name))
+
+                        //trocar o nome desses toggle close pra end
+
+                        if (endTargetToggle.isOn || closeTargetToggle.isOn) {
+                            //desativa a midia
+                            namesMedia.SetActive(false);
+                            //se em 360, limpa a textura de tela
+                            if (target.Equals("VIDEO360") || target.Equals("IMAGE360")) {
+                                Camera.main.clearFlags = CameraClearFlags.Color;
+                                Camera.main.backgroundColor = Color.black;
+                            }
+                        } else //ativa a midia
+                            namesMedia.SetActive(true);
+        }
     }
 }

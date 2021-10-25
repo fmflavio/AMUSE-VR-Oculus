@@ -4929,6 +4929,7 @@ MonoBehaviour:
   ShowMyObject:
   - {fileID: 3223443171927460811}
   - {fileID: 3223443172129333246}
+  controllerMode: {fileID: 0}
 --- !u!1 &3223443172860623582
 GameObject:
   m_ObjectHideFlags: 0

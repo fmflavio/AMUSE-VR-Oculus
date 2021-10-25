@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Presentation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Scene="2">
+  <Medias>
+    <Media type="IMAGE2D" name="Image2D - 1" src="botafogo-pao-de-acucar-4.jpg" px="-1.24972165" py="-0.21213147" pz="4.83665133" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="5" sEnd="0" mDuration="5" sDuration="0" mDelay="0" sDelay="0" scale="0.005" loop="false" mute="false" interactive="true" startTarget="true" interactiveTarget="Image2D - 2" interactiveIcon="true" />
+    <Media type="IMAGE2D" name="Image2D - 2" src="31838619732_3202cf3e4e_b.jpg" px="2.37836" py="-0.264150769" pz="4.390174" rStart="OnBegin This Scene" mStart="0" sStart="10" rEnd="End of This Media Time" mEnd="5" sEnd="10" mDuration="5" sDuration="0" mDelay="0" sDelay="10" scale="0.005" loop="false" mute="false" interactive="true" startTarget="false" interactiveTarget="Image2D - 1" interactiveIcon="true" />
+    <Media type="IMAGE2D" name="Image2D - 3" src="FlaMaraca.jpg" px="-4.19146156" py="-0.8970995" pz="-2.57426882" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="5" sEnd="0" mDuration="5" sDuration="0" mDelay="0" sDelay="0" scale="0.005" loop="false" mute="false" interactive="true" startTarget="true" interactiveTarget="Scene 1" interactiveIcon="true" />
+  </Medias>
+</Presentation>

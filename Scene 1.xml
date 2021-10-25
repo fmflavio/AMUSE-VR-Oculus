@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<Presentation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Scene="1">
+  <Medias>
+    <Media type="VIDEO2D" name="Video2D - 1" src="null" px="-1.44790983" py="-0.09269333" pz="4.78486824" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="0" sEnd="0" mDuration="0" sDuration="0" mDelay="0" sDelay="0" scale="0.005" loop="false" mute="false" volume="1" interactive="true" startTarget="true" interactiveTarget="Scene 2" interactiveIcon="true" />
+    <Media type="TEXTMESSAGE" name="TextMessage - 1" px="2.92288566" py="0.0189773925" pz="4.05664635" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="5" sEnd="0" mDuration="5" sDuration="0" mDelay="0" sDelay="0" scale="0.01" loop="false" mute="false" interactive="true" startTarget="true" interactiveTarget="Video2D - 1" interactiveIcon="true" textMessage="Type your message" />
+  </Medias>
+</Presentation>

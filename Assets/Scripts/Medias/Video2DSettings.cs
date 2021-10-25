@@ -142,6 +142,8 @@ public class Video2DSettings: MonoBehaviour {
         uploadButton.transform.Find("Message").gameObject.SetActive(false);
     }
     public void updateShowComponents() {
+        //ativa ou desativa o icone interactive
+        interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);
         if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia
             start.SetActive(false);
             end.SetActive(false);
@@ -186,7 +188,6 @@ public class Video2DSettings: MonoBehaviour {
                 updateInteract = false;
             } else
                 updateInteract = true;
-            interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);
         }
         //relações de start e end
         if(startDropdown.value == 0)
@@ -370,36 +371,34 @@ public class Video2DSettings: MonoBehaviour {
         this.canvas.transform.localScale = newVector;
     }
     public void interact() {
-        /*
-        if(!canvas.GetComponentInChildren<DragDrop>().enabled && isInteractToggle.isOn) {
-            string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
-            if(target.StartsWith("Scene")) {
-                serializerManager.serializeSave();
-                SceneManager.LoadScene(target);
-            } else
-                foreach(GameObject namesMedia in sceneManager.getMidias())
-                    if(target.Equals(namesMedia.name)) {
-                        if(endTargetToggle.isOn) {
-                            namesMedia.SetActive(false);
-                            if(target.Equals("VIDEO360") || target.Equals("IMAGE360")) {
-                                Camera.main.clearFlags = CameraClearFlags.Color;
-                                Camera.main.backgroundColor = Color.black;
-                            }
-                        } else
-                            namesMedia.SetActive(true);
-                    }
-        }
-        */
-        //respostas aos cliques
+        //feedback condicionado aos cliques
         if (controller.getMode() == controller.EDIT)
             setings.gameObject.SetActive(true);
-        else
-            if (controller.getMode() == controller.DELETE)
+        if (controller.getMode() == controller.DELETE)
             foreach (GameObject namesMedia in sceneManager.getMidias())
                 if (namesMedia.name.Equals(gameObject.name)) {
                     sceneManager.deleteMidia(namesMedia);
                     Destroy(gameObject);
                 }
+        if (controller.getMode() == controller.VIEWER && isInteractToggle.isOn) {
+            string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
+            if (target.StartsWith("Scene")) { //se tratar-se de interação com cena
+                serializerManager.serializeSave(); //salva a cena atual
+                SceneManager.LoadScene(target); //carrega a cena
+            } else
+                foreach (GameObject namesMedia in sceneManager.getMidias())
+                    if (target.Equals(namesMedia.name))
+                        if (endTargetToggle.isOn) {
+                            //desativa a midia
+                            namesMedia.SetActive(false);
+                            //se em 360, limpa a textura de tela
+                            if (target.Equals("VIDEO360") || target.Equals("IMAGE360")) {
+                                Camera.main.clearFlags = CameraClearFlags.Color;
+                                Camera.main.backgroundColor = Color.black;
+                            }
+                        } else //ativa a midia
+                            namesMedia.SetActive(true);
+        }
     }
     public void setInteractiveIcon() {
         interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);

@@ -58,13 +58,13 @@ public class ControllerMode : MonoBehaviour {
     }
     //mensagens para exibir no controle
     public void getModeMessage(int mode) {
-        if (mode == 1) 
+        if (mode == EDIT) 
             rightMessage.GetComponentInChildren<Text>().text = "Edit Mode";
         else
-            if (mode == 2)
+            if (mode == DELETE)
                 rightMessage.GetComponentInChildren<Text>().text = "Delete Mode";
             else
-                if (mode == 3)
+                if (mode == VIEWER)
                     rightMessage.GetComponentInChildren<Text>().text = "Preview Mode";
                 else
                     rightMessage.GetComponentInChildren<Text>().text = "Author Mode";

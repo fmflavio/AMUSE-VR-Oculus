@@ -8,7 +8,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-public class Image2DSettings: MonoBehaviour {
+public class Image2DSettings : MonoBehaviour {
     /// <summary>
     /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
     /// </summary>
@@ -120,6 +120,8 @@ public class Image2DSettings: MonoBehaviour {
         uploadButton.transform.Find("Message").gameObject.SetActive(false);
     }
     public void updateShowComponents() {
+        //ativa ou desativa o icone interactive
+        interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);
         if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia
             start.SetActive(false);
             end.SetActive(false);
@@ -130,12 +132,12 @@ public class Image2DSettings: MonoBehaviour {
             } else { //caso tenha mais que 1 midia e nao esteja em loop, ativa o start e end além de exibir as midias concorrentes
                 end.SetActive(true);
                 //caso não necessite atualizar o dropbox
-                if (startMediaDropdown.options.Count != (sceneManager.getMidias().Count-1) && updateRelMedias) {
+                if (startMediaDropdown.options.Count != (sceneManager.getMidias().Count - 1) && updateRelMedias) {
                     listMidias = sceneManager.getMidias();
                     tempList = new List<string>();
                     foreach (GameObject namesMedia in listMidias)
                         if (!namesMedia.name.Equals(this.gameObject.name))
-                            tempList.Add(namesMedia.name);  
+                            tempList.Add(namesMedia.name);
                     startMediaDropdown.ClearOptions();
                     startMediaDropdown.AddOptions(tempList);
                     startMediaDropdown.RefreshShownValue();
@@ -146,32 +148,31 @@ public class Image2DSettings: MonoBehaviour {
                     end.SetActive(true);
                     updateRelMedias = false;
                 } else //caso necessite atualizar o dropbox
-                    updateRelMedias = true; 
+                    updateRelMedias = true;
             }
             //para gerar as midias e cenas no interact
-            if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 4) && updateInteract) {
+            if (isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 4) && updateInteract) {
                 listMidias = sceneManager.getMidias();
                 tempList = new List<string>();
-                foreach(GameObject namesMedia in listMidias) {
-                    if(!namesMedia.name.Equals(this.gameObject.name))
+                foreach (GameObject namesMedia in listMidias) {
+                    if (!namesMedia.name.Equals(this.gameObject.name))
                         tempList.Add(namesMedia.name);
                 }
                 chooseTargetDropdown.ClearOptions();
-                for(int i = 1; i <= 5; i++)
+                for (int i = 1; i <= 5; i++)
                     tempList.Add("Scene " + i);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
                 updateInteract = false;
             } else
                 updateInteract = true;
-            interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);
         }
         //relações de start e end
-        if(startDropdown.value == 0)
+        if (startDropdown.value == 0)
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if (endDropdown.value == 0) {
             endMediaDropdown.gameObject.SetActive(false);
             setings.transform.Find("DurationSteppers").gameObject.SetActive(true);
         } else {
@@ -215,8 +216,8 @@ public class Image2DSettings: MonoBehaviour {
                                 Dropdown tempStartDropdown = namesMidia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>();
                                 Dropdown tempStartMediaDropdown = namesMidia.transform.Find("EditMenu/Start/StartMediaDropdown").GetComponent<Dropdown>();
                                 //em caso de relacionamento cruzado, reseta um deles
-                                if (tempStartDropdown.value == 1 && 
-                                    tempStartMediaDropdown.options[tempStartMediaDropdown.value].text.Equals(this.gameObject.name)){
+                                if (tempStartDropdown.value == 1 &&
+                                    tempStartMediaDropdown.options[tempStartMediaDropdown.value].text.Equals(this.gameObject.name)) {
                                     startDropdown.value = 0;
                                     startDropdown.Select();
                                 } else { //importa os valores
@@ -258,8 +259,8 @@ public class Image2DSettings: MonoBehaviour {
                                 Dropdown tempEndMediaDropdown = namesMidia.transform.Find("EditMenu/End/EndMediaDropdown").GetComponent<Dropdown>();
                                 if (tempEndDropdown.value == 1 &&
                                     tempEndMediaDropdown.options[tempEndMediaDropdown.value].text.Equals(this.gameObject.name)) {//se a outra já estiver selecionad esta torna tempo local
-                                        endDropdown.value = 0;
-                                        endDropdown.Select();
+                                    endDropdown.value = 0;
+                                    endDropdown.Select();
                                 } else { //importa os valores
                                     endMinutes = namesMidia.transform.Find("EditMenu/Hide/StartMinutes").GetComponent<Text>().text;
                                     endSeconds = namesMidia.transform.Find("EditMenu/Hide/StartSeconds").GetComponent<Text>().text;
@@ -285,13 +286,13 @@ public class Image2DSettings: MonoBehaviour {
                             }
                         }
                     }
-                }              
+                }
             }
         } else { // caso tenha somente uma mmídia
             if (loopToggle.isOn) {//caso esteja em loop
                 startMinutes = startSeconds = delayMinutes = delaySeconds = "0";
                 durationMinutes = durationSeconds = endMinutes = endSeconds = "99";
-            } else { 
+            } else {
                 durationMinutes = stepperDurationMinutes.transform.Find("TimeMinutesText").GetComponent<Text>().text;
                 durationSeconds = stepperDurationSeconds.transform.Find("TimeSecondText").GetComponent<Text>().text;
                 startMinutes = startSeconds = delayMinutes = delaySeconds = "0";
@@ -312,38 +313,39 @@ public class Image2DSettings: MonoBehaviour {
         setings.transform.Find("Hide/MediaType").GetComponent<Text>().text = mediaType;
     }
     public void ScaleCanvas() {
-        this.canvas.transform.localScale = new Vector3(originalMenuScale.x * slider.value, originalMenuScale.y * slider.value, originalMenuScale.z * slider.value); 
+        this.canvas.transform.localScale = new Vector3(originalMenuScale.x * slider.value, originalMenuScale.y * slider.value, originalMenuScale.z * slider.value);
     }
-    public void interact() {
-        /*
-        if(!canvas.GetComponentInChildren<DragDrop>().enabled && isInteractToggle.isOn) {
-            string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
-            if(target.StartsWith("Scene")) {
-                serializerManager.serializeSave();
-                SceneManager.LoadScene(target);
-            } else
-                foreach(GameObject namesMedia in sceneManager.getMidias())
-                    if(target.Equals(namesMedia.name)) {
-                        if(endTargetToggle.isOn) {
-                            namesMedia.SetActive(false);
-                            if(target.Equals("VIDEO360") || target.Equals("IMAGE360")) {
-                                Camera.main.clearFlags = CameraClearFlags.Color;
-                                Camera.main.backgroundColor = Color.black;
-                            }
-                        } else
-                            namesMedia.SetActive(true);
-                    }
-        }
-        */
-        //respostas aos cliques
+    public void interact() { 
+        //feedback condicionado aos cliques
         if (controller.getMode() == controller.EDIT)
             setings.gameObject.SetActive(true);
-        else
-            if (controller.getMode() == controller.DELETE)
+        if (controller.getMode() == controller.DELETE) 
             foreach (GameObject namesMedia in sceneManager.getMidias())
                 if (namesMedia.name.Equals(gameObject.name)) {
                     sceneManager.deleteMidia(namesMedia);
                     Destroy(gameObject);
                 }
+        if (controller.getMode() == controller.VIEWER && isInteractToggle.isOn) {
+            string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
+            if (target.StartsWith("Scene")) { //se tratar-se de interação com cena
+                serializerManager.serializeSave(); //salva a cena atual
+                SceneManager.LoadScene(target); //carrega a cena
+            } else 
+                foreach (GameObject namesMedia in sceneManager.getMidias())
+                    if (target.Equals(namesMedia.name))
+                        if (endTargetToggle.isOn) {
+                            //desativa a midia
+                            namesMedia.SetActive(false);
+                            //se em 360, limpa a textura de tela
+                            if (target.Equals("VIDEO360") || target.Equals("IMAGE360")) {
+                                Camera.main.clearFlags = CameraClearFlags.Color;
+                                Camera.main.backgroundColor = Color.black;
+                            }
+                        } else //ativa a midia
+                            namesMedia.SetActive(true);
+        }
+    }
+    public void setInteractiveIcon() {
+        interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);
     }
 }

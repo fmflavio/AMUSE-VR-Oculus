@@ -1847,6 +1847,7 @@ MonoBehaviour:
   ShowMyObject:
   - {fileID: 1429614675985457766}
   - {fileID: 1429614675787171775}
+  controllerMode: {fileID: 0}
 --- !u!1 &1429614675628363598
 GameObject:
   m_ObjectHideFlags: 0
@@ -4550,6 +4551,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowMyObject:
   - {fileID: 1429614675889325889}
+  controllerMode: {fileID: 0}
 --- !u!1 &1429614676163013873
 GameObject:
   m_ObjectHideFlags: 0

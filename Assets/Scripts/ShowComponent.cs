@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ShowComponent: MonoBehaviour {
     public GameObject[] ShowMyObject;
-
+    public ControllerMode controllerMode;
     public void ToggleShowComponents(bool visible) {
         foreach (GameObject components in ShowMyObject) {
             if(visible)
@@ -21,7 +21,7 @@ public class ShowComponent: MonoBehaviour {
     }
     //exibir texto no botão prewiew
     public void switchButtonText(Text textoButton) {
-        if(textoButton.text.Equals("Preview Mode"))
+        if (textoButton.text.Equals("Preview Mode"))
             textoButton.text = "Author Mode";
         else
             textoButton.text = "Preview Mode";
@@ -32,5 +32,11 @@ public class ShowComponent: MonoBehaviour {
             textoHeader.text = "PREVIEW MODE";
         else
             textoHeader.text = "CHOOSE YOUR OPTION";
+    }
+    public void switchControlText(Text textoButton) {
+        if (textoButton.text.Equals("Preview Mode"))
+            controllerMode.getModeMessage(controllerMode.NOME);
+        else
+            controllerMode.getModeMessage(controllerMode.VIEWER);
     }
 }

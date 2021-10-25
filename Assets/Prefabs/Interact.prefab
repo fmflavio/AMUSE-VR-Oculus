@@ -694,6 +694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowMyObject:
   - {fileID: 7600125685252913343}
+  controllerMode: {fileID: 0}
 --- !u!1 &1769235469237606259
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,6 +1128,7 @@ MonoBehaviour:
   ShowMyObject:
   - {fileID: 207892903425180787}
   - {fileID: 7600125685252913343}
+  controllerMode: {fileID: 0}
 --- !u!1 &2748939673033927455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2663,6 +2665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowMyObject:
   - {fileID: 5141401466609926400}
+  controllerMode: {fileID: 0}
 --- !u!1 &5141401465934732896
 GameObject:
   m_ObjectHideFlags: 0
@@ -3304,6 +3307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowMyObject:
   - {fileID: 7600125685252913343}
+  controllerMode: {fileID: 0}
 --- !u!1 &5651516119491479656
 GameObject:
   m_ObjectHideFlags: 0
@@ -7099,6 +7103,7 @@ MonoBehaviour:
   ShowMyObject:
   - {fileID: 5818856654823014052}
   - {fileID: 5818856654950744959}
+  controllerMode: {fileID: 0}
 --- !u!1 &5818856655002086647
 GameObject:
   m_ObjectHideFlags: 0
@@ -12183,6 +12188,7 @@ MonoBehaviour:
   ShowMyObject:
   - {fileID: 0}
   - {fileID: 0}
+  controllerMode: {fileID: 0}
 --- !u!1 &8475468631651310453
 GameObject:
   m_ObjectHideFlags: 0
