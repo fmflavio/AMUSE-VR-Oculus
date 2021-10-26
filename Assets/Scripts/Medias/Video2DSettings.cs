@@ -86,6 +86,12 @@ public class Video2DSettings: MonoBehaviour {
             completPaths.Add(data.FullName);
         }
         folderDropdown.AddOptions(names);
+        //adiciona a primeira lista de cenas ao interact, removendo a cena atual
+        tempList = new List<string>();
+        for (int i = 1; i <= 5; i++)
+            tempList.Add("Scene " + i);
+        tempList.Remove(SceneManager.GetActiveScene().name);
+        chooseTargetDropdown.AddOptions(tempList);
     }
     public void Update() {
         if (folderDropdown.value > 0 && videoPlayer.isPlaying)
@@ -173,7 +179,7 @@ public class Video2DSettings: MonoBehaviour {
                     updateRelMedias = true;
             }
             //para gerar as midias e cenas no interact
-            if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 4) && updateInteract) {
+            if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 3) && updateInteract) {
                 listMidias = sceneManager.getMidias();
                 tempList = new List<string>();
                 foreach(GameObject namesMedia in listMidias) {
@@ -183,6 +189,7 @@ public class Video2DSettings: MonoBehaviour {
                 chooseTargetDropdown.ClearOptions();
                 for(int i = 1; i <= 5; i++)
                     tempList.Add("Scene " + i);
+                tempList.Remove(SceneManager.GetActiveScene().name);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
                 updateInteract = false;

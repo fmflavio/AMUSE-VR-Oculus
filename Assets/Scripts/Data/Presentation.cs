@@ -26,6 +26,8 @@ public class Media {
     public float py;
     [XmlAttribute("pz")]
     public float pz;
+    [XmlAttribute("lookAt")]
+    public bool lookAt;
     [XmlAttribute("rStart")]
     public string rStart;
     [XmlAttribute("rMediaStart")]

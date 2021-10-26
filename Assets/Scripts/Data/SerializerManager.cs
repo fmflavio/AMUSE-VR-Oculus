@@ -39,13 +39,13 @@ public class SerializerManager : MonoBehaviour {
     public void serializeLoader(){
         pre = SerializeOp.Deserialize<Presentation>(path+".xml");
         //if(File.Exists(path + ".xml")) Debug.Log("XML FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE");
-        for(int i=0; i< pre.Media.Count; i++) {
-            if(pre.Media[i].type.Equals("AUDIO3D")) {
+        for(int i=0; i< pre.Media.Count; i++) { //lista todas as mídias encontradas no arquivo
+            if(pre.Media[i].type.Equals("AUDIO3D")) { //individualmente carrega cada uma seguindo as caracteristicas do tipo
                 instantiate.intantiateAudio3D();
                 foreach(GameObject ob in sceneManager.getMidias()) {
                     if(ob.name.Equals(pre.Media[i].name)) {
                         //para preencher o dropdown do arquivo
-                        StartCoroutine(chooseFileLate(ob, pre.Media[i].src));
+                        StartCoroutine(chooseFileLate(ob, pre.Media[i].src)); //algumas informações necessitam de delay para ser apresentadas na tela
                         //Relacionamento Start e End
                         if(pre.Media[i].rStart.Equals("OnBegin")) {
                             ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 1;
@@ -63,6 +63,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o delay
                         ob.transform.Find("EditMenu/Start/DelaySteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDelay.ToString();
                         ob.transform.Find("EditMenu/Start/DelaySteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDelay.ToString();
@@ -96,6 +98,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o duração
                         ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
                         ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
@@ -176,6 +180,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o duração
                         ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
                         ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
@@ -253,6 +259,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o duração
                         ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
                         ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
@@ -288,6 +296,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o duração
                         ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
                         ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
@@ -323,6 +333,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o duração
                         ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
                         ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
@@ -358,6 +370,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o duração
                         ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
                         ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
@@ -407,6 +421,8 @@ public class SerializerManager : MonoBehaviour {
                         }
                         //position
                         ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
                         //para o delay
                         ob.transform.Find("EditMenu/Start/DelaySteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDelay.ToString();
                         ob.transform.Find("EditMenu/Start/DelaySteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDelay.ToString();
@@ -483,6 +499,7 @@ public class SerializerManager : MonoBehaviour {
                 media.px = ob.transform.position.x;
                 media.py = ob.transform.position.y;
                 media.pz = ob.transform.position.z;
+                media.lookAt = ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn;
                 media.rStart = ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().options[ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value].text;
                 if(ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value != 0)
                     media.rMediaStart = ob.transform.Find("EditMenu/Start/StartMediaDropdown").GetComponent<Dropdown>().options[ob.transform.Find("EditMenu/Start/StartMediaDropdown").GetComponent<Dropdown>().value].text;

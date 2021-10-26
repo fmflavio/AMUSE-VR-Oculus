@@ -21,7 +21,7 @@ public class InteractSettings : MonoBehaviour {
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
     private GameObject start, end;
-    private Toggle lookAt, loopToggle, openTargetToggle, closeTargetToggle, isInteractToggle, startTargetToggle, endTargetToggle;
+    private Toggle lookAt, loopToggle, isInteractToggle, startTargetToggle, endTargetToggle;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Dropdown chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private SerializerManager serializerManager;
@@ -35,8 +35,6 @@ public class InteractSettings : MonoBehaviour {
         end = setings.transform.Find("End").gameObject;
         lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
-        openTargetToggle = setings.transform.Find("Interact/ToggleGroup/OpenTargetToggle").GetComponent<Toggle>();
-        closeTargetToggle = setings.transform.Find("Interact/ToggleGroup/CloseTargetToggle").GetComponent<Toggle>();
         startTargetToggle = setings.transform.Find("Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>();
         endTargetToggle = setings.transform.Find("Interact/ToggleGroup/EndTargetToggle").GetComponent<Toggle>();
         chooseTargetDropdown = setings.transform.Find("Interact/ChooseTargetDropdown").GetComponent<Dropdown>();
@@ -49,6 +47,12 @@ public class InteractSettings : MonoBehaviour {
         stepperDelaySecond = setings.transform.Find("Start/DelaySteppers/StepperSeconds").GetComponent<Stepper>();
         endDropdown = setings.transform.Find("End/EndDropdown").GetComponent<Dropdown>();
         endMediaDropdown = setings.transform.Find("End/EndMediaDropdown").GetComponent<Dropdown>();
+        //adiciona a primeira lista de cenas ao interact, removendo a cena atual
+        tempList = new List<string>();
+        for (int i = 1; i <= 5; i++)
+            tempList.Add("Scene " + i);
+        tempList.Remove(SceneManager.GetActiveScene().name);
+        chooseTargetDropdown.AddOptions(tempList);
     }
     public void Update() {
         updateShowComponents();
@@ -70,12 +74,12 @@ public class InteractSettings : MonoBehaviour {
             } else { //caso tenha mais que 1 midia e nao esteja em loop, ativa o start e end além de exibir as midias concorrentes
                 end.SetActive(true);
                 //caso não necessite atualizar o dropbox
-                if (startMediaDropdown.options.Count != (sceneManager.getMidias().Count-1) && updateRelMedias) {
+                if (startMediaDropdown.options.Count != (sceneManager.getMidias().Count - 1) && updateRelMedias) {
                     listMidias = sceneManager.getMidias();
                     tempList = new List<string>();
-                    foreach (GameObject namesMidia in listMidias) 
-                        if (!namesMidia.name.Equals(this.gameObject.name))
-                            tempList.Add(namesMidia.name);
+                    foreach (GameObject namesMedia in listMidias) 
+                        if (!namesMedia.name.Equals(this.gameObject.name))
+                            tempList.Add(namesMedia.name);
                     startMediaDropdown.ClearOptions();
                     startMediaDropdown.AddOptions(tempList);
                     startMediaDropdown.RefreshShownValue();
@@ -89,7 +93,7 @@ public class InteractSettings : MonoBehaviour {
                     updateRelMedias = true;
             }
             //para gerar as midias e cenas no interact
-            if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 4) && updateInteract) {
+            if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 3) && updateInteract) {
                 listMidias = sceneManager.getMidias();
                 tempList = new List<string>();
                 foreach(GameObject namesMedia in listMidias) {
@@ -99,6 +103,7 @@ public class InteractSettings : MonoBehaviour {
                 chooseTargetDropdown.ClearOptions();
                 for(int i = 1; i <= 5; i++)
                     tempList.Add("Scene " + i);
+                tempList.Remove(SceneManager.GetActiveScene().name);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
                 updateInteract = false;
@@ -268,10 +273,7 @@ public class InteractSettings : MonoBehaviour {
             } else
                 foreach (GameObject namesMedia in sceneManager.getMidias())
                     if (target.Equals(namesMedia.name))
-
-                        //trocar o nome desses toggle close pra end
-
-                        if (endTargetToggle.isOn || closeTargetToggle.isOn) {
+                        if (endTargetToggle.isOn) {
                             //desativa a midia
                             namesMedia.SetActive(false);
                             //se em 360, limpa a textura de tela

@@ -12072,7 +12072,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Do you want to exit to the main menu?
+  m_Text: 'Are you sure you want to exit to the main menu without saving?
+
+    If
+    yes, you will lose all your progress.'
 --- !u!222 &548636907
 CanvasRenderer:
   m_ObjectHideFlags: 0

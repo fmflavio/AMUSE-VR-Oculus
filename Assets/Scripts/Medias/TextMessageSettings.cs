@@ -38,7 +38,7 @@ public class TextMessageSettings: MonoBehaviour {
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
         serializerManager = GameObject.Find("/Management/Data Management").GetComponent<SerializerManager>();
-        //canvasKeyboard = setings.transform.Find("canvasKeyboard").gameObject;
+        canvasKeyboard = setings.transform.Find("CanvasKeyboard").gameObject;
         rawImage = canvas.GetComponentInChildren<RawImage>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
@@ -59,8 +59,12 @@ public class TextMessageSettings: MonoBehaviour {
         slider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
         originalMenuScale = canvas.transform.localScale;
-        //Settings Setters
-
+        //adiciona a primeira lista de cenas ao interact, removendo a cena atual
+        tempList = new List<string>();
+        for (int i = 1; i <= 5; i++)
+            tempList.Add("Scene " + i);
+        tempList.Remove(SceneManager.GetActiveScene().name);
+        chooseTargetDropdown.AddOptions(tempList);
     }
     public void Update() {
         updateShowComponents();
@@ -106,7 +110,7 @@ public class TextMessageSettings: MonoBehaviour {
                     updateRelMedias = true;
             }
             //para gerar as midias e cenas no interact
-            if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 4) && updateInteract) {
+            if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 3) && updateInteract) {
                 listMidias = sceneManager.getMidias();
                 tempList = new List<string>();
                 foreach(GameObject namesMedia in listMidias) {
@@ -116,6 +120,7 @@ public class TextMessageSettings: MonoBehaviour {
                 chooseTargetDropdown.ClearOptions();
                 for(int i = 1; i <= 5; i++)
                     tempList.Add("Scene " + i);
+                tempList.Remove(SceneManager.GetActiveScene().name);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
                 updateInteract = false;
@@ -301,8 +306,6 @@ public class TextMessageSettings: MonoBehaviour {
                             namesMedia.SetActive(true);
         }
     }
-
-    //verificar se precisa desta função
     public void setInteractiveIcon() {
         interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);
     }
