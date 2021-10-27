@@ -12,7 +12,7 @@ public class ViewerManager : MonoBehaviour {
     static float minutesLocal = -1, secondsLocal = -1;
 
     void Update() {
-        hideAllMedias(); // da pra melhorar chamando somente uma vez pelo botão
+        hideAllMedias(); 
         updateGlobalTime();
         showMidiasInTime();
     }
@@ -21,17 +21,17 @@ public class ViewerManager : MonoBehaviour {
         viewer.SetActive(!viewer.activeSelf);
     }
     //esconde todas as midias para exibir somente as agendadas para o modo preview
-    public void hideAllMedias() { //da pra melhorar
-        if(viewer.activeSelf && hide) {
+    public void hideAllMedias() {
+        if (viewer.activeSelf && hide) {
             medias = this.GetComponent<SceneManagement>().getMidias();
-            foreach(GameObject localMedias in medias)
+            foreach (GameObject localMedias in medias)
                 localMedias.SetActive(false);
             Camera.main.clearFlags = CameraClearFlags.Color;
             Camera.main.backgroundColor = Color.black;
             hide = false;
         } else
-            if(!viewer.activeSelf)
-                hide = true;
+            if (!viewer.activeSelf)
+            hide = true;
     }
     //exibi todas as mídias que estejam instanciadas, mesmo que ocultas para o modo autoria
     public void showAllMedias() {

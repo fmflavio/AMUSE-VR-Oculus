@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Presentation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Scene="1">
+  <Medias>
+    <Media type="VIDEO2D" name="Video2D - 1" src="Bondinho do Pão de Açúcar.mp4" px="-3.057655" py="0.604729" pz="-3.90960932" lookAt="true" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="3" sEnd="49" mDuration="3" sDuration="49" mDelay="0" sDelay="0" scale="0.03476234" loop="false" mute="true" volume="1" interactive="false" startTarget="false" interactiveIcon="false" />
+    <Media type="IMAGE2D" name="Image2D - 1" src="botafogo-pao-de-acucar-4.jpg" px="4.42931032" py="0.5919274" pz="-2.24295235" lookAt="true" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="5" sEnd="0" mDuration="5" sDuration="0" mDelay="0" sDelay="0" scale="0.049999997" loop="false" mute="false" interactive="false" startTarget="false" interactiveIcon="false" />
+    <Media type="IMAGE2D" name="Image2D - 2" src="FlaMaraca.jpg" px="0.6323962" py="0.214397728" pz="-4.95521069" lookAt="true" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="5" sEnd="0" mDuration="5" sDuration="0" mDelay="0" sDelay="0" scale="0.0025" loop="false" mute="false" interactive="false" startTarget="false" interactiveIcon="false" />
+  </Medias>
+</Presentation>

@@ -519,10 +519,8 @@ public class SerializerManager : MonoBehaviour {
                     media.mute = ob.transform.Find("EditMenu/MuteToggle").GetComponent<Toggle>().isOn;
                     media.volume = ob.transform.Find("EditMenu/VolumeSlider").GetComponent<Slider>().value.ToString();
                 }
-                //////////////////////corigir a escala////////////////////////////////////
                 if(type.Equals("IMAGE2D") || type.Equals("VIDEO2D") || type.Equals("TEXTMESSAGE"))
                     media.scale = ob.transform.Find("Canvas").gameObject.transform.localScale.x;
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 if(type.Equals("IMAGE2D") || type.Equals("INTERACT") || type.Equals("VIDEO2D") || type.Equals("TEXTMESSAGE")) {
                     media.interactive = ob.transform.Find("EditMenu/Interact/IsInteractToggle").GetComponent<Toggle>().isOn;
                     media.interactiveIcon = ob.transform.Find("EditMenu/Interact/IsInteractToggle").GetComponent<Toggle>().isOn;
