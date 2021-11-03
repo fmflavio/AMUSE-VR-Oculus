@@ -996,7 +996,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5382767031618938163}
   - component: {fileID: 4945385382053148673}
-  - component: {fileID: 5709867662175756171}
   m_Layer: 5
   m_Name: LookAt
   m_TagString: Untagged
@@ -1071,35 +1070,8 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5709867662175756171}
-        m_MethodName: ToggleShowComponents
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 1
---- !u!114 &5709867662175756171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2971850625643120117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43887ed306ba90e4baac352609569493, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowMyObject:
-  - {fileID: 0}
-  - {fileID: 0}
-  controllerMode: {fileID: 0}
 --- !u!1 &3339326118442452125
 GameObject:
   m_ObjectHideFlags: 0

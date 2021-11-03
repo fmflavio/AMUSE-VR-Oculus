@@ -97,11 +97,11 @@ public class Image360Settings: MonoBehaviour {
     public IEnumerator showTextFuntion() {
         uploadButton.transform.Find("Message").gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
-        uploadFile = EditorUtility.OpenFilePanel("Open your image", "", "png,jpg,jpeg");
+        //uploadFile = EditorUtility.OpenFilePanel("Open your image", "", "png,jpg,jpeg");
         if (!uploadFile.Equals("")) {
             FileInfo fileinfo = new FileInfo(uploadFile);
-            FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
-            AssetDatabase.Refresh();
+            //FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
+            //AssetDatabase.Refresh();
             yield return new WaitForSeconds(1);
             folderDropdown.options.Clear();
             names.Add(fileinfo.Name);

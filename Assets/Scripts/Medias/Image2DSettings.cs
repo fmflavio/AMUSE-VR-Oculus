@@ -101,7 +101,9 @@ public class Image2DSettings : MonoBehaviour {
     }
 
     private FileInfo[] GetFolderFiles() {
-        path = Application.dataPath + "/Resources/" + folderMidia;
+        //path = Application.dataPath + "/Resources/" + folderMidia;
+        //path = "file:///storage/emulated/0/Download";
+        path = "///storage/emulated/0/DCIM/Camera/"; 
         folder = new DirectoryInfo(@path);
         FileInfo[] Files = folder.GetFiles().Where(f => f.Extension == ".png" || f.Extension == ".jpeg" || f.Extension == ".jpg").ToArray(); ;
         return Files;
@@ -112,11 +114,11 @@ public class Image2DSettings : MonoBehaviour {
     public IEnumerator showTextFuntion() {
         uploadButton.transform.Find("Message").gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
-        uploadFile = EditorUtility.OpenFilePanel("Open your image", "", "png,jpg");
+        //uploadFile = EditorUtility.OpenFilePanel("Open your image", "", "png,jpg");
         if (!uploadFile.Equals("")) {
             FileInfo fileinfo = new FileInfo(uploadFile);
-            FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
-            AssetDatabase.Refresh();
+            //FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
+            //AssetDatabase.Refresh();
             yield return new WaitForSeconds(1);
             folderDropdown.options.Clear();
             names.Add(fileinfo.Name);

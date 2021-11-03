@@ -229,10 +229,8 @@ namespace UnityEngine.UI.Extensions
                 float insetX = i == 0 ? 0 : width + separatorWidth;
 
                 var rectTransform = sides[i].GetComponent<RectTransform>();
-                Vector2 zero = Vector2.zero;
-                rectTransform.anchorMin = zero;
-                Vector2 zero1 = Vector2.zero;
-                rectTransform.anchorMax = zero1;
+                rectTransform.anchorMin = Vector2.zero;
+                rectTransform.anchorMax = Vector2.zero;
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, insetX, width);
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, transform.rect.height);
 

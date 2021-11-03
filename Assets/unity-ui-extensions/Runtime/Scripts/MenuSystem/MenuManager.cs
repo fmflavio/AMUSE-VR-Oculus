@@ -83,9 +83,17 @@ namespace UnityEngine.UI.Extensions
                     }
                 }
 
-                var topCanvas = menuInstance.GetComponent<Canvas>();
-                var previousCanvas = menuStack.Peek().GetComponent<Canvas>();
-                topCanvas.sortingOrder = previousCanvas.sortingOrder + 1;
+                Canvas topCanvas = menuInstance.GetComponent<Canvas>();
+                if (topCanvas != null)
+                {
+                    Canvas previousCanvas = menuStack.Peek().GetComponent<Canvas>();
+
+                    if(previousCanvas != null)
+                    {
+                        topCanvas.sortingOrder = previousCanvas.sortingOrder + 1;
+                    }
+                }
+
             }
 
             menuStack.Push(menuInstance);
@@ -143,7 +151,7 @@ namespace UnityEngine.UI.Extensions
         private void Update()
         {
             // On Android the back button is sent as Esc
-            if (Input.GetKeyDown(KeyCode.Escape) && menuStack.Count > 0)
+            if (UIExtensionsInputManager.GetKeyDown(KeyCode.Escape) && menuStack.Count > 0)
             {
                 menuStack.Peek().OnBackPressed();
             }

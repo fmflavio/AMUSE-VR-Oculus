@@ -104,11 +104,11 @@ public class AudioSettings: MonoBehaviour {
     public IEnumerator showTextFuntion() {
         uploadButton.transform.Find("Message").gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
-        uploadFile = EditorUtility.OpenFilePanel("Open your audio", "", "mp3,wav");
+        //uploadFile = EditorUtility.OpenFilePanel("Open your audio", "", "mp3,wav");
         if (!uploadFile.Equals("")) {
             FileInfo fileinfo = new FileInfo(uploadFile);
-            FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
-            AssetDatabase.Refresh();
+            //FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
+            //AssetDatabase.Refresh();
             yield return new WaitForSeconds(1);
             folderDropdown.options.Clear();
             names.Add(fileinfo.Name);

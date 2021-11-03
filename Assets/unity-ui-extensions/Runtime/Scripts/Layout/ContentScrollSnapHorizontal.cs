@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/// Credit Beka Westberg 
+/// Sourced from - https://bitbucket.org/UnityUIExtensions/unity-ui-extensions/pull-requests/28
+/// Updated by SimonDarksideJ - Added some exception management and a SetNewItems to replace the content programmatically
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
@@ -99,7 +103,7 @@ namespace UnityEngine.UI.Extensions
         private ScrollRect scrollRect = null;
         private RectTransform scrollRectTransform = null;
         private RectTransform contentTransform = null;
-        private List<Vector3> contentPositions = null;
+        private List<Vector3> contentPositions = new List<Vector3>();
         private Vector3 lerpTarget = Vector3.zero;
         private float totalScrollableWidth = 0;
         private DrivenRectTransformTracker tracker ;
@@ -185,11 +189,60 @@ namespace UnityEngine.UI.Extensions
             if (prevButton)
                 prevButton.GetComponent<Button>().onClick.AddListener(() => { PreviousItem(); });
 
-            SetupDrivenTransforms();
-            SetupSnapScroll();
-            scrollRect.horizontalNormalizedPosition = 0;
-            _closestItem = 0;
-            GoTo(startInfo);
+            if (IsScrollRectAvailable)
+            {
+                SetupDrivenTransforms();
+                SetupSnapScroll();
+                scrollRect.horizontalNormalizedPosition = 0;
+                _closestItem = 0;
+                GoTo(startInfo);
+            }
+        }
+
+        public void SetNewItems(ref List<Transform> newItems)
+        {
+            if (scrollRect && contentTransform)
+            {
+                for (int i = scrollRect.content.childCount - 1; i >= 0; i--)
+                {
+                    Transform child = contentTransform.GetChild(i);
+                    child.SetParent(null);
+                    GameObject.DestroyImmediate(child.gameObject);
+                }
+
+                foreach (Transform item in newItems)
+                {
+                    GameObject newItem = item.gameObject;
+                    if (newItem.IsPrefab())
+                    {
+                        newItem = Instantiate(item.gameObject, contentTransform);
+                    }
+                    else
+                    {
+                        newItem.transform.SetParent(contentTransform);
+                    }
+                }
+
+                SetupDrivenTransforms();
+                SetupSnapScroll();
+                scrollRect.horizontalNormalizedPosition = 0;
+                _closestItem = 0;
+                GoTo(startInfo);
+            }
+        }
+
+        private bool IsScrollRectAvailable
+        {
+            get
+            {
+                if (scrollRect &&
+                    contentTransform &&
+                    contentTransform.childCount > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
         }
 
         private void OnDisable()
@@ -461,6 +514,11 @@ namespace UnityEngine.UI.Extensions
         #region Behind the Scenes Movement stuff
         public void OnBeginDrag(PointerEventData ped)
         {
+            if (contentPositions.Count < 2)
+            {
+                return;
+            }
+
             StopMovement();
             if (!Moving)
             {
@@ -470,16 +528,27 @@ namespace UnityEngine.UI.Extensions
 
         public void OnEndDrag(PointerEventData ped)
         {
-            StartCoroutine("SlideAndLerp");
+            if (contentPositions.Count <= 1)
+            {
+                return;
+            }
+
+            if (IsScrollRectAvailable)
+            {
+                StartCoroutine("SlideAndLerp");
+            }
         }
 
         private void Update()
         {
-            if (_closestItem != ClosestItemIndex)
+            if (IsScrollRectAvailable)
             {
-                CurrentItemChanged.Invoke(ClosestItemIndex);
-                ChangePaginationInfo(ClosestItemIndex);
-                _closestItem = ClosestItemIndex;
+                if (_closestItem != ClosestItemIndex)
+                {
+                    CurrentItemChanged.Invoke(ClosestItemIndex);
+                    ChangePaginationInfo(ClosestItemIndex);
+                    _closestItem = ClosestItemIndex;
+                }
             }
         }
 

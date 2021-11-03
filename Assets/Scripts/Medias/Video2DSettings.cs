@@ -133,11 +133,11 @@ public class Video2DSettings: MonoBehaviour {
     private IEnumerator showTextFuntion() {
         uploadButton.transform.Find("Message").gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
-        uploadFile = EditorUtility.OpenFilePanel("Open your video", "", "mp4,avi");
+        //uploadFile = EditorUtility.OpenFilePanel("Open your video", "", "mp4,avi");
         if (!uploadFile.Equals("")) {
             FileInfo fileinfo = new FileInfo(uploadFile);
-            FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
-            AssetDatabase.Refresh();
+            //FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
+            //AssetDatabase.Refresh();
             yield return new WaitForSeconds(1);
             folderDropdown.options.Clear();
             completPaths.Add(fileinfo.FullName);

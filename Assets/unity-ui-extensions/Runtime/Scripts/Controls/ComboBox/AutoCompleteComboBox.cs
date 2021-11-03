@@ -19,6 +19,11 @@ namespace UnityEngine.UI.Extensions
         public Color disabledTextColor;
         public DropDownListItem SelectedItem { get; private set; } //outside world gets to get this, not set it
 
+        /// <summary>
+        /// Contains the included items. To add and remove items to/from this list, use the <see cref="AddItem(string)"/>,
+        /// <see cref="RemoveItem(string)"/> and <see cref="SetAvailableOptions(List{string})"/> methods as these also execute
+        /// the required methods to update to the current collection.
+        /// </summary>
         public List<string> AvailableOptions;
 
         //private bool isInitialized = false;
@@ -36,7 +41,7 @@ namespace UnityEngine.UI.Extensions
         private RectTransform _scrollPanelRT;
         private RectTransform _scrollBarRT;
         private RectTransform _slidingAreaRT;
-        //   private RectTransform scrollHandleRT;
+        private RectTransform _scrollHandleRT;
         private RectTransform _itemsPanelRT;
         private Canvas _canvas;
         private RectTransform _canvasRT;
@@ -95,12 +100,17 @@ namespace UnityEngine.UI.Extensions
 			}
 		}
 
-		//TODO design as foldout for Inspector
-		public Color ValidSelectionTextColor = Color.green;
+        public float DropdownOffset = 10f;
+
+        //TODO design as foldout for Inspector
+        public Color ValidSelectionTextColor = Color.green;
 		public Color MatchingItemsRemainingTextColor = Color.black;
 		public Color NoItemsRemainingTextColor = Color.red;
 
         public AutoCompleteSearchType autocompleteSearchType = AutoCompleteSearchType.Linq;
+
+        [SerializeField]
+        private bool _displayPanelAbove = false;
 
         private bool _selectionIsValid = false;
 
@@ -127,13 +137,15 @@ namespace UnityEngine.UI.Extensions
         {
             Initialize();
         }
+
 		public void Start()
 		{
 			if (SelectFirstItemOnStart && AvailableOptions.Count > 0) {
 				ToggleDropdownPanel (false);
 				OnItemClicked (AvailableOptions [0]);
 			}
-		}
+            RedrawPanel();
+        }
 
         private bool Initialize()
         {
@@ -153,7 +165,7 @@ namespace UnityEngine.UI.Extensions
                 _scrollPanelRT = _overlayRT.Find("ScrollPanel").GetComponent<RectTransform>();
                 _scrollBarRT = _scrollPanelRT.Find("Scrollbar").GetComponent<RectTransform>();
                 _slidingAreaRT = _scrollBarRT.Find("SlidingArea").GetComponent<RectTransform>();
-                //  scrollHandleRT = slidingAreaRT.FindChild("Handle").GetComponent<RectTransform>();
+                _scrollHandleRT = _slidingAreaRT.Find("Handle").GetComponent<RectTransform>();
                 _itemsPanelRT = _scrollPanelRT.Find("Items").GetComponent<RectTransform>();
                 //itemPanelLayout = itemsPanelRT.gameObject.GetComponent<LayoutGroup>();
 
@@ -180,48 +192,100 @@ namespace UnityEngine.UI.Extensions
             _panelItems = new List<string>();
 
             RebuildPanel();
-            //RedrawPanel(); - causes an initialisation failure in U5
             return success;
         }
 
-        /* currently just using items in the list instead of being able to add to it.
-        public void AddItems(params object[] list)
+        /// <summary>
+        /// Adds the item to <see cref="this.AvailableOptions"/> if it is not a duplicate and rebuilds the panel.
+        /// </summary>
+        /// <param name="item">Item to add.</param>
+        public void AddItem(string item)
         {
-            List<DropDownListItem> ddItems = new List<DropDownListItem>();
-            foreach (var obj in list)
+            if (!this.AvailableOptions.Contains(item))
             {
-                if (obj is DropDownListItem)
-                {
-                    ddItems.Add((DropDownListItem)obj);
-                }
-                else if (obj is string)
-                {
-                    ddItems.Add(new DropDownListItem(caption: (string)obj));
-                }
-                else if (obj is Sprite)
-                {
-                    ddItems.Add(new DropDownListItem(image: (Sprite)obj));
-                }
-                else
-                {
-                    throw new System.Exception("Only ComboBoxItems, Strings, and Sprite types are allowed");
-                }
+                this.AvailableOptions.Add(item);
+                this.RebuildPanel();
             }
-            Items.AddRange(ddItems);
-            Items = Items.Distinct().ToList();//remove any duplicates
+            else
+            {
+                Debug.LogWarning($"{nameof(AutoCompleteComboBox)}.{nameof(AddItem)}: items may only exists once. '{item}' can not be added.");
+            }
+        }
+
+        /// <summary>
+        /// Removes the item from <see cref="this.AvailableOptions"/> and rebuilds the panel.
+        /// </summary>
+        /// <param name="item">Item to remove.</param>
+        public void RemoveItem(string item)
+        {
+            if (this.AvailableOptions.Contains(item))
+            {
+                this.AvailableOptions.Remove(item);
+                this.RebuildPanel();
+            }
+        }
+
+        /// <summary>
+        /// Sets the given items as new content for the comboBox. Previous entries will be cleared.
+        /// </summary>
+        /// <param name="newOptions">New entries.</param>
+        public void SetAvailableOptions(List<string> newOptions)
+        {
+            var uniqueOptions = newOptions.Distinct().ToList();
+            if (newOptions.Count != uniqueOptions.Count)
+            {
+                Debug.LogWarning($"{nameof(AutoCompleteComboBox)}.{nameof(SetAvailableOptions)}: items may only exists once. {newOptions.Count - uniqueOptions.Count} duplicates.");
+            }
+
+            this.AvailableOptions.Clear();
+            this.AvailableOptions = uniqueOptions;
+            this.RebuildPanel();
+        }
+
+        /// <summary>
+        /// Sets the given items as new content for the comboBox. Previous entries will be cleared.
+        /// </summary>
+        /// <param name="newOptions">New entries.</param>
+        public void SetAvailableOptions(string[] newOptions)
+        {
+            var uniqueOptions = newOptions.Distinct().ToList();
+            if (newOptions.Length != uniqueOptions.Count)
+            {
+                Debug.LogWarning($"{nameof(AutoCompleteComboBox)}.{nameof(SetAvailableOptions)}: items may only exists once. {newOptions.Length - uniqueOptions.Count} duplicates.");
+            }
+
+            this.AvailableOptions.Clear();
+            for (int i = 0; i < newOptions.Length; i++)
+            {
+                this.AvailableOptions.Add(newOptions[i]);
+            }
+
+            this.RebuildPanel();
+        }
+
+        public void ResetItems()
+        {
+            AvailableOptions.Clear();
             RebuildPanel();
         }
-        */
 
         /// <summary>
         /// Rebuilds the contents of the panel in response to items being added.
         /// </summary>
         private void RebuildPanel()
         {
+            if (_isPanelActive) ToggleDropdownPanel();
+
             //panel starts with all options
             _panelItems.Clear();
             _prunedPanelItems.Clear();
             panelObjects.Clear();
+
+            //clear Autocomplete children in scene
+            foreach (Transform child in _itemsPanelRT.transform)
+            {
+                Destroy(child.gameObject);
+            }
 
             foreach (string option in AvailableOptions)
             {
@@ -246,7 +310,7 @@ namespace UnityEngine.UI.Extensions
                 if (i < AvailableOptions.Count)
                 {
                     itemObjs[i].name = "Item " + i + " " + _panelItems[i];
-                    itemObjs[i].transform.Find("Text").GetComponent<Text>().text = _panelItems[i]; //set the text value
+                    itemObjs[i].transform.Find("Text").GetComponent<Text>().text = AvailableOptions[i]; //set the text value
 
                     Button itemBtn = itemObjs[i].GetComponent<Button>();
                     itemBtn.onClick.RemoveAllListeners();
@@ -313,7 +377,9 @@ namespace UnityEngine.UI.Extensions
                 _inputRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _rectTransform.sizeDelta.y);
 
                 _scrollPanelRT.SetParent(transform, true);//break the scroll panel from the overlay
-                _scrollPanelRT.anchoredPosition = new Vector2(0, -_rectTransform.sizeDelta.y); //anchor it to the bottom of the button
+                _scrollPanelRT.anchoredPosition = _displayPanelAbove ?
+                    new Vector2(0, DropdownOffset + _rectTransform.sizeDelta.y * _panelItems.Count - 1) :
+                    new Vector2(0, -_rectTransform.sizeDelta.y);
 
                 //make the overlay fill the screen
                 _overlayRT.SetParent(_canvas.transform, false); //attach it to top level object
@@ -326,7 +392,7 @@ namespace UnityEngine.UI.Extensions
 
             if (_panelItems.Count < 1) return;
 
-            float dropdownHeight = _rectTransform.sizeDelta.y * Mathf.Min(_itemsToDisplay, _panelItems.Count);
+            float dropdownHeight = _rectTransform.sizeDelta.y * Mathf.Min(_itemsToDisplay, _panelItems.Count) + DropdownOffset;
 
             _scrollPanelRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dropdownHeight);
             _scrollPanelRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _rectTransform.sizeDelta.x);
@@ -336,6 +402,7 @@ namespace UnityEngine.UI.Extensions
 
             _scrollBarRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scrollbarWidth);
             _scrollBarRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dropdownHeight);
+            if (scrollbarWidth == 0) _scrollHandleRT.gameObject.SetActive(false); else _scrollHandleRT.gameObject.SetActive(true); 
 
             _slidingAreaRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
             _slidingAreaRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dropdownHeight - _scrollBarRT.sizeDelta.x);
@@ -387,7 +454,7 @@ namespace UnityEngine.UI.Extensions
         /// Toggle the drop down list
         /// </summary>
         /// <param name="directClick"> whether an item was directly clicked on</param>
-        public void ToggleDropdownPanel(bool directClick)
+        public void ToggleDropdownPanel(bool directClick = false)
         {
             _isPanelActive = !_isPanelActive;
 
