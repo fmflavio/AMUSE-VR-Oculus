@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<Presentation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Scene="1">
-  <Medias>
-    <Media type="VIDEO2D" name="Video2D - 1" src="Seal 2D.mp4" px="-1.21293068" py="-0.9626086" pz="4.75417566" lookAt="true" rStart="OnBegin This Scene" mStart="3" sStart="0" rEnd="End of This Media Time" mEnd="3" sEnd="10" mDuration="0" sDuration="10" mDelay="3" sDelay="0" scale="0.005" loop="false" mute="false" volume="1" interactive="false" startTarget="false" interactiveIcon="false" />
-    <Media type="AUDIO3D" name="Audio3D - 1" src="null" px="-4.16161" py="-0.306574851" pz="2.75445271" lookAt="true" rStart="OnBegin This Scene" mStart="0" sStart="0" rEnd="End of This Media Time" mEnd="0" sEnd="0" mDuration="0" sDuration="0" mDelay="0" sDelay="0" scale="0" loop="false" mute="false" volume="1" interactive="false" startTarget="false" interactiveIcon="false" />
-  </Medias>
-</Presentation>

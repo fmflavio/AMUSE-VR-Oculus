@@ -122,7 +122,8 @@ public class Video2DSettings: MonoBehaviour {
         return videoPlayer.isPlaying;
     }
     private FileInfo[] GetFolderFiles() {
-        path = Application.dataPath + "/Resources/" + folderMidia;
+        //path = Application.dataPath + "/Resources/" + folderMidia;
+        path = Application.persistentDataPath;
         folder = new DirectoryInfo(@path);
         FileInfo[] Files = folder.GetFiles().Where(f => f.Extension == ".mp4" || f.Extension == ".avi").ToArray(); ;
         return Files;

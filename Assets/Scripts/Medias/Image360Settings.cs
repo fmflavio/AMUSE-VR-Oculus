@@ -86,7 +86,8 @@ public class Image360Settings: MonoBehaviour {
         }
     }
     private FileInfo[] getFolderFiles() {
-        path = Application.dataPath + "/Resources/" + folderMidia;
+        //path = Application.dataPath + "/Resources/" + folderMidia;
+        path = Application.persistentDataPath;
         folder = new DirectoryInfo(@path);
         FileInfo[] Files = folder.GetFiles().Where(f => f.Extension == ".jpg" || f.Extension == ".jpeg" || f.Extension == ".png").ToArray(); ;
         return Files;

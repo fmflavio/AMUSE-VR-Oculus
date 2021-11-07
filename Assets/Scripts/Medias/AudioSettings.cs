@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using System;
+using System.Collections;
+using UnityEngine.Networking;
 
 public class AudioSettings: MonoBehaviour {
     /// <summary>
@@ -67,9 +69,8 @@ public class AudioSettings: MonoBehaviour {
         folderDropdown.options.Clear();
         files = GetFolderFiles();
         names.Add("Choose your 3D Audio");
-        foreach (FileInfo data in files) {
+        foreach (FileInfo data in files)
             names.Add(data.Name);
-        }
         folderDropdown.AddOptions(names);
     }
     public void Update() {
@@ -86,14 +87,33 @@ public class AudioSettings: MonoBehaviour {
     public void setAudio() {
         audioSource.Stop();
         if (folderDropdown.value > 0) {
-            clip = Resources.Load(folderMidia + names[folderDropdown.value].Substring(0, names[folderDropdown.value].Length - 4)) as AudioClip;
-            audioSource.clip = clip;
-            audioSource.Play();
+            //clip = Resources.Load(folderMidia + names[folderDropdown.value].Substring(0, names[folderDropdown.value].Length - 4)) as AudioClip;
+            //audioSource.Play();
+            StartCoroutine(LoadAudio(path+"/", names[folderDropdown.value]));
+
+            Text temp = setings.transform.Find("Temp").GetComponent<Text>();
+            temp.text = path + "/"+ names[folderDropdown.value];
+
             playButton.GetComponentInChildren<Text>().text = "Stop";
         }
     }
+    //para carregar o audio
+    private IEnumerator LoadAudio(string soundPath, string  audioName) {
+        WWW request = GetAudioFromFile(soundPath, audioName);
+        yield return request;
+        clip = request.GetAudioClip();
+        clip.name = audioName;
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+    private WWW GetAudioFromFile(string path, string filename) {
+        string audioToLoad = string.Format(path + "{0}", filename);
+        WWW request = new WWW(audioToLoad);
+        return request;
+    }
     private FileInfo[] GetFolderFiles() {
-        path = Application.dataPath + "/Resources/" + folderMidia;
+        //path = Application.dataPath + "/Resources/" + folderMidia;
+        path = Application.persistentDataPath;
         folder = new DirectoryInfo(@path);
         FileInfo[] Files = folder.GetFiles().Where(f => f.Extension == ".mp3" || f.Extension == ".wav").ToArray(); 
         return Files;

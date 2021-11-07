@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using System;
 
 public class Image2DSettings : MonoBehaviour {
     /// <summary>
@@ -17,7 +18,7 @@ public class Image2DSettings : MonoBehaviour {
     private FileInfo[] files;
     private string path, folderMidia, uploadFile = "";
     private DirectoryInfo folder;
-    private List<string> names, tempList;
+    private List<string> names, tempList, completPaths;
     private Texture2D myTexture;
     private List<GameObject> listMidias = new List<GameObject>();
     private bool updateRelMedias = true, updateInteract = true;
@@ -44,6 +45,7 @@ public class Image2DSettings : MonoBehaviour {
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
         serializerManager = GameObject.Find("/Management/Data Management").GetComponent<SerializerManager>();
         rawImage = canvas.GetComponentInChildren<RawImage>();
+        myTexture = new Texture2D(2048, 1024, TextureFormat.RGB24, false);
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
         lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
@@ -68,11 +70,13 @@ public class Image2DSettings : MonoBehaviour {
         buttonMessage = canvas.GetComponentInChildren<Text>();
         //Folder File Manager
         names = new List<string>();
+        completPaths = new List<string>();
         folderDropdown.options.Clear();
         files = GetFolderFiles();
         names.Add("Choose your 2D Image");
         foreach (FileInfo data in files) {
             names.Add(data.Name);
+            completPaths.Add(data.FullName);
         }
         folderDropdown.AddOptions(names);
         //adiciona a primeira lista de cenas ao interact, removendo a cena atual
@@ -95,15 +99,32 @@ public class Image2DSettings : MonoBehaviour {
         this.gameObject.SetActive(true);
     }
     public void setTexture() {
-        myTexture = Resources.Load(folderMidia + names[folderDropdown.value].Substring(0, names[folderDropdown.value].Length - 4)) as Texture2D;
-        rawImage.texture = myTexture;
-        buttonMessage.text = "";
+        //myTexture = Resources.Load(folderMidia + names[folderDropdown.value].Substring(0, names[folderDropdown.value].Length - 4)) as Texture2D;
+        if (folderDropdown.value > 0) {
+            string pathFile = completPaths[folderDropdown.value - 1];
+            try {
+                if (File.Exists(pathFile)) {
+                    byte[] fileData = File.ReadAllBytes(pathFile);
+                    myTexture.LoadImage(fileData);
+                } else {
+                    Debug.LogError($"There is no file at: '{pathFile}'");
+                }
+            } catch (Exception exc) {
+                Debug.LogException(exc);
+            }
+            rawImage.texture = myTexture;
+            buttonMessage.text = "";
+
+            Text temp = setings.transform.Find("Temp").GetComponent<Text>();
+            temp.text = pathFile;
+        }
     }
 
     private FileInfo[] GetFolderFiles() {
         //path = Application.dataPath + "/Resources/" + folderMidia;
-        //path = "file:///storage/emulated/0/Download";
-        path = "///storage/emulated/0/DCIM/Camera/"; 
+        //path = "file:///C:\Users\flavi\AppData\LocalLow\fmflavio";
+        //path = "file:///storage/emulated/0/Android/data/com.oculus.AMUSEVR/files";
+        path = Application.persistentDataPath;
         folder = new DirectoryInfo(@path);
         FileInfo[] Files = folder.GetFiles().Where(f => f.Extension == ".png" || f.Extension == ".jpeg" || f.Extension == ".jpg").ToArray(); ;
         return Files;

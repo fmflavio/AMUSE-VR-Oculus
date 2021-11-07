@@ -30,6 +30,10 @@ public class SerializerManager : MonoBehaviour {
             DeleteFiles();
         }
     }
+
+         //if (!Directory.Exists("Saves"))
+            //Directory.CreateDirectory("Saves");
+
     public bool isEmptyList() {
         pre = SerializeOp.Deserialize<Presentation>(path + ".xml");
         if(File.Exists(path + ".xml")) 
