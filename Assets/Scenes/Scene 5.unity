@@ -31155,7 +31155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneManger: {fileID: 1529193076}
   parentMidias: {fileID: 789613322}
-  front: {fileID: 2117094283}
   image2DPrefab: {fileID: 6747399403433600190, guid: 3df9247f563c530479a394c479e7b612,
     type: 3}
   video2DPrefab: {fileID: 7794002477646559013, guid: 8f043903e6616794697f926aa09e4b4e,
@@ -31172,6 +31171,9 @@ MonoBehaviour:
     type: 3}
   sELightPrefab: {fileID: 7367313482002069039, guid: a26b01b1b2063b4488fcb5519c4ee429,
     type: 3}
+  pIPPrefab: {fileID: 2136830410}
+  image360Prefab: {fileID: 1761895027}
+  video360Prefab: {fileID: 2033896905}
 --- !u!4 &1510958381
 Transform:
   m_ObjectHideFlags: 0

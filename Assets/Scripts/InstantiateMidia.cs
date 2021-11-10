@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class InstantiateMidia: MonoBehaviour {
     private GameObject ob;
-    public GameObject sceneManger, parentMidias, front, image2DPrefab, video2DPrefab, textMessagePrefab,
-        audioPrefab, interactPrefab, sEWindPrefab, sESteamPrefab, sELightPrefab;
+    public GameObject sceneManger, parentMidias, image2DPrefab, video2DPrefab, textMessagePrefab,
+        audioPrefab, interactPrefab, sEWindPrefab, sESteamPrefab, sELightPrefab, pIPPrefab, image360Prefab, video360Prefab;
     private float distance = 5;
 
     public void Start() {
@@ -17,24 +17,18 @@ public class InstantiateMidia: MonoBehaviour {
     public void intantiateVideo360() {
         Camera.main.clearFlags = CameraClearFlags.Color;
         Camera.main.backgroundColor = Color.white;
-        ob = parentMidias.transform.Find("Video360").gameObject;
-        List<GameObject> list = sceneManger.GetComponent<SceneManagement>().video360;
-        sceneManger.GetComponent<SceneManagement>().video360.Add(ob);
+        sceneManger.GetComponent<SceneManagement>().video360.Add(video360Prefab);
         sceneManger.GetComponent<SceneManagement>().image360.Clear();
     }
 
     public void intantiateImage360() {
         Camera.main.clearFlags = CameraClearFlags.Color;
         Camera.main.backgroundColor = Color.white;
-        ob = parentMidias.transform.Find("Image360").gameObject;
-        List<GameObject> list = sceneManger.GetComponent<SceneManagement>().image360;
-        sceneManger.GetComponent<SceneManagement>().image360.Add(ob);
+        sceneManger.GetComponent<SceneManagement>().image360.Add(image360Prefab);
         sceneManger.GetComponent<SceneManagement>().video360.Clear();
     }
     public void intantiatePIP() {
-        ob = front.transform.Find("PIP").gameObject;
-        List<GameObject> list = sceneManger.GetComponent<SceneManagement>().pip;
-        sceneManger.GetComponent<SceneManagement>().pip.Add(ob);
+        sceneManger.GetComponent<SceneManagement>().pip.Add(pIPPrefab);
     }
 
     public void intantiateVideo2D() {

@@ -1,5 +1,5 @@
 ﻿/// referencia https://gram.gs/gramlog/xml-serialization-and-deserialization-in-unity/
-/// //https://answers.unity.com/questions/293400/how-can-i-use-a-list-inside-a-xml-serializer-class.html
+/// https://answers.unity.com/questions/293400/how-can-i-use-a-list-inside-a-xml-serializer-class.html
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
