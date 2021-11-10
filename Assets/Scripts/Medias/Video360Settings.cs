@@ -82,11 +82,9 @@ public class Video360Settings: MonoBehaviour {
             DynamicGI.UpdateEnvironment();
         }
     }
-    /*
     public bool isPlay() {
         return videoPlayer.isPlaying;
     }
-    */
     private FileInfo[] getFolderFiles() {
         //path = Application.dataPath + "/Resources/" + folderMidia;
         path = Application.persistentDataPath;

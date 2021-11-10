@@ -19,7 +19,7 @@ public class AudioSettings: MonoBehaviour {
     private FileInfo[] files;
     private string path, folderMidia, uploadFile="";
     private DirectoryInfo folder;
-    private List<string> names, tempList;
+    private List<string> names, tempList, completPaths;
     private RenderTexture rt2D;
     private List<GameObject> listMidias = new List<GameObject>();
     private bool updateFlag = true;
@@ -66,11 +66,14 @@ public class AudioSettings: MonoBehaviour {
         //Settings Setters
         //Folder File Manager
         names = new List<string>();
+        completPaths = new List<string>();
         folderDropdown.options.Clear();
         files = GetFolderFiles();
         names.Add("Choose your 3D Audio");
-        foreach (FileInfo data in files)
+        foreach (FileInfo data in files) {
             names.Add(data.Name);
+            completPaths.Add(data.FullName);
+        }
         folderDropdown.AddOptions(names);
     }
     public void Update() {
@@ -89,15 +92,32 @@ public class AudioSettings: MonoBehaviour {
         if (folderDropdown.value > 0) {
             //clip = Resources.Load(folderMidia + names[folderDropdown.value].Substring(0, names[folderDropdown.value].Length - 4)) as AudioClip;
             //audioSource.Play();
-            StartCoroutine(LoadAudio(path+"/", names[folderDropdown.value]));
+            //StartCoroutine(GetAudioClip());
+
+            StartCoroutine(LoadAudio());
 
             Text temp = setings.transform.Find("Temp").GetComponent<Text>();
-            temp.text = path + "/"+ names[folderDropdown.value];
+            temp.text = completPaths[folderDropdown.value - 1];
 
             playButton.GetComponentInChildren<Text>().text = "Stop";
         }
     }
     //para carregar o audio
+    private IEnumerator LoadAudio() {
+        WWW request = new WWW(completPaths[folderDropdown.value - 1]);
+        yield return request;
+        audioSource.clip = request.GetAudioClip();
+        audioSource.Play();
+    }
+    /*
+    IEnumerator GetAudioClip() {
+        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(completPaths[folderDropdown.value - 1], AudioType.MPEG)) {
+            yield return www.SendWebRequest();
+            AudioClip myClip = DownloadHandlerAudioClip.GetContent(www);
+            audioSource.clip = myClip;
+            audioSource.Play();
+        }
+    }
     private IEnumerator LoadAudio(string soundPath, string  audioName) {
         WWW request = GetAudioFromFile(soundPath, audioName);
         yield return request;
@@ -106,11 +126,12 @@ public class AudioSettings: MonoBehaviour {
         audioSource.clip = clip;
         audioSource.Play();
     }
-    private WWW GetAudioFromFile(string path, string filename) {
-        string audioToLoad = string.Format(path + "{0}", filename);
+    private WWW GetAudioFromFile(string soundPath, string filename) {
+        string audioToLoad = string.Format(soundPath + "{0}", filename);
         WWW request = new WWW(audioToLoad);
         return request;
     }
+    */
     private FileInfo[] GetFolderFiles() {
         //path = Application.dataPath + "/Resources/" + folderMidia;
         path = Application.persistentDataPath;

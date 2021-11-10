@@ -17,7 +17,9 @@ public class SerializerManager : MonoBehaviour {
     private GameObject ob;
     private static int i = 0;
     public void Awake() {
-        path = SceneManager.GetActiveScene().name;
+        if (!Directory.Exists(Application.persistentDataPath + "/temp/"))
+            Directory.CreateDirectory(Application.persistentDataPath + "/temp/");
+        path = Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml";
     }
     void Update() {
         if(Input.GetKeyDown(KeyCode.S)) {
@@ -30,19 +32,23 @@ public class SerializerManager : MonoBehaviour {
             DeleteFiles();
         }
     }
-
-         //if (!Directory.Exists("Saves"))
-            //Directory.CreateDirectory("Saves");
-
     public bool isEmptyList() {
-        pre = SerializeOp.Deserialize<Presentation>(path + ".xml");
-        if(File.Exists(path + ".xml")) 
-            if(pre.Media.Count > 0) return false; else return true;
-        else return true;
+        if (!File.Exists(path))
+            return true;
+        else {
+            pre = SerializeOp.Deserialize<Presentation>(path);
+            if (pre.Media.Count > 0) return false; else return true;
+        }
+
     }
     public void serializeLoader(){
-        pre = SerializeOp.Deserialize<Presentation>(path+".xml");
-        //if(File.Exists(path + ".xml")) Debug.Log("XML FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE");
+        //if (!File.Exists(path)) {
+            //serializeSave();
+            //StreamWriter sr = File.CreateText(path);
+            //sr.Close();
+        //}
+        pre = SerializeOp.Deserialize<Presentation>(path);
+        //if(File.Exists(path)) Debug.Log("XML FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE");
         for(int i=0; i< pre.Media.Count; i++) { //lista todas as mídias encontradas no arquivo
             if(pre.Media[i].type.Equals("AUDIO3D")) { //individualmente carrega cada uma seguindo as caracteristicas do tipo
                 instantiate.intantiateAudio3D();
@@ -503,7 +509,8 @@ public class SerializerManager : MonoBehaviour {
                 media.px = ob.transform.position.x;
                 media.py = ob.transform.position.y;
                 media.pz = ob.transform.position.z;
-                media.lookAt = ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn;
+                if (!type.Equals("VIDEO360") && !type.Equals("IMAGE360") && !type.Equals("PIP"))
+                    media.lookAt = ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn;
                 media.rStart = ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().options[ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value].text;
                 if(ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value != 0)
                     media.rMediaStart = ob.transform.Find("EditMenu/Start/StartMediaDropdown").GetComponent<Dropdown>().options[ob.transform.Find("EditMenu/Start/StartMediaDropdown").GetComponent<Dropdown>().value].text;
@@ -541,8 +548,8 @@ public class SerializerManager : MonoBehaviour {
                 pre.Media.Add(media);
             }
         }
-        SerializeOp.Serialize(pre, path + ".xml");
-        //if(File.Exists(path + ".xml")) Debug.Log("XML SAVE"); else Debug.LogError("XML NOT SAVE");
+        SerializeOp.Serialize(pre, path);
+        //if(File.Exists(path)) Debug.Log("XML SAVE"); else Debug.LogError("XML NOT SAVE");
     }
     public void DeleteFiles() {
         string filePath;
