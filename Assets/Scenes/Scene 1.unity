@@ -29369,6 +29369,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 63661397}
+        m_MethodName: DeleteFiles
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1960148496}
         m_MethodName: LoadMain
         m_Mode: 1
@@ -44670,6 +44681,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Image360
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223443173020664311, guid: 4639cef53fa529849adb81cdd49e2a2c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4639cef53fa529849adb81cdd49e2a2c, type: 3}

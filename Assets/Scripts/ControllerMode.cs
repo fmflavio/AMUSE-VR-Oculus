@@ -20,19 +20,21 @@ public class ControllerMode : MonoBehaviour {
 
     public void Start() {
         string scene = SceneManager.GetActiveScene().name;
-        sceneTitleMenu1.text = sceneTitleMenu2.text = scene;
-        if(scene.Last() == '1') {
-            previus1.gameObject.SetActive(false);
-            previus2.gameObject.SetActive(false);
-        } else {
-            if(scene.Last() == '5') {
-                next1.gameObject.SetActive(false);
-                next2.gameObject.SetActive(false);
+        if (!scene.Equals("Main")) {
+            sceneTitleMenu1.text = sceneTitleMenu2.text = scene;
+            if (scene.Last() == '1') {
+                previus1.gameObject.SetActive(false);
+                previus2.gameObject.SetActive(false);
             } else {
-                previus1.gameObject.SetActive(true);
-                previus2.gameObject.SetActive(true);
-                next1.gameObject.SetActive(true);
-                next2.gameObject.SetActive(true);
+                if (scene.Last() == '5') {
+                    next1.gameObject.SetActive(false);
+                    next2.gameObject.SetActive(false);
+                } else {
+                    previus1.gameObject.SetActive(true);
+                    previus2.gameObject.SetActive(true);
+                    next1.gameObject.SetActive(true);
+                    next2.gameObject.SetActive(true);
+                }
             }
         }
     }

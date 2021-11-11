@@ -554,7 +554,7 @@ public class SerializerManager : MonoBehaviour {
     public void DeleteFiles() {
         string filePath;
         for(int i = 1; i <= 5; i++) {
-            filePath = "Scene " + i + ".xml";
+            filePath = Application.persistentDataPath + "/temp/" + "Scene " + i + ".xml";
             if(File.Exists(filePath))
                 File.Delete(filePath);
         }
