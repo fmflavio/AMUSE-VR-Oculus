@@ -85,7 +85,19 @@ public class PIPSettings: MonoBehaviour {
             rawImage.texture = rt2D; ;
             videoPlayer.targetTexture = rt2D;
             videoPlayer.Prepare();
+            playButton.gameObject.SetActive(true);
             playButton.GetComponentInChildren<Text>().text = "Stop";
+            loopToggle.gameObject.SetActive(true);
+            volumeSlider.gameObject.SetActive(true);
+            muteToggle.gameObject.SetActive(true);
+        } else {
+            videoPlayer.Stop();
+            loopToggle.gameObject.SetActive(false);
+            volumeSlider.gameObject.SetActive(false);
+            muteToggle.gameObject.SetActive(false);
+            playButton.GetComponentInChildren<Text>().text = "Play";
+            playButton.gameObject.SetActive(false);
+            rawImage.texture = new Texture2D(2048, 1024, TextureFormat.RGB24, false);
         }
     }
     public bool isPlay() {
@@ -155,13 +167,10 @@ public class PIPSettings: MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if(endDropdown.value == 0) 
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("Duration").gameObject.SetActive(true);
-        } else {
+        else 
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("Duration").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if(sceneManager.getMidias().Count > 1) {
@@ -319,12 +328,15 @@ public class PIPSettings: MonoBehaviour {
         }
     }
     public void setLoop() {
-        videoPlayer.isLooping = loopToggle.isOn;
+        if (loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
+            videoPlayer.isLooping = loopToggle.isOn;
     }
     public void scaleVolume() {
-        videoPlayer.SetDirectAudioVolume(0, volumeSlider.value);
+        if (volumeSlider.gameObject.activeSelf)
+            videoPlayer.SetDirectAudioVolume(0, volumeSlider.value);
     }
     public void setMute() {
-        videoPlayer.SetDirectAudioMute(0, muteToggle.isOn);
+        if (loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
+            videoPlayer.SetDirectAudioMute(0, muteToggle.isOn);
     }
 }

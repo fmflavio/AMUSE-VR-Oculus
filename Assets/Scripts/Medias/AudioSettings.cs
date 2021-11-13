@@ -99,7 +99,17 @@ public class AudioSettings: MonoBehaviour {
             Text temp = setings.transform.Find("Temp").GetComponent<Text>();
             temp.text = completPaths[folderDropdown.value - 1];
 
+            loopToggle.gameObject.SetActive(true);
+            volumeSlider.gameObject.SetActive(true);
+            muteToggle.gameObject.SetActive(true);
+            playButton.gameObject.SetActive(true);
             playButton.GetComponentInChildren<Text>().text = "Stop";
+        } else {
+            loopToggle.gameObject.SetActive(false);
+            volumeSlider.gameObject.SetActive(false);
+            muteToggle.gameObject.SetActive(false);
+            playButton.gameObject.SetActive(false);
+            playButton.GetComponentInChildren<Text>().text = "Play";
         }
     }
     //para carregar o audio
@@ -195,13 +205,10 @@ public class AudioSettings: MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if(endDropdown.value == 0)
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("Duration").gameObject.SetActive(true);
-        } else {
+        else
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("Duration").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if (sceneManager.getMidias().Count > 1) {
@@ -359,14 +366,15 @@ public class AudioSettings: MonoBehaviour {
         }
     }
     public void setLoop() {
-        if(audioSource.isPlaying)
+        if(loopToggle.gameObject.activeSelf && audioSource.isPlaying)
             audioSource.loop = loopToggle.isOn;
     }
     public void scaleVolume() {
-        audioSource.volume = volumeSlider.value;
+        if(volumeSlider.gameObject.activeSelf)
+            audioSource.volume = volumeSlider.value;
     }
     public void setMute() {
-        if(audioSource.isPlaying)
+        if(loopToggle.gameObject.activeSelf &&audioSource.isPlaying)
             audioSource.mute = muteToggle.isOn;
     }
     public void interact() {

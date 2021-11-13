@@ -21,7 +21,7 @@ public class SESteamSettings: MonoBehaviour {
         endMinutes, endSeconds, delayMinutes, delaySeconds;
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
-    private GameObject start, end;
+    private GameObject start, end, durationSteppers;
     private RawImage rawImage;
     private Toggle lookAt, loopToggle;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
@@ -37,6 +37,7 @@ public class SESteamSettings: MonoBehaviour {
         rawImage = canvas.GetComponentInChildren<RawImage>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        durationSteppers = setings.transform.Find("DurationSteppers").gameObject;
         lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         intensitySlider = setings.transform.Find("IntensitySlider").GetComponent<Slider>();
         stepperDurationMinutes = setings.transform.Find("DurationSteppers/StepperMinutes").GetComponent<Stepper>();
@@ -58,6 +59,12 @@ public class SESteamSettings: MonoBehaviour {
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
         }
+    }
+    public void setToogleLoop() {
+        if (loopToggle.isOn)
+            durationSteppers.SetActive(false);
+        else
+            durationSteppers.SetActive(true);
     }
     public void updateShowComponents() {
         if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia
@@ -96,13 +103,10 @@ public class SESteamSettings: MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if(endDropdown.value == 0) 
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(true);
-        } else {
+        else
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if (sceneManager.getMidias().Count > 1) {

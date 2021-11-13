@@ -5,8 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SceneManagement: MonoBehaviour
-{
+public class SceneManagement: MonoBehaviour {
     public List<GameObject> audio3D, images2D, image360, interact, pip, sELight,
         sESteam, sEWind, video2D, video360, textMessage = new List<GameObject>();
     public InstantiateMidia instantiateMidia;

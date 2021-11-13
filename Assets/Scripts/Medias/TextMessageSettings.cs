@@ -24,7 +24,7 @@ public class TextMessageSettings: MonoBehaviour {
         endMinutes, endSeconds, delayMinutes, delaySeconds;
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
-    private GameObject start, end, canvasKeyboard, interactiveIcon;
+    private GameObject start, end, canvasKeyboard, interactiveIcon, durationSteppers;
     private RawImage rawImage;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Toggle lookAt, loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
@@ -42,6 +42,7 @@ public class TextMessageSettings: MonoBehaviour {
         rawImage = canvas.GetComponentInChildren<RawImage>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        durationSteppers = setings.transform.Find("DurationSteppers").gameObject;
         lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         interactiveIcon = canvas.transform.Find("InteractiveIcon").gameObject;
         startTargetToggle = setings.transform.Find("Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>();
@@ -74,6 +75,12 @@ public class TextMessageSettings: MonoBehaviour {
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
         }
+    }
+    public void setToogleLoop() {
+        if (loopToggle.isOn)
+            durationSteppers.SetActive(false);
+        else
+            durationSteppers.SetActive(true);
     }
     public void showKeyBoard() {
         canvasKeyboard.SetActive(!canvasKeyboard.activeSelf);
@@ -132,13 +139,10 @@ public class TextMessageSettings: MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if(endDropdown.value == 0) 
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(true);
-        } else {
+        else
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if (sceneManager.getMidias().Count > 1) {

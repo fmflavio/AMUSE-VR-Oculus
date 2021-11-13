@@ -28,7 +28,7 @@ public class Video2DSettings: MonoBehaviour {
         endMinutes, endSeconds, delayMinutes, delaySeconds;
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
-    private GameObject start, end, interactiveIcon;
+    private GameObject start, end, interactiveIcon, interativeGroup;
     private RawImage rawImage;
     private VideoPlayer videoPlayer;
     private Button playButton, uploadButton;
@@ -51,6 +51,7 @@ public class Video2DSettings: MonoBehaviour {
         videoPlayer = canvas.GetComponent<VideoPlayer>();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        interativeGroup = setings.transform.Find("Interact").gameObject;
         lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         interactiveIcon = canvas.transform.Find("InteractiveIcon").gameObject;
         startTargetToggle = setings.transform.Find("Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>();
@@ -61,7 +62,6 @@ public class Video2DSettings: MonoBehaviour {
         loopToggle = setings.transform.Find("LoopToggle").GetComponent<Toggle>();
         folderDropdown = setings.transform.Find("FolderDropdown").GetComponent<Dropdown>();
         duration = setings.transform.Find("Duration/DurationTimeText").GetComponent<Text>();
-        loopToggle = setings.transform.Find("LoopToggle").GetComponent<Toggle>();
         startDropdown = setings.transform.Find("Start/StartDropdown").GetComponent<Dropdown>();
         startMediaDropdown = setings.transform.Find("Start/StartMediaDropdown").GetComponent<Dropdown>();
         stepperDelayMinutes = setings.transform.Find("Start/DelaySteppers/StepperMinutes").GetComponent<Stepper>();
@@ -114,8 +114,26 @@ public class Video2DSettings: MonoBehaviour {
             rawImage.texture = rt2D; ;
             videoPlayer.targetTexture = rt2D;
             videoPlayer.Prepare();
+            playButton.gameObject.SetActive(true);
             playButton.GetComponentInChildren<Text>().text = "Stop";
             buttonMessage.text = "";
+            loopToggle.gameObject.SetActive(true);
+            scaleSlider.gameObject.SetActive(true);
+            interativeGroup.SetActive(true);
+            volumeSlider.gameObject.SetActive(true);
+            muteToggle.gameObject.SetActive(true);
+            
+        } else {
+            videoPlayer.Stop();
+            loopToggle.gameObject.SetActive(false);
+            volumeSlider.gameObject.SetActive(false);
+            muteToggle.gameObject.SetActive(false);
+            scaleSlider.gameObject.SetActive(false);
+            interativeGroup.SetActive(false);
+            playButton.GetComponentInChildren<Text>().text = "Play";
+            playButton.gameObject.SetActive(false);
+            rawImage.texture = new Texture2D(2048, 1024, TextureFormat.RGB24, false);
+            buttonMessage.text = "BLANK";
         }
     }
     public bool isPlay() {
@@ -202,13 +220,10 @@ public class Video2DSettings: MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if(endDropdown.value == 0) 
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("Duration").gameObject.SetActive(true);
-        } else {
+        else 
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("Duration").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if (sceneManager.getMidias().Count > 1) {
@@ -366,17 +381,22 @@ public class Video2DSettings: MonoBehaviour {
         }
     }
     public void setLoop() {
-        videoPlayer.isLooping = loopToggle.isOn;
+        if (loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
+            videoPlayer.isLooping = loopToggle.isOn;
     }
     public void scaleVolume() {
-        videoPlayer.SetDirectAudioVolume(0, volumeSlider.value);
+        if (volumeSlider.gameObject.activeSelf)
+            videoPlayer.SetDirectAudioVolume(0, volumeSlider.value);
     }
     public void setMute() {
-        videoPlayer.SetDirectAudioMute(0,muteToggle.isOn);
+        if (loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
+            videoPlayer.SetDirectAudioMute(0,muteToggle.isOn);
     }
     public void ScaleCanvas() {
-        var newVector = new Vector3(originalMenuScale.x * scaleSlider.value, originalMenuScale.y * scaleSlider.value, originalMenuScale.z * scaleSlider.value);
-        this.canvas.transform.localScale = newVector;
+        if (scaleSlider.gameObject.activeSelf) {
+            var newVector = new Vector3(originalMenuScale.x * scaleSlider.value, originalMenuScale.y * scaleSlider.value, originalMenuScale.z * scaleSlider.value);
+            this.canvas.transform.localScale = newVector;
+        }
     }
     public void interact() {
         //feedback condicionado aos cliques

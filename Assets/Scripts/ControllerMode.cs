@@ -11,12 +11,14 @@ using UnityEngine.SceneManagement;
 
 public class ControllerMode : MonoBehaviour {
     
-    public GameObject MiniMenuEdit, MiniMenuDelete, ViwerMenu, LeftControl, RightControl;
+    public GameObject menuEdit, menuDelete, MiniMenuEdit, MiniMenuDelete, ViwerMenu, LeftControl, RightControl;
     public Canvas rightMessage;
     public Text sceneTitleMenu1, sceneTitleMenu2;
     public Button previus1, previus2, next1, next2;
     public int NOME = 0, EDIT = 1, DELETE = 2, VIEWER = 3;
     public bool controllerHand = true;
+    private List<GameObject> listMidias = new List<GameObject>();
+    public SceneManagement sceneManager;
 
     public void Start() {
         string scene = SceneManager.GetActiveScene().name;
@@ -38,13 +40,12 @@ public class ControllerMode : MonoBehaviour {
             }
         }
     }
-
     public int getMode() {
-        if (MiniMenuEdit.activeSelf) {
+        if (menuEdit.activeSelf || MiniMenuEdit.activeSelf) {
             getModeMessage(EDIT);
             return EDIT;
         } else {
-            if (MiniMenuDelete.activeSelf) {
+            if (menuDelete.activeSelf || MiniMenuDelete.activeSelf) {
                 getModeMessage(DELETE);
                 return DELETE;
             } else {
@@ -58,18 +59,52 @@ public class ControllerMode : MonoBehaviour {
             }
         }
     }
-    //mensagens para exibir no controle
+    //mensagens para exibir no controle e listar nos menus
     public void getModeMessage(int mode) {
-        if (mode == EDIT) 
+        if (mode == EDIT) {
+            //exibe mensagem no controle
             rightMessage.GetComponentInChildren<Text>().text = "Edit Mode";
-        else
-            if (mode == DELETE)
-                rightMessage.GetComponentInChildren<Text>().text = "Delete Mode";
-            else
-                if (mode == VIEWER)
-                    rightMessage.GetComponentInChildren<Text>().text = "Preview Mode";
-                else
-                    rightMessage.GetComponentInChildren<Text>().text = "Author Mode";
+            //lista nos menus os botões
+            listMidias = sceneManager.getMidias();
+            foreach (GameObject namesMedia in listMidias) {
+                if (namesMedia.name.Equals("Video360")) {
+                    menuEdit.transform.Find("Video360Button").gameObject.SetActive(true);
+                    MiniMenuEdit.transform.Find("Video360Button").gameObject.SetActive(true);
+                }
+                if (namesMedia.name.Equals("Image360")) {
+                    menuEdit.transform.Find("Image360Button").gameObject.SetActive(true);
+                    MiniMenuEdit.transform.Find("Image360Button").gameObject.SetActive(true);
+                }
+                if (namesMedia.name.Equals("PIP")) {
+                    menuEdit.transform.Find("PIPButton").gameObject.SetActive(true);
+                    MiniMenuEdit.transform.Find("PIPButton").gameObject.SetActive(true);
+                }
+            }
+        }        
+        if (mode == DELETE) {
+            rightMessage.GetComponentInChildren<Text>().text = "Delete Mode";
+            listMidias = sceneManager.getMidias();
+            foreach (GameObject namesMedia in listMidias) {
+                if (namesMedia.name.Equals("Video360")) {
+                    menuDelete.transform.Find("Video360Button").gameObject.SetActive(true);
+                    MiniMenuDelete.transform.Find("Video360Button").gameObject.SetActive(true);
+                }
+                if (namesMedia.name.Equals("Image360")) {
+                    menuDelete.transform.Find("Image360Button").gameObject.SetActive(true);
+                    MiniMenuDelete.transform.Find("Image360Button").gameObject.SetActive(true);
+                }
+                if (namesMedia.name.Equals("PIP")) {
+                    menuDelete.transform.Find("PIPButton").gameObject.SetActive(true);
+                    MiniMenuDelete.transform.Find("PIPButton").gameObject.SetActive(true);
+                }
+            }
+        }
+        if (mode == VIEWER) {
+            rightMessage.GetComponentInChildren<Text>().text = "Preview Mode";
+        }
+        if (mode == NOME) {
+            rightMessage.GetComponentInChildren<Text>().text = "Author Mode";
+        }       
     }
     //referente a desligar e ligar os lazers
     public void controllerLeftOnOff() {

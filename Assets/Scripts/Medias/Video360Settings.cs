@@ -73,6 +73,7 @@ public class Video360Settings: MonoBehaviour {
     }
     public void setVideo360() {
         if (folderDropdown.value != 0) {
+            videoPlayer.Stop();
             Camera.main.clearFlags = CameraClearFlags.Skybox;
             RenderSettings.skybox = materialVideo360;
             videoPlayer.url = completPaths[folderDropdown.value - 1];
@@ -80,6 +81,20 @@ public class Video360Settings: MonoBehaviour {
             playButton.GetComponentInChildren<Text>().text = "Stop";
             videoPlayer.Play();
             DynamicGI.UpdateEnvironment();
+            playButton.gameObject.SetActive(true);
+            playButton.GetComponentInChildren<Text>().text = "Stop";
+            loopToggle.gameObject.SetActive(true);
+            volumeSlider.gameObject.SetActive(true);
+            muteToggle.gameObject.SetActive(true);
+        } else {
+            videoPlayer.Stop();
+            loopToggle.gameObject.SetActive(false);
+            volumeSlider.gameObject.SetActive(false);
+            muteToggle.gameObject.SetActive(false);
+            playButton.GetComponentInChildren<Text>().text = "Play";
+            playButton.gameObject.SetActive(false);
+            Camera.main.clearFlags = CameraClearFlags.Color;
+            Camera.main.backgroundColor = Color.white;
         }
     }
     public bool isPlay() {
@@ -149,13 +164,10 @@ public class Video360Settings: MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if(endDropdown.value == 0)
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("Duration").gameObject.SetActive(true);
-        } else {
+        else 
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("Duration").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if (sceneManager.getMidias().Count > 1) {
@@ -313,14 +325,15 @@ public class Video360Settings: MonoBehaviour {
         }
     }
     public void setLoop() {
-        if(videoPlayer.isPlaying)
+        if (loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
             videoPlayer.isLooping = loopToggle.isOn;
     }
     public void scaleVolume() {
-        videoPlayer.SetDirectAudioVolume(0, volumeSlider.value);
+        if(volumeSlider.gameObject.activeSelf)
+            videoPlayer.SetDirectAudioVolume(0, volumeSlider.value);
     }
     public void setMute() {
-        if(videoPlayer.isPlaying)
+        if(loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
             videoPlayer.SetDirectAudioMute(0, muteToggle.isOn);
     }
 }

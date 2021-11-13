@@ -681,7 +681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1966579154027354982
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5946,7 +5946,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3424547509199104612
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6349,7 +6349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1114690961381944563
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7191,7 +7191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5954995304430990394
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7950,7 +7950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5954995304911649454
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8151,7 +8151,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5954995304991476683
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9673,14 +9673,13 @@ GameObject:
   m_Component:
   - component: {fileID: 14697792490634122}
   - component: {fileID: 537593474075885753}
-  - component: {fileID: 705687684793345275}
   m_Layer: 5
   m_Name: LoopToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &14697792490634122
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9748,35 +9747,8 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 705687684793345275}
-        m_MethodName: ToggleShowComponents
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
---- !u!114 &705687684793345275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6053416215726810056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43887ed306ba90e4baac352609569493, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowMyObject:
-  - {fileID: 5954995305408335736}
-  - {fileID: 7191650742100730504}
-  controllerMode: {fileID: 0}
 --- !u!1 &7191650742100730504
 GameObject:
   m_ObjectHideFlags: 0

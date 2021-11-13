@@ -24,7 +24,7 @@ public class Image360Settings: MonoBehaviour {
     public Canvas setings;
     public Material materialImage360;
     private SceneManagement sceneManager;
-    private GameObject start, end;
+    private GameObject start, end, durationSteppers;
     private Button uploadButton;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Toggle loopToggle;
@@ -37,6 +37,7 @@ public class Image360Settings: MonoBehaviour {
         myTexture = new Texture2D(2048, 1024, TextureFormat.RGB24, false);
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        durationSteppers = setings.transform.Find("DurationSteppers").gameObject;
         uploadButton = setings.transform.Find("UploadFileButton").GetComponent<Button>();
         folderDropdown = setings.transform.Find("FolderDropdown").GetComponent<Dropdown>();
         stepperDurationMinutes = setings.transform.Find("DurationSteppers/StepperMinutes").GetComponent<Stepper>();
@@ -83,7 +84,20 @@ public class Image360Settings: MonoBehaviour {
             materialImage360.mainTexture = myTexture;
             RenderSettings.skybox = materialImage360;
             DynamicGI.UpdateEnvironment();
+            loopToggle.gameObject.SetActive(true);
+            setToogleLoop();
+        } else {
+            loopToggle.gameObject.SetActive(false);
+            durationSteppers.SetActive(false);
+            Camera.main.clearFlags = CameraClearFlags.Color;
+            Camera.main.backgroundColor = Color.white;
         }
+    }
+    public void setToogleLoop() {
+        if (loopToggle.isOn)
+            durationSteppers.SetActive(false);
+        else
+            durationSteppers.SetActive(true);
     }
     private FileInfo[] getFolderFiles() {
         //path = Application.dataPath + "/Resources/" + folderMidia;
@@ -149,13 +163,10 @@ public class Image360Settings: MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if(endDropdown.value == 0) {
+        if(endDropdown.value == 0) 
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(true);
-        } else {
+        else 
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if (sceneManager.getMidias().Count > 1) {

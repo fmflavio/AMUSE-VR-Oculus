@@ -42,11 +42,6 @@ public class SerializerManager : MonoBehaviour {
 
     }
     public void serializeLoader(){
-        //if (!File.Exists(path)) {
-            //serializeSave();
-            //StreamWriter sr = File.CreateText(path);
-            //sr.Close();
-        //}
         pre = SerializeOp.Deserialize<Presentation>(path);
         //if(File.Exists(path)) Debug.Log("XML FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE");
         for(int i=0; i< pre.Media.Count; i++) { //lista todas as mídias encontradas no arquivo

@@ -28,13 +28,13 @@ public class Image2DSettings : MonoBehaviour {
         endMinutes, endSeconds, delayMinutes, delaySeconds;
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
-    private GameObject start, end, interactiveIcon;
+    private GameObject start, end, interactiveIcon, durationSteppers, interativeGroup;
     private RawImage rawImage;
     private Button uploadButton;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Toggle lookAt, loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
     private Dropdown folderDropdown, chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
-    private Slider slider;
+    private Slider scaleSlider;
     private Vector3 originalMenuScale;
     private SerializerManager serializerManager;
     private Text buttonMessage;
@@ -48,6 +48,8 @@ public class Image2DSettings : MonoBehaviour {
         myTexture = new Texture2D(2048, 1024, TextureFormat.RGB24, false);
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
+        durationSteppers = setings.transform.Find("DurationSteppers").gameObject;
+        interativeGroup = setings.transform.Find("Interact").gameObject;
         lookAt = setings.transform.Find("LookAt").GetComponent<Toggle>();
         interactiveIcon = canvas.transform.Find("InteractiveIcon").gameObject;
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
@@ -65,7 +67,7 @@ public class Image2DSettings : MonoBehaviour {
         stepperDelaySecond = setings.transform.Find("Start/DelaySteppers/StepperSeconds").GetComponent<Stepper>();
         endDropdown = setings.transform.Find("End/EndDropdown").GetComponent<Dropdown>();
         endMediaDropdown = setings.transform.Find("End/EndMediaDropdown").GetComponent<Dropdown>();
-        slider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
+        scaleSlider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
         originalMenuScale = canvas.transform.localScale;
         buttonMessage = canvas.GetComponentInChildren<Text>();
         //Folder File Manager
@@ -117,9 +119,26 @@ public class Image2DSettings : MonoBehaviour {
 
             Text temp = setings.transform.Find("Temp").GetComponent<Text>();
             temp.text = pathFile;
+            loopToggle.gameObject.SetActive(true);
+            setToogleLoop();
+            scaleSlider.gameObject.SetActive(true);
+            interativeGroup.SetActive(true);
+        } else {
+            loopToggle.gameObject.SetActive(false);
+            durationSteppers.SetActive(false);
+            scaleSlider.gameObject.SetActive(false);
+            interativeGroup.SetActive(false);
+            rawImage.texture = new Texture2D(2048, 1024, TextureFormat.RGB24, false);
+            buttonMessage.text = "BLANK";
         }
     }
-
+    public void setToogleLoop() {
+        if(loopToggle.gameObject.activeSelf)
+            if (loopToggle.isOn)
+                durationSteppers.SetActive(false);
+            else
+                durationSteppers.SetActive(true);
+    }
     private FileInfo[] GetFolderFiles() {
         //path = Application.dataPath + "/Resources/" + folderMidia;
         //path = "file:///C:\Users\flavi\AppData\LocalLow\fmflavio";
@@ -181,13 +200,13 @@ public class Image2DSettings : MonoBehaviour {
             }
             //para gerar as midias e cenas no interact
             if (isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 3) && updateInteract) {
+                chooseTargetDropdown.ClearOptions();
                 listMidias = sceneManager.getMidias();
                 tempList = new List<string>();
                 foreach (GameObject namesMedia in listMidias) {
                     if (!namesMedia.name.Equals(this.gameObject.name))
                         tempList.Add(namesMedia.name);
                 }
-                chooseTargetDropdown.ClearOptions();
                 for (int i = 1; i <= 5; i++)
                     tempList.Add("Scene " + i);
                 tempList.Remove(SceneManager.GetActiveScene().name);
@@ -202,13 +221,10 @@ public class Image2DSettings : MonoBehaviour {
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
-        if (endDropdown.value == 0) {
+        if (endDropdown.value == 0)
             endMediaDropdown.gameObject.SetActive(false);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(true);
-        } else {
+        else
             endMediaDropdown.gameObject.SetActive(true);
-            setings.transform.Find("DurationSteppers").gameObject.SetActive(false);
-        }
     }
     public void updateTimes() {
         if (sceneManager.getMidias().Count > 1) {
@@ -343,7 +359,8 @@ public class Image2DSettings : MonoBehaviour {
         setings.transform.Find("Hide/MediaType").GetComponent<Text>().text = mediaType;
     }
     public void ScaleCanvas() {
-        this.canvas.transform.localScale = new Vector3(originalMenuScale.x * slider.value, originalMenuScale.y * slider.value, originalMenuScale.z * slider.value);
+        if(scaleSlider.gameObject.activeSelf)
+            this.canvas.transform.localScale = new Vector3(originalMenuScale.x * scaleSlider.value, originalMenuScale.y * scaleSlider.value, originalMenuScale.z * scaleSlider.value);
     }
     public void interact() { 
         //feedback condicionado aos cliques

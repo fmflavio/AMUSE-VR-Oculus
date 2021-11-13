@@ -3206,8 +3206,8 @@ public class OpenVRInterop
 	internal static extern IntPtr GetGenericInterface([In, MarshalAs(UnmanagedType.LPStr)] string pchInterfaceVersion, ref EVRInitError peError);
 	[DllImportAttribute("openvr_api", EntryPoint = "VR_IsInterfaceVersionValid", CallingConvention = CallingConvention.Cdecl)]
 	internal static extern bool IsInterfaceVersionValid([In, MarshalAs(UnmanagedType.LPStr)] string pchInterfaceVersion);
-	[DllImportAttribute("openvr_api", EntryPoint = "VR_GetInitToken", CallingConvention = CallingConvention.Cdecl)]
-	internal static extern uint GetInitToken();
+	//[DllImportAttribute("openvr_api", EntryPoint = "VR_GetInitToken", CallingConvention = CallingConvention.Cdecl)]
+	//internal static extern uint GetInitToken();
 }
 
 
@@ -4572,12 +4572,12 @@ public class OpenVR
 	{
 		return OpenVRInterop.IsInterfaceVersionValid(pchInterfaceVersion);
 	}
-
+	/*
 	public static uint GetInitToken()
 	{
-		return OpenVRInterop.GetInitToken();
+         return OpenVRInterop.GetInitToken();
 	}
-
+	*/
 	public const uint k_nDriverNone = 4294967295;
 	public const uint k_unMaxDriverDebugResponseSize = 32768;
 	public const uint k_unTrackedDeviceIndex_Hmd = 0;
@@ -4777,15 +4777,16 @@ public class OpenVR
 
 		void CheckClear()
 		{
-			if (VRToken != GetInitToken())
-			{
+				/*
+			if (VRToken != GetInitToken()) {
 				Clear();
 				VRToken = GetInitToken();
 			}
+				*/
 		}
 
 		public CVRSystem VRSystem()
-		{
+		{/*
 			CheckClear();
 			if (m_pVRSystem == null)
 			{
@@ -4794,6 +4795,7 @@ public class OpenVR
 				if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
 					m_pVRSystem = new CVRSystem(pInterface);
 			}
+				*/
 			return m_pVRSystem;
 		}
 
