@@ -117,8 +117,9 @@ public class Image2DSettings : MonoBehaviour {
             rawImage.texture = myTexture;
             buttonMessage.text = "";
 
-            Text temp = setings.transform.Find("Temp").GetComponent<Text>();
-            temp.text = pathFile;
+            //Text temp = setings.transform.Find("Temp").GetComponent<Text>();
+            //temp.text = pathFile;
+
             loopToggle.gameObject.SetActive(true);
             setToogleLoop();
             scaleSlider.gameObject.SetActive(true);
@@ -138,6 +139,17 @@ public class Image2DSettings : MonoBehaviour {
                 durationSteppers.SetActive(false);
             else
                 durationSteppers.SetActive(true);
+    }
+    public void interactiveWaitStart() {
+        if(isInteractToggle.isOn && startTargetToggle.isOn) {
+            string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
+            if (!target.StartsWith("Scene"))  //tratar-se de interação com outra mídia
+                foreach (GameObject namesMedia in sceneManager.getMidias()) 
+                    if (target.Equals(namesMedia.name)) {//altera para o valor Not Defined
+                        namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 3;
+                        namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().RefreshShownValue();
+                    }  
+        }
     }
     private FileInfo[] GetFolderFiles() {
         //path = Application.dataPath + "/Resources/" + folderMidia;
@@ -170,7 +182,7 @@ public class Image2DSettings : MonoBehaviour {
     public void updateShowComponents() {
         //ativa ou desativa o icone interactive
         interactiveIcon.gameObject.SetActive(isInteractToggle.isOn);
-        if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia
+        if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia, caso nao haja
             start.SetActive(false);
             end.SetActive(false);
         } else {//caso tenha mais que uma mídia
@@ -212,12 +224,13 @@ public class Image2DSettings : MonoBehaviour {
                 tempList.Remove(SceneManager.GetActiveScene().name);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
+                interactiveWaitStart();
                 updateInteract = false;
             } else
                 updateInteract = true;
         }
         //relações de start e end
-        if (startDropdown.value == 0)
+        if (startDropdown.value == 0 || startDropdown.value == 3)
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
@@ -334,7 +347,7 @@ public class Image2DSettings : MonoBehaviour {
                     }
                 }
             }
-        } else { // caso tenha somente uma mmídia
+        } else { // caso tenha somente uma mídia
             if (loopToggle.isOn) {//caso esteja em loop
                 startMinutes = startSeconds = delayMinutes = delaySeconds = "0";
                 durationMinutes = durationSeconds = endMinutes = endSeconds = "99";
@@ -377,7 +390,7 @@ public class Image2DSettings : MonoBehaviour {
             if (target.StartsWith("Scene")) { //se tratar-se de interação com cena
                 serializerManager.serializeSave(); //salva a cena atual
                 SceneManager.LoadScene(target); //carrega a cena
-            } else 
+            } else //se nao, carrega mídia
                 foreach (GameObject namesMedia in sceneManager.getMidias())
                     if (target.Equals(namesMedia.name))
                         if (endTargetToggle.isOn) {
@@ -388,8 +401,20 @@ public class Image2DSettings : MonoBehaviour {
                                 Camera.main.clearFlags = CameraClearFlags.Color;
                                 Camera.main.backgroundColor = Color.black;
                             }
-                        } else //ativa a midia
+                        } else {//ativa a midia
                             namesMedia.SetActive(true);
+                            //startar midias especiais ou que precisem de play
+                            if (namesMedia.name.Equals("Image360"))
+                                namesMedia.GetComponentInChildren<Image360Settings>().setImage360();
+                            if (namesMedia.name.Equals("Video360"))
+                                namesMedia.GetComponentInChildren<Video360Settings>().setVideo360();
+                            if (namesMedia.name.Equals("PIP"))
+                                namesMedia.GetComponentInChildren<PIPSettings>().setPIP();
+                            if (namesMedia.name.StartsWith("Video2D"))
+                                namesMedia.GetComponentInChildren<Video2DSettings>().setVideo2D();
+                            //oculta todos os menus de edição
+                            namesMedia.transform.Find("EditMenu").gameObject.SetActive(false);
+                        }
         }
     }
     public void setInteractiveIcon() {

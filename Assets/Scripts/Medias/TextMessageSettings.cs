@@ -82,6 +82,17 @@ public class TextMessageSettings: MonoBehaviour {
         else
             durationSteppers.SetActive(true);
     }
+    public void interactiveWaitStart() {
+        if (isInteractToggle.isOn && startTargetToggle.isOn) {
+            string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
+            if (!target.StartsWith("Scene"))  //tratar-se de interação com outra mídia
+                foreach (GameObject namesMedia in sceneManager.getMidias())
+                    if (target.Equals(namesMedia.name)) {//altera para o valor Not Defined
+                        namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 3;
+                        namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().RefreshShownValue();
+                    }
+        }
+    }
     public void showKeyBoard() {
         canvasKeyboard.SetActive(!canvasKeyboard.activeSelf);
     }
@@ -130,12 +141,13 @@ public class TextMessageSettings: MonoBehaviour {
                 tempList.Remove(SceneManager.GetActiveScene().name);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
+                interactiveWaitStart();
                 updateInteract = false;
             } else
                 updateInteract = true;
         }
         //relações de start e end
-        if(startDropdown.value == 0)
+        if (startDropdown.value == 0 || startDropdown.value == 3)
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
@@ -306,8 +318,20 @@ public class TextMessageSettings: MonoBehaviour {
                                 Camera.main.clearFlags = CameraClearFlags.Color;
                                 Camera.main.backgroundColor = Color.black;
                             }
-                        } else //ativa a midia
+                        } else {//ativa a midia
                             namesMedia.SetActive(true);
+                            //startar midias especiais ou que precisem de play
+                            if (namesMedia.name.Equals("Image360"))
+                                namesMedia.GetComponentInChildren<Image360Settings>().setImage360();
+                            if (namesMedia.name.Equals("Video360"))
+                                namesMedia.GetComponentInChildren<Video360Settings>().setVideo360();
+                            if (namesMedia.name.Equals("PIP"))
+                                namesMedia.GetComponentInChildren<PIPSettings>().setPIP();
+                            if (namesMedia.name.StartsWith("Video2D"))
+                                namesMedia.GetComponentInChildren<Video2DSettings>().setVideo2D();
+                            //oculta todos os menus de edição
+                            namesMedia.transform.Find("EditMenu").gameObject.SetActive(false);
+                        }
         }
     }
     public void setInteractiveIcon() {

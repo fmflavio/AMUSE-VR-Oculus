@@ -1380,7 +1380,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: OnEnd
       m_Image: {fileID: 0}
-    - m_Text: Not defined
+    - m_Text: Not Defined
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4280,7 +4280,6 @@ GameObject:
   - component: {fileID: 1429614676129257771}
   - component: {fileID: 1429614676129257770}
   - component: {fileID: 1429614676129257773}
-  - component: {fileID: 1429614676129257772}
   m_Layer: 5
   m_Name: MoveButton
   m_TagString: Untagged
@@ -4388,18 +4387,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1429614676129257772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1429614676129257774}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ebfb4a21d5db4183dda9d255081a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1429614676140340349
 GameObject:
   m_ObjectHideFlags: 0
@@ -9691,7 +9678,6 @@ GameObject:
   - component: {fileID: 3007050923894471817}
   - component: {fileID: 3007050923894471816}
   - component: {fileID: 3007050923894471819}
-  - component: {fileID: 3007050923894471818}
   - component: {fileID: 6547344606905942948}
   - component: {fileID: 2394228879227809695}
   - component: {fileID: 921206986552859352}
@@ -9833,24 +9819,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3007050923894471818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3007050923894471821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0059efe726b18194ca9aa577ff45be3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultMenu: {fileID: 3007050923894471831}
-  ControlMode: 0
-  Camera: {fileID: 0}
-  FollowCamera: 1
-  IgnoreLaser: 0
-  Controller: {fileID: 0}
 --- !u!114 &6547344606905942948
 MonoBehaviour:
   m_ObjectHideFlags: 0

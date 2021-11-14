@@ -78,32 +78,23 @@ public class ViewerManager : MonoBehaviour {
                     if(tempStartMinutes == 0 && tempStartSecunds == 0) tempStartSecunds = 1;
                     //forçando a terminar um segundo apos o inicio
                     //if(tempStartMinutes == tempEndMinutes && tempStartSecunds == tempEndSeconds) tempEndSeconds++;
+                    //verifica se o relacionamento start está definido pra Not Defined
+                    int valueStart = localMedias.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value;
                     //gerencia o iniciar da midia
-                    if(tempStartMinutes == minutes && tempStartSecunds == seconds && !localMedias.activeSelf) {
+                    if (tempStartMinutes == minutes && tempStartSecunds == seconds && !localMedias.activeSelf && valueStart != 3) {
                         //Debug.Log("Start: " + localMedias.name);
                         //Debug.Log("Sminutes: " + tempStartMinutes + " Sseconds: " + tempStartSecunds + " Eminutes: " + tempEndMinutes + " Eseconds: " + tempEndSeconds);
                         //ativa a midia ativa no foreach
                         localMedias.SetActive(true);
                         //startar midias especiais ou que precisem de play
-                        if(localMedias.name.Equals("Image360")) {
-                            Camera.main.clearFlags = CameraClearFlags.Skybox;
-                            Camera.main.backgroundColor = Color.white;
+                        if(localMedias.name.Equals("Image360")) 
                             localMedias.GetComponentInChildren<Image360Settings>().setImage360();
-                        }
-                        if(localMedias.name.Equals("Video360")) {
-                            Camera.main.clearFlags = CameraClearFlags.Skybox;
-                            Camera.main.backgroundColor = Color.white;
+                        if(localMedias.name.Equals("Video360"))
                             localMedias.GetComponentInChildren<Video360Settings>().setVideo360();
-                        }
-                        if(localMedias.name.Equals("PIP")) {
+                        if(localMedias.name.Equals("PIP"))
                             localMedias.GetComponentInChildren<PIPSettings>().setPIP();
-                        }
-                        if(localMedias.name.StartsWith("Video2D")) {
+                        if(localMedias.name.StartsWith("Video2D"))
                             localMedias.GetComponentInChildren<Video2DSettings>().setVideo2D();
-                        }
-
-                        //veridicar se falta startar as mídias de audio
-
                         //oculta todos os menus de edição
                         localMedias.transform.Find("EditMenu").gameObject.SetActive(false);
                     } else {
@@ -115,9 +106,6 @@ public class ViewerManager : MonoBehaviour {
                             if(localMedias.name.Equals("Image360") || localMedias.name.Equals("Video360")) {
                                 Camera.main.clearFlags = CameraClearFlags.Color;
                                 Camera.main.backgroundColor = Color.black;
-
-                                //falta dar stop mo video
-
                             }
                             //termina a midia comum
                             localMedias.SetActive(false);

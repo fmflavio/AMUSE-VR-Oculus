@@ -280,7 +280,18 @@ MonoBehaviour:
     m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5821229109349707696}
+        m_MethodName: interactiveWaitStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.5
 --- !u!1 &419724393307895361
 GameObject:
@@ -1051,7 +1062,6 @@ GameObject:
   - component: {fileID: 1004914346702791597}
   - component: {fileID: 4661258553662052088}
   - component: {fileID: 1609606607707101432}
-  - component: {fileID: 6634622613188209673}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1180,18 +1190,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 640, y: 480, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6634622613188209673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1004914346702791594}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ebfb4a21d5db4183dda9d255081a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1012766648573285664
 GameObject:
   m_ObjectHideFlags: 0
@@ -6401,7 +6399,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: OnEnd
       m_Image: {fileID: 0}
-    - m_Text: Not defined
+    - m_Text: Not Defined
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11290,7 +11288,6 @@ GameObject:
   - component: {fileID: 8430811783397626882}
   - component: {fileID: 5123187522259846517}
   - component: {fileID: 3849629716732509959}
-  - component: {fileID: 6054525622995372569}
   m_Layer: 5
   m_Name: MoveButton
   m_TagString: Untagged
@@ -11398,18 +11395,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6054525622995372569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6306593473659176184}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ebfb4a21d5db4183dda9d255081a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6593321314205178034
 GameObject:
   m_ObjectHideFlags: 0
@@ -12502,7 +12487,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3100797049695593348}
-  - component: {fileID: 6158166449039837166}
   - component: {fileID: 5821229109349707696}
   m_Layer: 0
   m_Name: Video2D
@@ -12527,24 +12511,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6158166449039837166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7794002477646559013}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0059efe726b18194ca9aa577ff45be3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultMenu: {fileID: 3729238687202352444}
-  ControlMode: 0
-  Camera: {fileID: 0}
-  FollowCamera: 1
-  IgnoreLaser: 0
-  Controller: {fileID: 0}
 --- !u!114 &5821229109349707696
 MonoBehaviour:
   m_ObjectHideFlags: 0

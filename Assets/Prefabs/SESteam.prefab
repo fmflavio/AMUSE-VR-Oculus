@@ -8027,7 +8027,6 @@ GameObject:
   - component: {fileID: 6384728203274881779}
   - component: {fileID: 6384728203274881780}
   - component: {fileID: 6384728203274881781}
-  - component: {fileID: 6384728203274881777}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -8156,18 +8155,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 180, y: 180, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6384728203274881777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6384728203274881783}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ebfb4a21d5db4183dda9d255081a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6384728203489000406
 GameObject:
   m_ObjectHideFlags: 0
@@ -8449,7 +8436,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6384728204338628852}
-  - component: {fileID: 6384728204338628854}
   - component: {fileID: 6384728204338628850}
   m_Layer: 0
   m_Name: SESteam
@@ -8474,24 +8460,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6384728204338628854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6384728204338628853}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0059efe726b18194ca9aa577ff45be3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultMenu: {fileID: 6384728204068416061}
-  ControlMode: 0
-  Camera: {fileID: 0}
-  FollowCamera: 1
-  IgnoreLaser: 0
-  Controller: {fileID: 0}
 --- !u!114 &6384728204338628850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8992,7 +8960,6 @@ GameObject:
   - component: {fileID: 6436177827444873254}
   - component: {fileID: 6436177827444873255}
   - component: {fileID: 6436177827444873252}
-  - component: {fileID: 6436177827444873253}
   m_Layer: 5
   m_Name: MoveButton
   m_TagString: Untagged
@@ -9100,18 +9067,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6436177827444873253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6436177827444873275}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ebfb4a21d5db4183dda9d255081a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6436177827632102550
 GameObject:
   m_ObjectHideFlags: 0
@@ -13363,7 +13318,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: OnEnd
       m_Image: {fileID: 0}
-    - m_Text: Not defined
+    - m_Text: Not Defined
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

@@ -5145,7 +5145,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: OnEnd
       m_Image: {fileID: 0}
-    - m_Text: Not defined
+    - m_Text: Not Defined
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9456,7 +9456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6874466217305969590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9761,7 +9761,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5206995518719054912}
-  - component: {fileID: 4790539949129832841}
   - component: {fileID: 925285067349774390}
   m_Layer: 0
   m_Name: Image2D
@@ -9786,24 +9785,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4790539949129832841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6747399403433600190}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0059efe726b18194ca9aa577ff45be3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultMenu: {fileID: 5567842996456457239}
-  ControlMode: 0
-  Camera: {fileID: 0}
-  FollowCamera: 1
-  IgnoreLaser: 0
-  Controller: {fileID: 0}
 --- !u!114 &925285067349774390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10635,7 +10616,6 @@ GameObject:
   - component: {fileID: 8665695543519135012}
   - component: {fileID: 3486036298180894034}
   - component: {fileID: 3539845471392350515}
-  - component: {fileID: 2207654682337616680}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -10764,18 +10744,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 360, y: 240, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2207654682337616680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8665695543519135067}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ebfb4a21d5db4183dda9d255081a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8697088998797483362
 GameObject:
   m_ObjectHideFlags: 0
@@ -12031,7 +11999,18 @@ MonoBehaviour:
     m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 925285067349774390}
+        m_MethodName: interactiveWaitStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.5
 --- !u!1 &9059442966952077430
 GameObject:
@@ -12851,7 +12830,6 @@ GameObject:
   - component: {fileID: 9059442967315739880}
   - component: {fileID: 9059442967315739883}
   - component: {fileID: 9059442967315739882}
-  - component: {fileID: 9059442967315739885}
   m_Layer: 5
   m_Name: MoveButton
   m_TagString: Untagged
@@ -12959,18 +12937,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9059442967315739885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9059442967315739887}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ebfb4a21d5db4183dda9d255081a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9059442967402430443
 GameObject:
   m_ObjectHideFlags: 0

@@ -99,7 +99,7 @@ public class SESteamSettings: MonoBehaviour {
             }
         }
         //relações de start e end
-        if(startDropdown.value == 0)
+        if (startDropdown.value == 0 || startDropdown.value == 3)
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);

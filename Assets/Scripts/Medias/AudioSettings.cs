@@ -96,8 +96,8 @@ public class AudioSettings: MonoBehaviour {
 
             StartCoroutine(LoadAudio());
 
-            Text temp = setings.transform.Find("Temp").GetComponent<Text>();
-            temp.text = completPaths[folderDropdown.value - 1];
+            //Text temp = setings.transform.Find("Temp").GetComponent<Text>();
+            //temp.text = completPaths[folderDropdown.value - 1];
 
             loopToggle.gameObject.SetActive(true);
             volumeSlider.gameObject.SetActive(true);
@@ -201,7 +201,7 @@ public class AudioSettings: MonoBehaviour {
             }
         }
         //relações de start e end
-        if(startDropdown.value == 0)
+        if (startDropdown.value == 0 || startDropdown.value == 3)
             startMediaDropdown.gameObject.SetActive(false);
         else
             startMediaDropdown.gameObject.SetActive(true);
