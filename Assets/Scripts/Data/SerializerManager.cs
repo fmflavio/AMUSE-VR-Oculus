@@ -23,13 +23,13 @@ public class SerializerManager : MonoBehaviour {
     }
     void Update() {
         if(Input.GetKeyDown(KeyCode.S)) {
-            serializeSave();
+            //serializeSave();
         }
         if(Input.GetKeyDown(KeyCode.L)) {
-            serializeLoader();
+            //serializeLoader();
         }
         if(Input.GetKeyDown(KeyCode.C)) {
-            DeleteFiles();
+            //DeleteFiles();
         }
     }
     public bool isEmptyList() {
@@ -554,6 +554,7 @@ public class SerializerManager : MonoBehaviour {
                 File.Delete(filePath);
         }
     }
+    //carregamento com atrasos propositais
     private IEnumerator chooseFileLate(GameObject ob, string src) {
         yield return new WaitForSeconds(1);
         int index = ob.transform.Find("EditMenu/FolderDropdown").GetComponent<Dropdown>().options.FindIndex((option) => { return option.text.Equals(src); });
