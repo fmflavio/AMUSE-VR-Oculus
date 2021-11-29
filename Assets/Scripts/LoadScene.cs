@@ -41,6 +41,10 @@ public class LoadScene: MonoBehaviour {
         serializerManager.DeleteFiles();
         SceneManager.LoadScene("Scene 1");
     }
+    public void loadProjectAuthor() {
+        serializerManager.DeleteFiles();
+        SceneManager.LoadScene("Scene 1");
+    }
     public void LoadMain() {
         SceneManager.LoadScene("Main");
     }
