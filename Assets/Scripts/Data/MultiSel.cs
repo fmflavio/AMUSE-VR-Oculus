@@ -40,27 +40,80 @@ public class MultiSel : MonoBehaviour{
 
         XmlNodeList elemBody = doc.GetElementsByTagName("body");//retorna 1
         XmlNode nodeBody = elemBody[0];
-        Debug.LogWarning(nodeBody.Name);
-        Debug.LogWarning(nodeBody.Attributes["primaryComponent"].Value);
-        Debug.Log("*******************");
+        //Debug.LogWarning(nodeBody.Name);
+        //Debug.LogWarning(nodeBody.Attributes["primaryComponent"].Value);
+        //Debug.Log("*******************");
         XmlNodeList elemScene = doc.GetElementsByTagName("scene");//retorna 2
         for (int i = 0; i < elemScene.Count; i++) {
             XmlNode nodeScene = elemScene[i];
-            Debug.LogWarning(nodeScene.Name);
+            //Debug.LogWarning(nodeScene.Name);
             Debug.LogWarning(nodeScene.Attributes["id"].Value);
-            Debug.LogWarning(nodeScene.Attributes["primaryComponent"].Value);
-            
-            for (int j = 0; j < nodeScene.ChildNodes.Count; j++) {
+            //Debug.LogWarning(nodeScene.Attributes["primaryComponent"].Value);
+            for (int j = 0; j < nodeScene.ChildNodes.Count; j++) {//17 e 12 vezes
                 //Debug.Log(nodeScene.ChildNodes[j].InnerText);// assim imprime os comentáris da cena
-                Debug.Log(nodeScene.ChildNodes[j].);
-                Debug.Log(nodeScene.Attributes["id"].Value);
-                Debug.Log(nodeScene.Attributes["primaryComponent"].Value);
+                if (!nodeScene.ChildNodes[j].Name.Equals("#comment")) {//se não for comentario
+                    if (nodeScene.ChildNodes[j].Name.Equals("port")) {//se for porta da cena
+                        //imprime o nome e atributos do no
+                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
+                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
+                        Debug.Log("component: " + nodeScene.ChildNodes[j].Attributes["component"]?.Value);
+                    }
+                    if (nodeScene.ChildNodes[j].Name.Equals("media")) {
+                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
+                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
+                        Debug.Log("src: " + nodeScene.ChildNodes[j].Attributes["src"]?.Value);
+                        Debug.Log("type: " + nodeScene.ChildNodes[j].Attributes["type"]?.Value);
+                        //imprime os nos dos filhos de media com seus atributos
+                        for (int x = 0; x < nodeScene.ChildNodes[j].ChildNodes.Count; x++) {
+                            XmlNode nodeChild = nodeScene.ChildNodes[j].ChildNodes[x];
+                            Debug.Log("filho-property-name: " + nodeChild.Name);
+                            Debug.Log("filho-name: " + nodeChild.Attributes["name"]?.Value);
+                            Debug.Log("filho-value: " + nodeChild.Attributes["value"]?.Value);
+                        }
+                    }
+                    if (nodeScene.ChildNodes[j].Name.Equals("effect")) {
+                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
+                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
+                        Debug.Log("type: " + nodeScene.ChildNodes[j].Attributes["type"]?.Value);
+                        for (int x = 0; x < nodeScene.ChildNodes[j].ChildNodes.Count; x++) {
+                            XmlNode nodeChild = nodeScene.ChildNodes[j].ChildNodes[x];
+                            Debug.Log("filho-property-name: " + nodeChild.Name);
+                            Debug.Log("filho-name: " + nodeChild.Attributes["name"]?.Value);
+                            Debug.Log("filho-value: " + nodeChild.Attributes["value"]?.Value);
+                        }
+                    }
+                    if (nodeScene.ChildNodes[j].Name.Equals("relation")) {
+                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
+                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
+                        Debug.Log("type: " + nodeScene.ChildNodes[j].Attributes["type"]?.Value);
+                        Debug.Log("delay: " + nodeScene.ChildNodes[j].Attributes["delay"]?.Value);
+                        Debug.Log("keyCode: " + nodeScene.ChildNodes[j].Attributes["keyCode"]?.Value);
+                        for (int x = 0; x < nodeScene.ChildNodes[j].ChildNodes.Count; x++) {
+                            XmlNode nodeChild = nodeScene.ChildNodes[j].ChildNodes[x];
+                            Debug.Log("filho-property-name: " + nodeChild.Name);
+                            Debug.Log("filho-name: " + nodeChild.Attributes["component"]?.Value);
+                            //Debug.Log("filho-name: " + nodeChild.Attributes["interface"]?.Value);
+                        }
+                    }
+                }
             }
-            
         }
+        /*
+        //imprime os relacionamentos externos a cena
+        XmlNodeList elemsRelOut = doc.GetElementsByTagName("relation");
+        for (int i = 0; i < elemsRelOut.Count; i++) {
+            XmlNode elemRelOut = elemsRelOut[i];
+            if (elemRelOut.HasChildNodes) {
+                Debug.LogWarning(elemRelOut.Name);
+                Debug.LogWarning(elemRelOut.Attributes["id"]?.Value);
+                Debug.LogWarning(elemRelOut.Attributes["type"]?.Value);
+                Debug.LogWarning(elemRelOut.Attributes["keyCode"]?.Value);
+            }
+        }
+        */
+        
 
-
-
+        //Debug.Log(nodeScene.ChildNodes[j].InnerText);// assim imprime os comentáris da cena
         /*
         XmlDocument document = new XmlDocument();
         document.Load(folder + file);
