@@ -549,8 +549,28 @@ public class MultiSel : MonoBehaviour{
                         pre.Media.Add(media);
                     }
                 }
-                foreach (string str in idsList)
-                    Debug.Log(str);
+                //pos processamento
+                //troca os ids antigos pelos novos onde for necessário
+                for (int p = 0; p < pre.Media.Count; p++) {
+                    //trocando os ids dos targets de interação
+                    if (pre.Media[p]?.interactiveTarget != null) 
+                        foreach (string strId in idsList)
+                            if (strId.Contains(pre.Media[p]?.interactiveTarget)) 
+                                pre.Media[p].interactiveTarget = strId.Split('*')[0];
+                    //trocando os ids de onBegin
+                    if (pre.Media[p]?.rMediaStart != null)
+                        foreach (string strId in idsList)
+                            if (strId.Contains(pre.Media[p]?.rMediaStart))
+                                pre.Media[p].rMediaStart = strId.Split('*')[0];
+                    //trocando os ids de onEnd
+                    if (pre.Media[p]?.rMediaEnd != null)
+                        foreach (string strId in idsList)
+                            if (strId.Contains(pre.Media[p]?.rMediaEnd))
+                                pre.Media[p].rMediaEnd = strId.Split('*')[0];
+                    //se a duração for 0 o loop fica true
+                    if ((pre.Media[p]?.mDuration + pre.Media[p]?.sDuration) <= 0)
+                        pre.Media[p].loop = true;
+                }
                 //verifica a existencia da pasta e cria
                 if (!Directory.Exists(folder + "/new/")) Directory.CreateDirectory(folder + "/new/");
                 //fecha o arquivo 
