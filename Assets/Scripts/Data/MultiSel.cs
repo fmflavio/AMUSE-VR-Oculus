@@ -27,7 +27,7 @@ public class MultiSel : MonoBehaviour{
     //le o arquivo xml multisel
     public void importProject() {
         //na importação é necessário criar arquivos de cena
-        Debug.LogError("****************************");
+        Debug.LogError("**********INICIADO******************");
         
         XmlDocument doc = new XmlDocument();//cria o documento xml
         doc.Load(folder + file);//carrega o arquivo
@@ -35,329 +35,530 @@ public class MultiSel : MonoBehaviour{
         //carrega o no body e cria-se a lista de nos filhos
         XmlNodeList nodesBody = doc.GetElementsByTagName("body");
         XmlNode nodeBody = nodesBody[0];//como só tem 1 body
+
+        //pegando todos os relacionamentos externos a cena e armazenando
+        List<string> relOutList = new List<string>();
+        for (int ro = 0; ro < nodeBody?.ChildNodes.Count; ro++) {
+            XmlNode nodeRelOut = nodeBody?.ChildNodes[ro];//encurtando
+            if (nodeRelOut.Name.ToLower().Equals("relation")) { //obtendo as relações externas a cena
+                string strRelOut = nodeRelOut?.Attributes["type"]?.Value;
+                for (int nro = 0; nro < nodeRelOut?.ChildNodes.Count; nro++) {//agrupa os atributos a string
+                    if (nodeRelOut.ChildNodes[nro].Name.ToLower().Equals("primary")) {
+                        strRelOut = strRelOut + "*" + nodeRelOut.ChildNodes[nro]?.Attributes["component"]?.Value;
+                        strRelOut = strRelOut + "*" + nodeRelOut.ChildNodes[nro]?.Attributes["interface"]?.Value;
+                    }
+                    if (nodeRelOut.ChildNodes[nro].Name.ToLower().Equals("secondary"))
+                        strRelOut = strRelOut + "*" + nodeRelOut.ChildNodes[nro]?.Attributes["component"]?.Value;
+                }
+                relOutList.Add(strRelOut);// salva os values do relacionamento externo na lista
+            }
+        }
         for (int i = 0; i < nodeBody.ChildNodes.Count; i++) {
             pre = new Presentation();//instancia o arquivo se serialização
-            if (!nodeBody.ChildNodes[i].Name.ToLower().Equals("#comment")) {// exclui os comentários
-                //conteudo da cena
-                if (nodeBody.ChildNodes[i].Name.ToLower().Equals("scene")) {
-                    pre.nScene = "Scene " + (i + 1);//inclui nome da cena no arquivo
-                    //obtendo o numero de mídias da cena
-                    for (int j = 0; j < nodeBody.ChildNodes[i]?.ChildNodes.Count; j++) {
-                        XmlNode nodeScene = nodeBody.ChildNodes[i]?.ChildNodes[j];//encurtando
-                        media = new Media();//instancia nova midia
-                        if (nodeScene.Name.ToLower().Equals("media") || nodeScene.Name.ToLower().Equals("effect")) {//se for midia
-                            int idVIDEO2D = 1, idAUDIO3D = 1, idIMAGE2D = 1, idTEXT = 1, idINTERACT = 1, idSEWIND = 1, idSELIGHT = 1, idSESTEAM = 1;
-                            if (nodeScene.Attributes["type"].Value.ToLower().Equals("video")) {//se for video
-                                media.type = "VIDEO2D";
-                                media.name = "Video2D - " + idVIDEO2D++;
-                                media.src = nodeScene.Attributes["src"].Value;
-                                media.lookAt = true;
-                                media.scale = 0.005f;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {//veridica se é 360
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("background")) {
-                                        media.type = "VIDEO360";
-                                        media.name = "Video360";
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("pip")) {
-                                        media.type = "PIP";
-                                        media.name = "PIP";
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x")) 
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".",","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
-                                        if(nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
-                                            media.loop = true; else media.loop = false;
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("mute"))
-                                        if(nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
-                                            media.mute = true; else media.mute = false;
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("volume"))
-                                        media.volume = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
-                                }
-                            }
-                            if (nodeScene.Attributes["type"].Value.ToLower().Equals("audio")) {
-                                media.type = "AUDIO3D";
-                                media.name = "Audio3D - " + idAUDIO3D++;
-                                media.src = nodeScene.Attributes["src"].Value;
-                                media.lookAt = true;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
-                                        if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
-                                            media.loop = true;
-                                        else media.loop = false;
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("mute"))
-                                        if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
-                                            media.mute = true;
-                                        else media.mute = false;
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("volume"))
-                                        media.volume = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
-                                }
-                            }
-                            if (nodeScene.Attributes["type"].Value.ToLower().Equals("image")) {
-                                media.type = "IMAGE2D";
-                                media.name = "Image2D - " + idIMAGE2D++;
-                                media.src = nodeScene.Attributes["src"].Value;
-                                media.lookAt = true;
-                                media.scale = 0.005f;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeScene.ChildNodes[x].Attributes["name"].Value.ToLower().Equals("background")) {
-                                        media.type = "IMAGE360";
-                                        media.name = "Image360";
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                }
-                            }
-                            if (nodeScene.Attributes["type"].Value.ToLower().Equals("image/x-icon")) {
-                                media.type = "INTERACT";
-                                media.name = "INTERACT - " + idINTERACT++;
-                                media.lookAt = true;
-                                media.scale = 0.005f;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                }
-                            }
-                            if (nodeScene.Attributes["type"].Value.ToLower().Equals("text")) {
-                                media.type = "TEXTMESSAGE";
-                                media.name = "TextMessage - " + idTEXT++;
-                                media.lookAt = true;
-                                media.scale = 0.005f;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("text"))
-                                        media.textMessage = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
-                                }
-                            }
-                            if (nodeScene.Attributes["type"].Value.Equals("WindType")) {
-                                media.type = "SEWIND";
-                                media.name = "SEWind - " + idSEWIND++;
-                                media.lookAt = true;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("intensity"))
-                                        media.intensity = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
-                                }
-                            }
-                            if (nodeScene.Attributes["type"].Value.Equals("LightType")) {
-                                media.type = "SELIGHT";
-                                media.name = "SELight - " + idSELIGHT++;
-                                media.lookAt = true;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("intensity"))
-                                        media.intensity = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
-                                }
-                            }
-                            if (nodeScene.Attributes["type"].Value.Equals("SteamType")) {
-                                media.type = "SESTEAM";
-                                media.name = "SESteam - " + idSESTEAM++;
-                                media.lookAt = true;
-                                for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
-                                    XmlNode nodeMedia = nodeScene.ChildNodes[x];
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
-                                        media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
-                                        media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
-                                        media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
-                                        int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
-                                        if (dur <= 0) dur = 180;
-                                        int s = dur % 60; dur /= 60; int mins = dur % 60;
-                                        media.mDuration = mins;
-                                        media.sDuration = s;
-                                    }
-                                    if (nodeMedia.Attributes["name"].Value.ToLower().Equals("intensity"))
-                                        media.intensity = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
-                                }
-                            }
-                            //adiciona a mídia
-                            pre.Media.Add(media);
-                        }
-                    }
-
-                    //verifica a existencia da pasta e cria
-                    if (!Directory.Exists(folder + "/new/")) Directory.CreateDirectory(folder + "/new/");
-                    //fecha o arquivo 
-                    SerializeOp.Serialize(pre, folder + "/new/Scene " + (i + 1) + ".xml");
-                    if (File.Exists(folder + "/new/Scene " + (i + 1) + ".xml")) Debug.Log("XML SAVE - Scene " + (i + 1) + ".xml"); else Debug.LogError("XML NOT SAVE");
+            //conteudo da cena
+            if (nodeBody.ChildNodes[i].Name.ToLower().Equals("scene")) {
+                pre.nScene = "Scene " + (i + 1);//inclui nome da cena no arquivo
+                //pegando todas as portas desta cena
+                List<string> portsList = new List<string>();
+                for (int p = 0; p < nodeBody.ChildNodes[i]?.ChildNodes.Count; p++) {
+                    XmlNode nodePort = nodeBody.ChildNodes[i]?.ChildNodes[p];//encurtando
+                    if (nodePort.Name.ToLower().Equals("port")) //obtendo as portas
+                        portsList.Add(nodePort?.Attributes["id"]?.Value + "*" +
+                            nodePort?.Attributes["component"]?.Value.ToLower());
                 }
+                //para registrar os IDs novos e antigos
+                List<string> idsList = new List<string>();
+                //listando os nos filho da cena
+                for (int j = 0; j < nodeBody.ChildNodes[i]?.ChildNodes.Count; j++) {
+                    XmlNode nodeScene = nodeBody.ChildNodes[i]?.ChildNodes[j];//encurtando, nos da cena
+                    media = new Media();//instancia nova midia para serializar
+                    if (nodeScene.Name.ToLower().Equals("media") || nodeScene.Name.ToLower().Equals("effect")) {//se for midia
+                        int idVIDEO2D = 1, idAUDIO3D = 1, idIMAGE2D = 1, idTEXT = 1, idINTERACT = 1, idSEWIND = 1, idSELIGHT = 1, idSESTEAM = 1;
+                        if (nodeScene.Attributes["type"].Value.ToLower().Equals("video")) {//se for video
+                            media.type = "VIDEO2D";
+                            media.name = "Video2D - " + idVIDEO2D++;
+                            idsList.Add("Video2D - " + (idVIDEO2D - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());//armazena os ids
+                            media.rStart = "Not Defined";
+                            media.src = nodeScene.Attributes["src"].Value;
+                            media.lookAt = true;
+                            media.scale = 0.005f;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {//veridica se é 360
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("background")) {
+                                    media.type = "VIDEO360";
+                                    media.name = "Video360";
+                                    idsList.RemoveAt(idsList.Count-1);//remove o ultimo id
+                                    idsList.Add("Video360*" + nodeScene.Attributes["id"].Value.ToLower());
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("pip")) {
+                                    media.type = "PIP";
+                                    media.name = "PIP";
+                                    idsList.RemoveAt(idsList.Count-1);
+                                    idsList.Add("PIP*" + nodeScene.Attributes["id"].Value.ToLower());
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x")) 
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".",","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("mute"))
+                                    if(nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.mute = true; else media.mute = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true; else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("volume"))
+                                    media.volume = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
+                            }
+                            //verificando se a mídia possui id igual a alguma ao component de alguma porta
+                            foreach (string port in portsList) 
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower())) 
+                                    //verificando se ha relacionamento com esta porta
+                                    foreach (string relationOut in relOutList) 
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s", "S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        if (nodeScene.Attributes["type"].Value.ToLower().Equals("audio")) {
+                            media.type = "AUDIO3D";
+                            media.name = "Audio3D - " + idAUDIO3D++;
+                            idsList.Add("Audio3D - " + (idAUDIO3D - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.rStart = "Not Defined";
+                            media.src = nodeScene.Attributes["src"].Value;
+                            media.lookAt = true;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("mute"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.mute = true; else media.mute = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true; else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("volume"))
+                                    media.volume = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
+                            }
+                            foreach (string port in portsList)
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower()))
+                                    foreach (string relationOut in relOutList)
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s", "S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        if (nodeScene.Attributes["type"].Value.ToLower().Equals("image")) {
+                            media.type = "IMAGE2D";
+                            media.name = "Image2D - " + idIMAGE2D++;
+                            idsList.Add("Image2D - " + (idIMAGE2D - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.rStart = "Not Defined";
+                            media.src = nodeScene.Attributes["src"].Value;
+                            media.lookAt = true;
+                            media.scale = 0.005f;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeScene.ChildNodes[x].Attributes["name"].Value.ToLower().Equals("background")) {
+                                    media.type = "IMAGE360";
+                                    media.name = "Image360";
+                                    idsList.RemoveAt(idsList.Count-1);
+                                    idsList.Add("Image360*" + nodeScene.Attributes["id"].Value.ToLower());
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    if (dur <= 0) media.loop = true;
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                            }
+                            foreach (string port in portsList)
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower()))
+                                    foreach (string relationOut in relOutList)
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s", "S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        if (nodeScene.Attributes["type"].Value.ToLower().Equals("image/x-icon")) {//interact
+                            media.type = "INTERACT";
+                            media.name = "INTERACT - " + idINTERACT++;
+                            idsList.Add("INTERACT - " + (idINTERACT - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.rStart = "Not Defined";
+                            media.lookAt = true;
+                            media.scale = 0.005f;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    if (dur <= 0) media.loop = true;
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                            }
+                            foreach (string port in portsList)
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower()))
+                                    foreach (string relationOut in relOutList)
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s", "S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        if (nodeScene.Attributes["type"].Value.ToLower().Equals("text")) {
+                            media.type = "TEXTMESSAGE";
+                            media.name = "TextMessage - " + idTEXT++;
+                            idsList.Add("TextMessage - " + (idTEXT - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.rStart = "Not Defined";
+                            media.lookAt = true;
+                            media.scale = 0.005f;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    if (dur <= 0) media.loop = true;
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("text"))
+                                    media.textMessage = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
+                            }
+                            foreach (string port in portsList)
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower()))
+                                    foreach (string relationOut in relOutList)
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s", "S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        if (nodeScene.Attributes["type"].Value.Equals("WindType")) {
+                            media.type = "SEWIND";
+                            media.name = "SEWind - " + idSEWIND++;
+                            idsList.Add("SEWind - " + (idSEWIND - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.rStart = "Not Defined";
+                            media.lookAt = true;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    if (dur <= 0) media.loop = true;
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("intensity"))
+                                    media.intensity = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
+                            }
+                            foreach (string port in portsList)
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower()))
+                                    foreach (string relationOut in relOutList)
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s", "S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        if (nodeScene.Attributes["type"].Value.Equals("LightType")) {
+                            media.type = "SELIGHT";
+                            media.name = "SELight - " + idSELIGHT++;
+                            idsList.Add("SELight - " + (idSELIGHT - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.rStart = "Not Defined";
+                            media.lookAt = true;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    if (dur <= 0) media.loop = true;
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("intensity"))
+                                    media.intensity = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
+                            }
+                            foreach (string port in portsList)
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower()))
+                                    foreach (string relationOut in relOutList)
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s", "S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        if (nodeScene.Attributes["type"].Value.Equals("SteamType")) {
+                            media.type = "SESTEAM";
+                            media.name = "SESteam - " + idSESTEAM++;
+                            idsList.Add("SESteam - " + (idSESTEAM - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.rStart = "Not Defined";
+                            media.lookAt = true;
+                            for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
+                                XmlNode nodeMedia = nodeScene.ChildNodes[x];
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
+                                    media.px = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("y"))
+                                    media.py = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("z"))
+                                    media.pz = float.Parse(nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ","));
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("loop"))
+                                    if (nodeMedia.Attributes["value"].Value.ToLower().Equals("true"))
+                                        media.loop = true;
+                                    else media.loop = false;
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("duration")) {
+                                    int dur = int.Parse(nodeMedia.Attributes["value"]?.Value.ToLower());
+                                    if (dur <= 0) media.loop = true;
+                                    int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                    media.mDuration = mins;
+                                    media.sDuration = s;
+                                }
+                                if (nodeMedia.Attributes["name"].Value.ToLower().Equals("intensity"))
+                                    media.intensity = nodeMedia.Attributes["value"]?.Value.ToLower().Replace(".", ",");
+                            }
+                            foreach (string port in portsList)
+                                if (port.Contains(nodeScene.Attributes["id"].Value.ToLower()))
+                                    foreach (string relationOut in relOutList)
+                                        if (relationOut.Contains(port.Split('*')[0])) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = relationOut.Split('*')[3].Replace("s","S");
+                                            media.interactiveIcon = true;
+                                        }
+                        }
+                        //renacionamento
+                        //primeiro o primaryComponent
+                        if (nodeBody.ChildNodes[i].Attributes["primaryComponent"].Value.ToLower().Equals(
+                            nodeScene.Attributes["id"].Value.ToLower())) {
+                            media.rStart = "OnBegin This Scene";
+                            media.mStart = 0;
+                            media.sStart = 0;
+                        }
+                        //os demais relacionamentos
+                        //lista todas as relações para cruzar os dados com o nó da midia atual
+                        for (int y = 0; y < nodeBody.ChildNodes[i].ChildNodes.Count; y++) {
+                            string strPri = "", strSec = "";
+                            XmlNode nodeRelation = nodeBody.ChildNodes[i].ChildNodes[y];//encurta
+                            if (nodeRelation.Name.ToLower().Equals("relation")) {//se for no de relação
+                                if (nodeRelation.Attributes["type"].Value.ToLower().Equals("starts")) {//se for do tipo starts
+                                    for (int z = 0; z < nodeRelation.ChildNodes.Count; z++) {
+                                        //percorre os nos filhos da relação e pega o primary e secundary
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("primary")) 
+                                            strPri = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("secondary"))
+                                            strSec = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        //se o secundary referencia a midia atual como target e o primary inicia com scene
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
+                                            strPri.StartsWith("scene")) {
+                                            media.rStart = "OnBegin This Scene";
+                                            media.mStart = 0;
+                                            media.sStart = 0;
+                                        }
+                                        //se o secundary referencia a midia atual como target e o primary indica uma midia
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
+                                            !strPri.StartsWith("scene")) {
+                                            media.rStart = "OnBegin";
+                                            media.rMediaStart = strPri;
+                                            media.mStart = 0;
+                                            media.sStart = 0;
+                                        }
+                                        //se a relação tiver delay
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
+                                            nodeRelation.Attributes["delay"]?.Value != null &&
+                                            !nodeRelation.Attributes["delay"].Value.ToLower().Equals("0")) {
+                                            int dur = int.Parse(nodeRelation.Attributes["delay"]?.Value);
+                                            int s = dur % 60; dur /= 60; int mins = dur % 60;
+                                            media.mDelay = mins;
+                                            media.sDelay = s;
+                                        }
+                                    }
+                                }
+                                if (nodeRelation.Attributes["type"].Value.ToLower().Equals("finishes")) {
+                                    for (int z = 0; z < nodeRelation.ChildNodes.Count; z++) {
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("primary"))
+                                            strPri = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("secondary"))
+                                            strSec = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
+                                            strPri.StartsWith("scene")) {
+                                            media.rEnd = "End of This Media Time";
+                                            media.mEnd = media.mDuration;
+                                            media.sEnd = media.sDuration;
+                                        }
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
+                                            !strPri.StartsWith("scene")) {
+                                            media.rEnd = "OnEnd";
+                                            media.rMediaEnd = strPri;
+                                            media.mEnd = media.mDuration;
+                                            media.sEnd = media.sDuration;
+                                        }
+                                    }
+                                }
+                                if (nodeRelation.Attributes["type"].Value.ToLower().Equals("meet")) {//inicio com final da outra midia
+                                    for (int z = 0; z < nodeRelation.ChildNodes.Count; z++) {
+                                        //percorre os nos filhos da relação e pega o primary e secundary
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("primary"))
+                                            strPri = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("secondary"))
+                                            strSec = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        //se o secundary referencia a midia atual como target e o primary indica uma midia
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
+                                            !strPri.StartsWith("scene")) {
+                                            media.rStart = "OnEnd";
+                                            media.rMediaStart = strPri;
+                                            //tentar incluir a duração da primeira midia////////////////////////////////////////
+                                            media.mStart = 0;
+                                            media.sStart = 0;
+                                        }
+                                    }
+                                }
+                                if (nodeRelation.Attributes["type"].Value.Equals("metBy")) {//acaba com inicio da outra midia
+                                    for (int z = 0; z < nodeRelation.ChildNodes.Count; z++) {
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("primary"))
+                                            strPri = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("secondary"))
+                                            strSec = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
+                                            !strPri.StartsWith("scene")) {
+                                            media.rEnd = "OnEnd";
+                                            media.rMediaEnd = strPri;
+                                            //tentar incluir a duração da primeira midia////////////////////////////////////////
+                                            media.mEnd = 0;
+                                            media.sEnd = 0;
+                                        }
+                                    }
+                                }
+                                if (nodeRelation.Attributes["type"].Value.Equals("onSelectionStarts")) {
+                                    for (int z = 0; z < nodeRelation.ChildNodes.Count; z++) {
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("primary"))
+                                            strPri = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("secondary"))
+                                            strSec = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strPri) &&
+                                            !strPri.StartsWith("scene")) {
+                                            media.interactive = true;
+                                            media.startTarget = true;
+                                            media.interactiveTarget = strSec;
+                                            media.interactiveIcon = true;
+                                        }
+                                    }
+                                }
+                                if (nodeRelation.Attributes["type"].Value.Equals("onSelectionEnds")) {
+                                    for (int z = 0; z < nodeRelation.ChildNodes.Count; z++) {
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("primary"))
+                                            strPri = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeRelation.ChildNodes[z].Name.ToLower().Equals("secondary"))
+                                            strSec = nodeRelation.ChildNodes[z].Attributes["component"].Value.ToLower();
+                                        if (nodeScene.Attributes["id"].Value.ToLower().Equals(strPri) &&
+                                            !strPri.StartsWith("scene")) {
+                                            media.interactive = true;
+                                            media.startTarget = false;
+                                            media.interactiveTarget = strSec;
+                                            media.interactiveIcon = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }             
+                        //adiciona a mídia
+                        pre.Media.Add(media);
+                    }
+                }
+                foreach (string str in idsList)
+                    Debug.Log(str);
+                //verifica a existencia da pasta e cria
+                if (!Directory.Exists(folder + "/new/")) Directory.CreateDirectory(folder + "/new/");
+                //fecha o arquivo 
+                SerializeOp.Serialize(pre, folder + "/new/Scene " + (i + 1) + ".xml");
+                if (File.Exists(folder + "/new/Scene " + (i + 1) + ".xml")) Debug.Log("XML SAVE - Scene " + (i + 1) + ".xml"); else Debug.LogError("XML NOT SAVE");
             }
         }
-        /*
-        //Debug.LogWarning(nodeBody.Name);
-        //Debug.LogWarning(nodeBody.Attributes["primaryComponent"]?.Value);
-        //para imprimir os filhos scene e relation de body
-        for (int y = 0; y < nodeBody.ChildNodes.Count; y++) {
-            if (!nodeBody.ChildNodes[y].Name.Equals("#comment")) {//se for comentário nao imprime
-                if (nodeBody.ChildNodes[y].Name.Equals("scene")) {// imprime os dados da cena
-                    Debug.LogWarning("no: " + nodeBody.ChildNodes[y]?.Name);
-                    Debug.Log("id: " + nodeBody.ChildNodes[y]?.Attributes["id"]?.Value);
-                    Debug.Log("primaryComponent: " + nodeBody.ChildNodes[y]?.Attributes["primaryComponent"]?.Value);
-                    Debug.Log("delay: " + nodeBody.ChildNodes[y]?.Attributes["delay"]?.Value);
-                }
-                if (nodeBody.ChildNodes[y].Name.Equals("relation")) {//imprime os dados das relações externas
-                    Debug.LogWarning("no: " + nodeBody.ChildNodes[y]?.Name);
-                    Debug.Log("id: " + nodeBody.ChildNodes[y]?.Attributes["id"]?.Value);
-                    Debug.Log("type: " + nodeBody.ChildNodes[y]?.Attributes["type"]?.Value);
-                    Debug.Log("keyCode: " + nodeBody.ChildNodes[y]?.Attributes["keyCode"]?.Value);
-                    Debug.Log("delay: " + nodeBody.ChildNodes[y]?.Attributes["delay"]?.Value);
-                    for (int z = 0; z < nodeBody.ChildNodes[y]?.ChildNodes.Count; z++) {//imprime os filhos da relação
-                        XmlNode nodeBodyChild = nodeBody.ChildNodes[y]?.ChildNodes[z];
-                        Debug.Log("filho-property-name: " + nodeBodyChild.Name);
-                        Debug.Log("filho-component: " + nodeBodyChild.Attributes["component"]?.Value);
-                        Debug.Log("filho-interface: " + nodeBodyChild.Attributes["interface"]?.Value);
-                    }
-                }
-            }
-        }
-        */
-        /*
-        XmlNodeList elemScene = doc.GetElementsByTagName("scene");//retorna 2
-        for (int i = 0; i < elemScene.Count; i++) {
-            XmlNode nodeScene = elemScene[i];
-            //Debug.LogWarning(nodeScene.Name);
-            Debug.LogWarning(nodeScene.Attributes["id"].Value);
-            //Debug.LogWarning(nodeScene.Attributes["primaryComponent"].Value);
-            for (int j = 0; j < nodeScene.ChildNodes.Count; j++) {//17 e 12 vezes
-                //Debug.Log(nodeScene.ChildNodes[j].InnerText);// assim imprime os comentáris da cena
-                if (!nodeScene.ChildNodes[j].Name.Equals("#comment")) {//se não for comentario
-                    if (nodeScene.ChildNodes[j].Name.Equals("port")) {//se for porta da cena
-                        //imprime o nome e atributos do no
-                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
-                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
-                        Debug.Log("component: " + nodeScene.ChildNodes[j].Attributes["component"]?.Value);
-                    }
-                    if (nodeScene.ChildNodes[j].Name.Equals("media")) {
-                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
-                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
-                        Debug.Log("src: " + nodeScene.ChildNodes[j].Attributes["src"]?.Value);
-                        Debug.Log("type: " + nodeScene.ChildNodes[j].Attributes["type"]?.Value);
-                        //imprime os nos dos filhos de media com seus atributos
-                        for (int x = 0; x < nodeScene.ChildNodes[j].ChildNodes.Count; x++) {
-                            XmlNode nodeChild = nodeScene.ChildNodes[j].ChildNodes[x];
-                            Debug.Log("filho-property-name: " + nodeChild.Name);
-                            Debug.Log("filho-name: " + nodeChild.Attributes["name"]?.Value);
-                            Debug.Log("filho-value: " + nodeChild.Attributes["value"]?.Value);
-                        }
-                    }
-                    if (nodeScene.ChildNodes[j].Name.Equals("effect")) {
-                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
-                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
-                        Debug.Log("type: " + nodeScene.ChildNodes[j].Attributes["type"]?.Value);
-                        for (int x = 0; x < nodeScene.ChildNodes[j].ChildNodes.Count; x++) {
-                            XmlNode nodeChild = nodeScene.ChildNodes[j].ChildNodes[x];
-                            Debug.Log("filho-property-name: " + nodeChild.Name);
-                            Debug.Log("filho-name: " + nodeChild.Attributes["name"]?.Value);
-                            Debug.Log("filho-value: " + nodeChild.Attributes["value"]?.Value);
-                        }
-                    }
-                    if (nodeScene.ChildNodes[j].Name.Equals("relation")) {
-                        Debug.LogWarning("no: " + nodeScene.ChildNodes[j].Name);
-                        Debug.Log("id: " + nodeScene.ChildNodes[j].Attributes["id"]?.Value);
-                        Debug.Log("type: " + nodeScene.ChildNodes[j].Attributes["type"]?.Value);
-                        Debug.Log("delay: " + nodeScene.ChildNodes[j].Attributes["delay"]?.Value);
-                        Debug.Log("keyCode: " + nodeScene.ChildNodes[j].Attributes["keyCode"]?.Value);
-                        for (int x = 0; x < nodeScene.ChildNodes[j].ChildNodes.Count; x++) {
-                            XmlNode nodeChild = nodeScene.ChildNodes[j].ChildNodes[x];
-                            Debug.Log("filho-property-name: " + nodeChild.Name);
-                            Debug.Log("filho-name: " + nodeChild.Attributes["component"]?.Value);
-                        }
-                    }
-                }
-            }
-        }
-        */
-        Debug.LogError("****************************");
+        Debug.LogError("************FINALIZADO****************");
     }
     //cria o arquivo xml multisel
     public void exportProject() {
@@ -464,6 +665,10 @@ public class MultiSel : MonoBehaviour{
                         elementProperty3.SetAttribute("name", "z");
                         elementProperty3.SetAttribute("value", pre.Media[i].pz.ToString().Replace(",", "."));
                         elementMedia.AppendChild(elementProperty3);
+                        XmlElement elementProperty4 = doc.CreateElement(string.Empty, "property", string.Empty);
+                        elementProperty4.SetAttribute("name", "loop");
+                        elementProperty4.SetAttribute("value", pre.Media[i].loop.ToString().ToLower());
+                        elementMedia.AppendChild(elementProperty4);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
                         elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
@@ -478,6 +683,10 @@ public class MultiSel : MonoBehaviour{
                         elementProperty.SetAttribute("name", "background");
                         elementProperty.SetAttribute("value", "true");
                         elementMedia.AppendChild(elementProperty);
+                        XmlElement elementProperty4 = doc.CreateElement(string.Empty, "property", string.Empty);
+                        elementProperty4.SetAttribute("name", "loop");
+                        elementProperty4.SetAttribute("value", pre.Media[i].loop.ToString().ToLower());
+                        elementMedia.AppendChild(elementProperty4);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
                         elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
@@ -499,6 +708,10 @@ public class MultiSel : MonoBehaviour{
                         elementProperty3.SetAttribute("name", "z");
                         elementProperty3.SetAttribute("value", pre.Media[i].pz.ToString().Replace(",", "."));
                         elementMedia.AppendChild(elementProperty3);
+                        XmlElement elementProperty4 = doc.CreateElement(string.Empty, "property", string.Empty);
+                        elementProperty4.SetAttribute("name", "loop");
+                        elementProperty4.SetAttribute("value", pre.Media[i].loop.ToString().ToLower());
+                        elementMedia.AppendChild(elementProperty4);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
                         elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
@@ -546,6 +759,10 @@ public class MultiSel : MonoBehaviour{
                         elementProperty3.SetAttribute("name", "z");
                         elementProperty3.SetAttribute("value", pre.Media[i].pz.ToString().Replace(",", "."));
                         elementEffect.AppendChild(elementProperty3);
+                        XmlElement elementProperty4 = doc.CreateElement(string.Empty, "property", string.Empty);
+                        elementProperty4.SetAttribute("name", "loop");
+                        elementProperty4.SetAttribute("value", pre.Media[i].loop.ToString().ToLower());
+                        elementEffect.AppendChild(elementProperty4);
                         XmlElement elementProperty9 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty9.SetAttribute("name", "intensity");
                         elementProperty9.SetAttribute("value", (float.Parse(pre.Media[i].intensity) / 10).ToString().Replace(",","."));
@@ -571,6 +788,10 @@ public class MultiSel : MonoBehaviour{
                         elementProperty3.SetAttribute("name", "z");
                         elementProperty3.SetAttribute("value", pre.Media[i].pz.ToString().Replace(",", "."));
                         elementEffect.AppendChild(elementProperty3);
+                        XmlElement elementProperty4 = doc.CreateElement(string.Empty, "property", string.Empty);
+                        elementProperty4.SetAttribute("name", "loop");
+                        elementProperty4.SetAttribute("value", pre.Media[i].loop.ToString().ToLower());
+                        elementEffect.AppendChild(elementProperty4);
                         XmlElement elementProperty9 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty9.SetAttribute("name", "intensity");
                         elementProperty9.SetAttribute("value", (float.Parse(pre.Media[i].intensity) / 10).ToString().Replace(",","."));
@@ -596,6 +817,10 @@ public class MultiSel : MonoBehaviour{
                         elementProperty3.SetAttribute("name", "z");
                         elementProperty3.SetAttribute("value", pre.Media[i].pz.ToString().Replace(",", "."));
                         elementEffect.AppendChild(elementProperty3);
+                        XmlElement elementProperty4 = doc.CreateElement(string.Empty, "property", string.Empty);
+                        elementProperty4.SetAttribute("name", "loop");
+                        elementProperty4.SetAttribute("value", pre.Media[i].loop.ToString().ToLower());
+                        elementEffect.AppendChild(elementProperty4);
                         XmlElement elementProperty9 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty9.SetAttribute("name", "intensity");
                         elementProperty9.SetAttribute("value", (float.Parse(pre.Media[i].intensity) / 10).ToString().Replace(",", "."));
@@ -621,6 +846,10 @@ public class MultiSel : MonoBehaviour{
                         elementProperty3.SetAttribute("name", "z");
                         elementProperty3.SetAttribute("value", pre.Media[i].pz.ToString().Replace(",", "."));
                         elementMedia.AppendChild(elementProperty3);
+                        XmlElement elementProperty4 = doc.CreateElement(string.Empty, "property", string.Empty);
+                        elementProperty4.SetAttribute("name", "loop");
+                        elementProperty4.SetAttribute("value", pre.Media[i].loop.ToString().ToLower());
+                        elementMedia.AppendChild(elementProperty4);
                         XmlElement elementProperty8 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty8.SetAttribute("name", "text");
                         elementProperty8.SetAttribute("value", pre.Media[i].textMessage.ToString());
@@ -798,10 +1027,9 @@ public class MultiSel : MonoBehaviour{
                         //criação de relacionamento e portas
                         if (pre.Media[i].startTarget) {//se é uma interação de start
                             if (pre.Media[i].interactiveTarget.ToLower().StartsWith("scene")) {//é uma cena
-
                                 /*
-                                 * incluir o meets em futura atualização
-	                              <relation id="xx-7" type="meets" >// sobre a mudança de cenas automaticamente
+                                 * incluir o meet em futura atualização
+	                              <relation id="xx-7" type="meet" >// sobre a mudança de cenas automaticamente
 		                              <primary component="scene 1" interface="portVideo2d" />
 		                              <secondary component="scene 2" />
 	                              </relation>
