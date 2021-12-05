@@ -10,28 +10,32 @@ public class MultiSel : MonoBehaviour{
     private GameObject ob;
 
     private void Start() {
-        folder = Application.persistentDataPath + "/temp/";
-        file = "ProjetoMultiSel.xml";
+        folder = Application.persistentDataPath;
+        file = "projeto.xml";
         if (!Directory.Exists(folder))
             Directory.CreateDirectory(folder);
-        importProject();
     }
     void Update() {
+        /*
         if (Input.GetKeyDown(KeyCode.S)) {
             exportProject();
         }
         if (Input.GetKeyDown(KeyCode.L)) {
             importProject();
         }
+        */
     }
     //le o arquivo xml multisel
     public void importProject() {
-        //na importação é necessário criar arquivos de cena
-        Debug.LogError("**********INICIADO******************");
-        
+        //na importação é necessário criar arquivos de cena        
         XmlDocument doc = new XmlDocument();//cria o documento xml
-        doc.Load(folder + file);//carrega o arquivo
-
+        if (File.Exists(folder + "/" + file)) {
+            doc.Load(folder + "/" + file);//carrega o arquivo
+            Debug.Log("Projeto MultiSel carregado!");
+        } else {
+            Debug.LogError("Projeto MultiSel não encontrado");
+            return;
+        }
         //carrega o no body e cria-se a lista de nos filhos
         XmlNodeList nodesBody = doc.GetElementsByTagName("body");
         XmlNode nodeBody = nodesBody[0];//como só tem 1 body
@@ -57,7 +61,13 @@ public class MultiSel : MonoBehaviour{
             pre = new Presentation();//instancia o arquivo se serialização
             //conteudo da cena
             if (nodeBody.ChildNodes[i].Name.ToLower().Equals("scene")) {
-                pre.nScene = "Scene " + (i + 1);//inclui nome da cena no arquivo
+                //inclui nome da cena no arquivo
+                pre.nScene = "Scene " + (i + 1);
+                //se tiver delay, armazena os dados para incluir posteriormente
+                string delayScene = "";
+                if (nodeBody.ChildNodes[i]?.Attributes["delay"]?.Value != null)
+                    delayScene = nodeBody.ChildNodes[i]?.Attributes["primaryComponent"]?.Value + "*" +
+                        nodeBody.ChildNodes[i]?.Attributes["delay"]?.Value;
                 //pegando todas as portas desta cena
                 List<string> portsList = new List<string>();
                 for (int p = 0; p < nodeBody.ChildNodes[i]?.ChildNodes.Count; p++) {
@@ -82,6 +92,12 @@ public class MultiSel : MonoBehaviour{
                             media.src = nodeScene.Attributes["src"].Value;
                             media.lookAt = true;
                             media.scale = 0.005f;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {//veridica se é 360
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeMedia.Attributes["name"].Value.ToLower().Equals("background")) {
@@ -140,6 +156,12 @@ public class MultiSel : MonoBehaviour{
                             media.rStart = "Not Defined";
                             media.src = nodeScene.Attributes["src"].Value;
                             media.lookAt = true;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
@@ -185,6 +207,12 @@ public class MultiSel : MonoBehaviour{
                             media.src = nodeScene.Attributes["src"].Value;
                             media.lookAt = true;
                             media.scale = 0.005f;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeScene.ChildNodes[x].Attributes["name"].Value.ToLower().Equals("background")) {
@@ -223,11 +251,17 @@ public class MultiSel : MonoBehaviour{
                         }
                         if (nodeScene.Attributes["type"].Value.ToLower().Equals("image/x-icon")) {//interact
                             media.type = "INTERACT";
-                            media.name = "INTERACT - " + idINTERACT++;
-                            idsList.Add("INTERACT - " + (idINTERACT - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
+                            media.name = "Interact - " + idINTERACT++;
+                            idsList.Add("Interact - " + (idINTERACT - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
                             media.rStart = "Not Defined";
                             media.lookAt = true;
                             media.scale = 0.005f;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
@@ -265,6 +299,12 @@ public class MultiSel : MonoBehaviour{
                             media.rStart = "Not Defined";
                             media.lookAt = true;
                             media.scale = 0.005f;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
@@ -303,6 +343,12 @@ public class MultiSel : MonoBehaviour{
                             idsList.Add("SEWind - " + (idSEWIND - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
                             media.rStart = "Not Defined";
                             media.lookAt = true;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
@@ -341,6 +387,12 @@ public class MultiSel : MonoBehaviour{
                             idsList.Add("SELight - " + (idSELIGHT - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
                             media.rStart = "Not Defined";
                             media.lookAt = true;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
@@ -379,6 +431,12 @@ public class MultiSel : MonoBehaviour{
                             idsList.Add("SESteam - " + (idSESTEAM - 1) + "*" + nodeScene.Attributes["id"].Value.ToLower());
                             media.rStart = "Not Defined";
                             media.lookAt = true;
+                            if (nodeScene.Attributes["id"].Value.ToLower().Equals(delayScene.Split('*')[0])) {
+                                int delay = int.Parse(delayScene.Split('*')[1]);
+                                int s = delay % 60; delay /= 60; int mins = delay % 60;
+                                media.mDelay = mins;
+                                media.sDelay = s;
+                            }
                             for (int x = 0; x < nodeScene.ChildNodes.Count; x++) {
                                 XmlNode nodeMedia = nodeScene.ChildNodes[x];
                                 if (nodeMedia.Attributes["name"].Value.ToLower().Equals("x"))
@@ -444,8 +502,6 @@ public class MultiSel : MonoBehaviour{
                                             !strPri.StartsWith("scene")) {
                                             media.rStart = "OnBegin";
                                             media.rMediaStart = strPri;
-                                            media.mStart = 0;
-                                            media.sStart = 0;
                                         }
                                         //se a relação tiver delay
                                         if (nodeScene.Attributes["id"].Value.ToLower().Equals(strSec) &&
@@ -479,6 +535,7 @@ public class MultiSel : MonoBehaviour{
                                         }
                                     }
                                 }
+        //***************rever o meet e metBy**********************************************
                                 if (nodeRelation.Attributes["type"].Value.ToLower().Equals("meet")) {//inicio com final da outra midia
                                     for (int z = 0; z < nodeRelation.ChildNodes.Count; z++) {
                                         //percorre os nos filhos da relação e pega o primary e secundary
@@ -491,9 +548,6 @@ public class MultiSel : MonoBehaviour{
                                             !strPri.StartsWith("scene")) {
                                             media.rStart = "OnEnd";
                                             media.rMediaStart = strPri;
-                                            //tentar incluir a duração da primeira midia////////////////////////////////////////
-                                            media.mStart = 0;
-                                            media.sStart = 0;
                                         }
                                     }
                                 }
@@ -507,9 +561,6 @@ public class MultiSel : MonoBehaviour{
                                             !strPri.StartsWith("scene")) {
                                             media.rEnd = "OnEnd";
                                             media.rMediaEnd = strPri;
-                                            //tentar incluir a duração da primeira midia////////////////////////////////////////
-                                            media.mEnd = 0;
-                                            media.sEnd = 0;
                                         }
                                     }
                                 }
@@ -568,17 +619,20 @@ public class MultiSel : MonoBehaviour{
                             if (strId.Contains(pre.Media[p]?.rMediaEnd))
                                 pre.Media[p].rMediaEnd = strId.Split('*')[0];
                     //se a duração for 0 o loop fica true
-                    if ((pre.Media[p]?.mDuration + pre.Media[p]?.sDuration) <= 0)
+                    if ((pre.Media[p]?.mDuration + pre.Media[p]?.sDuration) <= 0 &&
+                        !pre.Media[p].type.Equals("VIDEO360") &&
+                        !pre.Media[p].type.Equals("VIDEO2D") &&
+                        !pre.Media[p].type.Equals("PIP") &&
+                        !pre.Media[p].type.Equals("AUDIO3D")) 
                         pre.Media[p].loop = true;
                 }
                 //verifica a existencia da pasta e cria
-                if (!Directory.Exists(folder + "/new/")) Directory.CreateDirectory(folder + "/new/");
+                if (!Directory.Exists(folder + "/temp/")) Directory.CreateDirectory(folder + "/temp/");
                 //fecha o arquivo 
-                SerializeOp.Serialize(pre, folder + "/new/Scene " + (i + 1) + ".xml");
-                if (File.Exists(folder + "/new/Scene " + (i + 1) + ".xml")) Debug.Log("XML SAVE - Scene " + (i + 1) + ".xml"); else Debug.LogError("XML NOT SAVE");
+                SerializeOp.Serialize(pre, folder + "/temp/Scene " + (i + 1) + ".xml");
+                if (File.Exists(folder + "/temp/Scene " + (i + 1) + ".xml")) Debug.Log("XML SAVE - Scene " + (i + 1) + ".xml"); else Debug.LogError("XML NOT SAVE");
             }
         }
-        Debug.LogError("************FINALIZADO****************");
     }
     //cria o arquivo xml multisel
     public void exportProject() {
@@ -615,14 +669,15 @@ public class MultiSel : MonoBehaviour{
         List<XmlElement> relacoesExternas = new List<XmlElement>();
         //percorre as cenas existentes
         for (int s = 1; s <= 5; s++) {
-            if (File.Exists(folder + "Scene " + s + ".xml")) {
+            if (File.Exists(folder + "/temp/" + "Scene " + s + ".xml")) {
+                Debug.Log("FILE: " + folder + "/temp/" + "Scene " + s + ".xml loaded");
                 //cria a cena
                 XmlElement elementScene = doc.CreateElement(string.Empty, "scene", string.Empty);
                 elementScene.SetAttribute("id", "scene "+s);
                 string scenePrimaryComponent = "";
                 //^abre a cena^
                 //carrega o xml serializado da cena no objeto pre
-                pre = SerializeOp.Deserialize<Presentation>(folder + "Scene " + s + ".xml");
+                pre = SerializeOp.Deserialize<Presentation>(folder + "/temp/" + "Scene " + s + ".xml");
                 //agrupa as midias para imprimir depois
                 List<XmlElement> mediaEffects = new List<XmlElement>();
                 //agrupa as relações para imprimir depois
@@ -665,7 +720,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty6);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("IMAGE2D")) {
@@ -691,7 +746,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty4);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("IMAGE360")) {
@@ -709,7 +764,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty4);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("INTERACT")) {
@@ -734,7 +789,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty4);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("PIP")) {
@@ -760,7 +815,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty6);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("SELIGHT")) {
@@ -789,7 +844,7 @@ public class MultiSel : MonoBehaviour{
                         elementEffect.AppendChild(elementProperty9);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementEffect.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("SESTEAM")) {
@@ -818,7 +873,7 @@ public class MultiSel : MonoBehaviour{
                         elementEffect.AppendChild(elementProperty9);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementEffect.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("SEWIND")) {
@@ -847,7 +902,7 @@ public class MultiSel : MonoBehaviour{
                         elementEffect.AppendChild(elementProperty9);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementEffect.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("TEXTMESSAGE")) {
@@ -876,7 +931,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty8);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("VIDEO2D")) {
@@ -910,7 +965,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty6);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     if (pre.Media[i].type.Equals("VIDEO360")) {
@@ -936,7 +991,7 @@ public class MultiSel : MonoBehaviour{
                         elementMedia.AppendChild(elementProperty6);
                         XmlElement elementProperty11 = doc.CreateElement(string.Empty, "property", string.Empty);
                         elementProperty11.SetAttribute("name", "duration");
-                        elementProperty11.SetAttribute("value", ((((int)pre.Media[i].mDuration * 60) + ((int)pre.Media[i].sDuration))) + "");
+                        elementProperty11.SetAttribute("value", (((pre.Media[i].mDuration * 60) + (pre.Media[i].sDuration))) + "");
                         elementMedia.PrependChild(elementProperty11);
                     }
                     //insere as relações
@@ -950,7 +1005,7 @@ public class MultiSel : MonoBehaviour{
                             XmlElement elementRelationDelay = doc.CreateElement(string.Empty, "relation", string.Empty);
                             elementRelationDelay.SetAttribute("id", "Relation-" + idRelacao++);
                             elementRelationDelay.SetAttribute("type", "starts");
-                            elementRelationDelay.SetAttribute("delay", ((((int)pre.Media[i].mDelay * 60) + ((int)pre.Media[i].sDelay))) + "");
+                            elementRelationDelay.SetAttribute("delay", (((pre.Media[i].mDelay * 60) + (pre.Media[i].sDelay))) + "");
                             XmlElement elementRelationPrimaryDelay = doc.CreateElement(string.Empty, "primary", string.Empty);
                             elementRelationPrimaryDelay.SetAttribute("component", "scene " + s);
                             elementRelationDelay.AppendChild(elementRelationPrimaryDelay);
@@ -1047,6 +1102,7 @@ public class MultiSel : MonoBehaviour{
                         //criação de relacionamento e portas
                         if (pre.Media[i].startTarget) {//se é uma interação de start
                             if (pre.Media[i].interactiveTarget.ToLower().StartsWith("scene")) {//é uma cena
+///////////********************************************************************************************************////////
                                 /*
                                  * incluir o meet em futura atualização
 	                              <relation id="xx-7" type="meet" >// sobre a mudança de cenas automaticamente
@@ -1110,24 +1166,49 @@ public class MultiSel : MonoBehaviour{
                         } 
                     }
                     //fecha a cena
+                    //se so tiver uma midia salva ela no primary
+                    if (!elementScene.HasAttribute("primaryComponent") && //se nao tem um primaryComponent cadastrado
+                        !pre.Media[i].rStart.Equals("Not Defined") && //se não tiver o starts "Not Defined"
+                        pre.Media.Count == 1) {//se for somente uma midia
+                        scenePrimaryComponent = pre.Media[i].name.Replace(" ", "").ToLower() + "_s" + s;
+                        //adiciona ao filtro pro retirar o relacionamento
+                        elementScene.SetAttribute("primaryComponent", scenePrimaryComponent);
+                        if((pre.Media[i]?.mDelay + pre.Media[i]?.sDelay) > 0)//se tiver delay inclui
+                            elementScene.SetAttribute("delay", ((pre.Media[i]?.mDelay * 60) + pre.Media[i]?.sDelay).ToString());
+                    } 
+                    //se tiver mais que 1 midia
                     //primaryComponent com a primeira mídia da cena sem delay
-                    if (!elementScene.HasAttribute("primaryComponent") && 
-                        (((int)pre.Media[i].mDelay + (int)pre.Media[i].sDelay) == 0)) {
+                    if (!elementScene.HasAttribute("primaryComponent") &&
+                        !pre.Media[i].rStart.Equals("Not Defined") &&
+                        ((pre.Media[i].mDelay + pre.Media[i].sDelay) == 0)) {
                         //alem de incluir o primaryComponent na cena, salva para porterior filtro
                         scenePrimaryComponent = pre.Media[i].name.Replace(" ", "").ToLower() + "_s" + s;
-                        elementScene.SetAttribute("primaryComponent", scenePrimaryComponent); 
+                        elementScene.SetAttribute("primaryComponent", scenePrimaryComponent);
                     }
                     elementBody.AppendChild(elementScene);
                 }
-                /*
-                //primaryComponent caso todas as midias tenham delay, pega a primeira sem tratamento de menor
-                if (!elementScene.HasAttribute("primaryComponent") && pre.Media.Count > 0) {
-                    elementScene.SetAttribute("primaryComponent", pre.Media[0].name.Replace(" ", "").ToLower() + "_s" + s);
-                    elementScene.SetAttribute("delay", ((((int)pre.Media[0].mDelay * 60) + ((int)pre.Media[0].sDelay))) + "");
+                //se todas as midias apresentarem delay, pega-se a de menor delay 
+                if (!elementScene.HasAttribute("primaryComponent")) {
+                    int minour = 99999999;
+                    for (int pc = 0; pc < pre.Media.Count; pc++) 
+                        if ((pre.Media[pc].mDelay + pre.Media[pc].sDelay) <= minour &&
+                            !pre.Media[pc].rStart.Equals("Not Defined")) {
+                            minour = pre.Media[pc].mDelay + pre.Media[pc].sDelay;
+                            scenePrimaryComponent = pre.Media[pc].name.Replace(" ", "").ToLower() + "_s" + s;
+                            elementScene.SetAttribute("primaryComponent", scenePrimaryComponent);
+                            elementScene.SetAttribute("delay", ((pre.Media[pc]?.mDelay * 60) + pre.Media[pc]?.sDelay).ToString());
+                        } 
                 }
+                /*
+                    //primaryComponent caso todas as midias tenham delay, pega a primeira sem tratamento de menor
+                    if (!elementScene.HasAttribute("primaryComponent") && pre.Media.Count > 0) {
+                        elementScene.SetAttribute("primaryComponent", pre.Media[0].name.Replace(" ", "").ToLower() + "_s" + s);
+                        elementScene.SetAttribute("delay", ((((int)pre.Media[0].mDelay * 60) + ((int)pre.Media[0].sDelay))) + "");
+                    }
                 */
                 //imprimindo as midias e efeitos sensoriais
-                elementScene.AppendChild(doc.CreateComment("Mídias e SE desta cena"));
+                if(mediaEffects.Count > 0)
+                    elementScene.AppendChild(doc.CreateComment("Mídias e Efeitos Sensoriais desta cena"));
                 foreach (XmlElement me in mediaEffects)
                     elementScene.AppendChild(me);
                 //imprimindo os relacionamentos da cena
@@ -1177,15 +1258,22 @@ public class MultiSel : MonoBehaviour{
             }
         }
         //imprimindo os relacionamentos da cena
-        elementBody.AppendChild(doc.CreateComment("Relacionamentos entre cenas"));
+        if(relacoesExternas.Count > 0)
+            elementBody.AppendChild(doc.CreateComment("Relacionamentos entre cenas"));
         foreach (XmlElement ro in relacoesExternas) 
             elementBody.AppendChild(ro);
-            
         //salvamento do arquivo
-        doc.Save(folder + file);
-        if (File.Exists(folder + "ProjetoMultiSel.xml"))
-            Debug.LogWarning("PROJETO MULTISEL CRIADO!");
+        doc.Save(folder + "/" + file);
+        if (File.Exists(folder + "/" + "projeto.xml"))
+            Debug.Log("File projeto.xml written");
         else
-            Debug.LogError("ERRO AO CRIAR O PROJETO");
+            Debug.LogError("File projeto.xml not written!");
+    }
+    public void deleteProject() {
+        if (File.Exists(folder + "/" + "projeto.xml")) {
+            File.Delete(folder + "/" + "projeto.xml");
+            Debug.Log("File projeto.xml erased");
+        } else
+            Debug.LogError("File projeto.xml not erased!");
     }
 }
