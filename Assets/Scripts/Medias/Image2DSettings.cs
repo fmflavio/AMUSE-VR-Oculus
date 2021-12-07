@@ -30,12 +30,11 @@ public class Image2DSettings : MonoBehaviour {
     private SceneManagement sceneManager;
     private GameObject start, end, interactiveIcon, durationSteppers, interativeGroup;
     private RawImage rawImage;
-    private Button uploadButton;
+    private Button uploadButton, buttonCanvas;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Toggle lookAt, loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
     private Dropdown folderDropdown, chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider scaleSlider;
-    private Vector3 originalMenuScale;
     private SerializerManager serializerManager;
     private Text buttonMessage;
 
@@ -68,7 +67,7 @@ public class Image2DSettings : MonoBehaviour {
         endDropdown = setings.transform.Find("End/EndDropdown").GetComponent<Dropdown>();
         endMediaDropdown = setings.transform.Find("End/EndMediaDropdown").GetComponent<Dropdown>();
         scaleSlider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
-        originalMenuScale = canvas.transform.localScale;
+        buttonCanvas = canvas.transform.Find("Button").GetComponent<Button>();
         buttonMessage = canvas.GetComponentInChildren<Text>();
         //Folder File Manager
         names = new List<string>();
@@ -372,8 +371,12 @@ public class Image2DSettings : MonoBehaviour {
         setings.transform.Find("Hide/MediaType").GetComponent<Text>().text = mediaType;
     }
     public void ScaleCanvas() {
-        if(scaleSlider.gameObject.activeSelf)
-            this.canvas.transform.localScale = new Vector3(originalMenuScale.x * scaleSlider.value, originalMenuScale.y * scaleSlider.value, originalMenuScale.z * scaleSlider.value);
+        StartCoroutine(createScaleLate());
+    }
+    private IEnumerator createScaleLate() {
+        yield return new WaitForSeconds(0.1f);
+        if (scaleSlider.gameObject.activeSelf)
+            buttonCanvas.transform.localScale = new Vector3(scaleSlider.value, scaleSlider.value, scaleSlider.value);
     }
     public void interact() { 
         //feedback condicionado aos cliques

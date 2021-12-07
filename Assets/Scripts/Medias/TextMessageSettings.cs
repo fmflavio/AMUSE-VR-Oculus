@@ -26,11 +26,11 @@ public class TextMessageSettings: MonoBehaviour {
     private SceneManagement sceneManager;
     private GameObject start, end, canvasKeyboard, interactiveIcon, durationSteppers;
     private RawImage rawImage;
+    private Button buttonCanvas;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
     private Toggle lookAt, loopToggle, startTargetToggle, endTargetToggle, isInteractToggle;
     private Dropdown chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
-    private Slider slider;
-    private Vector3 originalMenuScale;
+    private Slider scaleSlider;
     private SerializerManager serializerManager;
 
     void Start() {
@@ -57,9 +57,9 @@ public class TextMessageSettings: MonoBehaviour {
         stepperDelaySecond = setings.transform.Find("Start/DelaySteppers/StepperSeconds").GetComponent<Stepper>();
         endDropdown = setings.transform.Find("End/EndDropdown").GetComponent<Dropdown>();
         endMediaDropdown = setings.transform.Find("End/EndMediaDropdown").GetComponent<Dropdown>();
-        slider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
+        scaleSlider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
+        buttonCanvas = canvas.transform.Find("Button").GetComponent<Button>();
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
-        originalMenuScale = canvas.transform.localScale;
         //adiciona a primeira lista de cenas ao interact, removendo a cena atual
         tempList = new List<string>();
         for (int i = 1; i <= 5; i++)
@@ -289,8 +289,12 @@ public class TextMessageSettings: MonoBehaviour {
         setings.transform.Find("Hide/MediaType").GetComponent<Text>().text = mediaType;
     }
     public void ScaleCanvas() {
-        var newVector = new Vector3(originalMenuScale.x * slider.value, originalMenuScale.y * slider.value, originalMenuScale.z * slider.value);
-        this.canvas.transform.localScale = newVector;
+        StartCoroutine(createScaleLate());
+    }
+    private IEnumerator createScaleLate() {
+        yield return new WaitForSeconds(0.1f);
+        if (scaleSlider.gameObject.activeSelf)
+            buttonCanvas.transform.localScale = new Vector3(scaleSlider.value, scaleSlider.value, scaleSlider.value);
     }
     public void interact() {
         //feedback condicionado aos cliques

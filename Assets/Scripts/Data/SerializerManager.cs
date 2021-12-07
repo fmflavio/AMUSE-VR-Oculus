@@ -22,6 +22,7 @@ public class SerializerManager : MonoBehaviour {
         path = Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml";
     }
     void Update() {
+        /*
         if(Input.GetKeyDown(KeyCode.S)) {
             //serializeSave();
         }
@@ -31,6 +32,7 @@ public class SerializerManager : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.C)) {
             //DeleteFiles();
         }
+        */
     }
     public bool isEmptyList() {
         if (!File.Exists(path))
@@ -39,7 +41,6 @@ public class SerializerManager : MonoBehaviour {
             pre = SerializeOp.Deserialize<Presentation>(path);
             if (pre.Media.Count > 0) return false; else return true;
         }
-
     }
     public void serializeLoader(){
         pre = SerializeOp.Deserialize<Presentation>(path);
@@ -124,9 +125,8 @@ public class SerializerManager : MonoBehaviour {
                             StartCoroutine(chooseInteractLate(ob, pre.Media[i].interactiveTarget));
                         }
                         //scale
-                        ////////////////////problema a atualizar o slider da scala//////////////////////////////
-                        ob.transform.Find("Canvas").gameObject.transform.localScale = new Vector3(pre.Media[i].scale, pre.Media[i].scale, pre.Media[i].scale);
-                        //ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value = pre.Media[i].scale;
+                        ob.transform.Find("Canvas/Button").gameObject.transform.localScale = new Vector3(pre.Media[i].scale, pre.Media[i].scale, pre.Media[i].scale);
+                        ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value = pre.Media[i].scale;
                     }
                 }
             }
@@ -207,7 +207,6 @@ public class SerializerManager : MonoBehaviour {
                         }
                     }
                 }
-
             }
             if(pre.Media[i].type.Equals("PIP")) {
                 instantiate.intantiatePIP();
@@ -397,9 +396,8 @@ public class SerializerManager : MonoBehaviour {
                             StartCoroutine(chooseInteractLate(ob, pre.Media[i].interactiveTarget));
                         }
                         //scale
-                        ////////////////////problema a atualizar o slider da scala//////////////////////////////
-                        ob.transform.Find("Canvas").gameObject.transform.localScale = new Vector3(pre.Media[i].scale, pre.Media[i].scale, pre.Media[i].scale);
-                        //ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value = pre.Media[i].scale;
+                        ob.transform.Find("Canvas/Button").gameObject.transform.localScale = new Vector3(pre.Media[i].scale, pre.Media[i].scale, pre.Media[i].scale);
+                        ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value = pre.Media[i].scale;
                     }
                 }
             }
@@ -446,9 +444,8 @@ public class SerializerManager : MonoBehaviour {
                             StartCoroutine(chooseInteractLate(ob, pre.Media[i].interactiveTarget));
                         }
                         //scale
-                        ////////////////////problema a atualizar o slider da scala//////////////////////////////
-                        ob.transform.Find("Canvas").gameObject.transform.localScale = new Vector3(pre.Media[i].scale, pre.Media[i].scale, pre.Media[i].scale);
-                        //ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value = pre.Media[i].scale;
+                        ob.transform.Find("Canvas/Button").gameObject.transform.localScale = new Vector3(pre.Media[i].scale, pre.Media[i].scale, pre.Media[i].scale);
+                        ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value = pre.Media[i].scale;
                     }
                 }
             }
@@ -526,8 +523,8 @@ public class SerializerManager : MonoBehaviour {
                     media.volume = ob.transform.Find("EditMenu/VolumeSlider").GetComponent<Slider>().value.ToString();
                 }
                 if(type.Equals("IMAGE2D") || type.Equals("VIDEO2D") || type.Equals("TEXTMESSAGE"))
-                    media.scale = ob.transform.Find("Canvas").gameObject.transform.localScale.x;
-                if(type.Equals("IMAGE2D") || type.Equals("INTERACT") || type.Equals("VIDEO2D") || type.Equals("TEXTMESSAGE")) {
+                    media.scale = ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value;
+                if (type.Equals("IMAGE2D") || type.Equals("INTERACT") || type.Equals("VIDEO2D") || type.Equals("TEXTMESSAGE")) {
                     media.interactive = ob.transform.Find("EditMenu/Interact/IsInteractToggle").GetComponent<Toggle>().isOn;
                     media.interactiveIcon = ob.transform.Find("EditMenu/Interact/IsInteractToggle").GetComponent<Toggle>().isOn;
                     if(media.interactive) {
@@ -592,14 +589,5 @@ public class SerializerManager : MonoBehaviour {
         yield return new WaitForSeconds(1);
         int index = ob.transform.Find("EditMenu/Interact/ChooseTargetDropdown").GetComponent<Dropdown>().options.FindIndex((option) => { return option.text.Equals(op); });
         ob.transform.Find("EditMenu/Interact/ChooseTargetDropdown").GetComponent<Dropdown>().value = index;
-    }
-    private IEnumerator chooseScaletLate(GameObject ob, float op) {
-        yield return new WaitForSeconds(1);
-        Vector3 originalMenuScale = ob.transform.Find("Canvas").transform.localScale;
-        //var newVector = new Vector3(float.Parse(op), float.Parse(op), float.Parse(op));
-        var newVector = new Vector3(originalMenuScale.x * op, originalMenuScale.y * op, originalMenuScale.z * op);
-        //ob.transform.Find("Canvas").transform.localScale = newVector;
-        ob.transform.Find("Canvas").gameObject.transform.localScale = new Vector3(op, op, op);
-        ob.transform.Find("EditMenu/ScaleSlider").GetComponent<Slider>().value = op;
     }
 }

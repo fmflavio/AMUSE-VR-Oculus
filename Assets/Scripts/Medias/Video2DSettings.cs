@@ -33,6 +33,7 @@ public class Video2DSettings: MonoBehaviour {
     private VideoPlayer videoPlayer;
     private Button playButton, uploadButton;
     private Text duration;
+    private Button buttonCanvas;
     private Stepper stepperDelayMinutes, stepperDelaySecond;
     private Toggle lookAt, loopToggle, isLinkToggle, muteToggle, startTargetToggle, endTargetToggle, isInteractToggle;
     private Dropdown chooseTargetDropdown, folderDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
@@ -71,8 +72,8 @@ public class Video2DSettings: MonoBehaviour {
         muteToggle = setings.transform.Find("MuteToggle").GetComponent<Toggle>();
         volumeSlider = setings.transform.Find("VolumeSlider").GetComponent<Slider>();
         scaleSlider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
+        buttonCanvas = canvas.transform.Find("Button").GetComponent<Button>();
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
-        originalMenuScale = canvas.transform.localScale;
         buttonMessage = canvas.GetComponentInChildren<Text>();
         //Settings Setters
         //Folder File Manager
@@ -405,10 +406,12 @@ public class Video2DSettings: MonoBehaviour {
             videoPlayer.SetDirectAudioMute(0,muteToggle.isOn);
     }
     public void ScaleCanvas() {
-        if (scaleSlider.gameObject.activeSelf) {
-            var newVector = new Vector3(originalMenuScale.x * scaleSlider.value, originalMenuScale.y * scaleSlider.value, originalMenuScale.z * scaleSlider.value);
-            this.canvas.transform.localScale = newVector;
-        }
+        StartCoroutine(createScaleLate());
+    }
+    private IEnumerator createScaleLate() {
+        yield return new WaitForSeconds(0.1f);
+        if (scaleSlider.gameObject.activeSelf)
+            buttonCanvas.transform.localScale = new Vector3(scaleSlider.value, scaleSlider.value, scaleSlider.value);
     }
     public void interact() {
         //feedback condicionado aos cliques
