@@ -14,7 +14,6 @@ public class MultiSel : MonoBehaviour{
         file = "projeto.xml";
         if (!Directory.Exists(folder))
             Directory.CreateDirectory(folder);
-
     }
     void Update() {
         /*
@@ -1203,6 +1202,7 @@ public class MultiSel : MonoBehaviour{
                         scenePrimaryComponent = pre.Media[i].name.Replace(" ", "").ToLower() + "_s" + s;
                         elementScene.SetAttribute("primaryComponent", scenePrimaryComponent);
                     }
+                    //adiciona a cena ao body
                     elementBody.AppendChild(elementScene);
                 }
                 //se todas as midias apresentarem delay, pega-se a de menor delay 

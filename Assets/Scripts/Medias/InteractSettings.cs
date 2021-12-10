@@ -296,6 +296,7 @@ public class InteractSettings : MonoBehaviour {
                             if (target.Equals("VIDEO360") || target.Equals("IMAGE360")) {
                                 Camera.main.clearFlags = CameraClearFlags.Color;
                                 Camera.main.backgroundColor = Color.black;
+                                Debug.Log("aqui!");
                             }
                         } else {//ativa a midia
                             namesMedia.SetActive(true);

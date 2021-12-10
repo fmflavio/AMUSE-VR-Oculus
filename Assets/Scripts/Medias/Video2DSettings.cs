@@ -6,7 +6,6 @@ using UnityEngine.UI.Extensions;
 using UnityEngine.Video;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine.SceneManagement;
 
 public class Video2DSettings: MonoBehaviour {
@@ -403,7 +402,8 @@ public class Video2DSettings: MonoBehaviour {
     }
     public void setMute() {
         if (loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
-            videoPlayer.SetDirectAudioMute(0,muteToggle.isOn);
+            for (int i = 0; i < videoPlayer.length; i++)
+                videoPlayer.SetDirectAudioMute((ushort)i, muteToggle.isOn);
     }
     public void ScaleCanvas() {
         StartCoroutine(createScaleLate());

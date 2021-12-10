@@ -4,14 +4,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(SerializerManager))]
 public class LoadScene: MonoBehaviour {
     private string sceneName;
     public SerializerManager serializerManager;
 
     public void Awake() {
         sceneName = SceneManager.GetActiveScene().name;
-        if(!serializerManager.isEmptyList())
-            serializerManager.serializeLoader();
+        serializerManager.serializeLoader();
     }
     //carrega a proxima cena
     public void nextScene() {

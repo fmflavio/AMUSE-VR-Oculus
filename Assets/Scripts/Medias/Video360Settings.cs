@@ -6,7 +6,6 @@ using UnityEngine.UI.Extensions;
 using UnityEngine.Video;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 
 public class Video360Settings: MonoBehaviour {
     string mediaType = "VIDEO360";
@@ -334,6 +333,7 @@ public class Video360Settings: MonoBehaviour {
     }
     public void setMute() {
         if(loopToggle.gameObject.activeSelf && videoPlayer.isPlaying)
-            videoPlayer.SetDirectAudioMute(0, muteToggle.isOn);
+            for (int i = 0; i < videoPlayer.length; i++)
+                videoPlayer.SetDirectAudioMute((ushort)i, muteToggle.isOn);
     }
 }

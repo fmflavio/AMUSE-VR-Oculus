@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine.SceneManagement;
 using System;
 

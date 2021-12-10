@@ -67,23 +67,18 @@ public class ViewerManager : MonoBehaviour {
             if(viewer.activeSelf) {
                 medias = this.GetComponent<SceneManagement>().getMidias();
                 foreach(GameObject localMedias in medias) { // lista todas a midias
-                    //Debug.Log("Seconds: " + seconds);
                     //pega os tempos da midia do loop
                     float tempStartMinutes = float.Parse(localMedias.transform.Find("EditMenu/Hide/StartMinutes").GetComponent<Text>().text),
                         tempStartSecunds = float.Parse(localMedias.transform.Find("EditMenu/Hide/StartSeconds").GetComponent<Text>().text),
                         tempEndMinutes = float.Parse(localMedias.transform.Find("EditMenu/Hide/EndMinutes").GetComponent<Text>().text),
                         tempEndSeconds = float.Parse(localMedias.transform.Find("EditMenu/Hide/EndSeconds").GetComponent<Text>().text);
-                    //Debug.Log("Sminutes: " + tempStartMinutes+" Sseconds: "+ tempStartSecunds+" Eminutes: "+ tempEndMinutes+" Eseconds: "+ tempEndSeconds);
                     //forçando a iniciar ou terminar com pelo menos 1 segundo
                     if(tempStartMinutes == 0 && tempStartSecunds == 0) tempStartSecunds = 1;
                     //forçando a terminar um segundo apos o inicio
-                    //if(tempStartMinutes == tempEndMinutes && tempStartSecunds == tempEndSeconds) tempEndSeconds++;
                     //verifica se o relacionamento start está definido pra Not Defined
                     int valueStart = localMedias.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value;
                     //gerencia o iniciar da midia
                     if (tempStartMinutes == minutes && tempStartSecunds == seconds && !localMedias.activeSelf && valueStart != 3) {
-                        //Debug.Log("Start: " + localMedias.name);
-                        //Debug.Log("Sminutes: " + tempStartMinutes + " Sseconds: " + tempStartSecunds + " Eminutes: " + tempEndMinutes + " Eseconds: " + tempEndSeconds);
                         //ativa a midia ativa no foreach
                         localMedias.SetActive(true);
                         //startar midias especiais ou que precisem de play
@@ -100,8 +95,6 @@ public class ViewerManager : MonoBehaviour {
                     } else {
                         //gerencia o termino da midia
                         if(tempEndMinutes == minutes && tempEndSeconds == seconds && localMedias.activeSelf) {
-                            //Debug.Log("End: " + localMedias.name);
-                            //Debug.Log("Sminutes: " + tempStartMinutes + " Sseconds: " + tempStartSecunds + " Eminutes: " + tempEndMinutes + " Eseconds: " + tempEndSeconds);
                             //oculta as midias especiais e limpa da apresentação
                             if(localMedias.name.Equals("Image360") || localMedias.name.Equals("Video360")) {
                                 Camera.main.clearFlags = CameraClearFlags.Color;

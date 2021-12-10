@@ -1,12 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UI.Extensions;
-using UnityEngine.Video;
 
 public class SerializerManager : MonoBehaviour {
     private string path;
@@ -14,7 +11,6 @@ public class SerializerManager : MonoBehaviour {
     private Media media;
     public SceneManagement sceneManager;
     public InstantiateMidia instantiate;
-    private GameObject ob;
     private static int i = 0;
     public void Awake() {
         if (!Directory.Exists(Application.persistentDataPath + "/temp/"))
@@ -22,7 +18,6 @@ public class SerializerManager : MonoBehaviour {
         path = Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml";
     }
     void Update() {
-        /*
         if(Input.GetKeyDown(KeyCode.S)) {
             //serializeSave();
         }
@@ -32,18 +27,21 @@ public class SerializerManager : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.C)) {
             //DeleteFiles();
         }
-        */
     }
-    public bool isEmptyList() {
+    public bool fileExists() {
+        Debug.LogError("endereço: "+path);
         if (!File.Exists(path))
-            return true;
+            return false;
         else {
             pre = SerializeOp.Deserialize<Presentation>(path);
-            if (pre.Media.Count > 0) return false; else return true;
+            Debug.LogError("midias: " + pre.Media.Count);
+            if (pre.Media.Count > 0) return true; else return false;
         }
     }
-    public void serializeLoader(){
-        pre = SerializeOp.Deserialize<Presentation>(path);
+    //carrega do arquivo
+#region Loader file
+    public void serializeLoader() {
+        pre = SerializeOp.Deserialize<Presentation>(Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml");
         //if(File.Exists(path)) Debug.Log("XML FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE");
         for(int i=0; i< pre.Media.Count; i++) { //lista todas as mídias encontradas no arquivo
             if(pre.Media[i].type.Equals("AUDIO3D")) { //individualmente carrega cada uma seguindo as caracteristicas do tipo
@@ -197,7 +195,6 @@ public class SerializerManager : MonoBehaviour {
                         StartCoroutine(chooseLoopLate(ob, pre.Media[i].loop));
                         //para interact
                         ob.transform.Find("EditMenu/Interact/IsInteractToggle").GetComponent<Toggle>().isOn = pre.Media[i].interactive;
-                        ob.transform.Find("Canvas/InteractiveIcon").gameObject.SetActive(pre.Media[i].interactiveIcon);
                         if(pre.Media[i].interactive) {
                             if(pre.Media[i].startTarget)
                                 ob.transform.Find("EditMenu/Interact/ToggleGroup/StartTargetToggle").GetComponent<Toggle>().isOn = true;
@@ -483,6 +480,9 @@ public class SerializerManager : MonoBehaviour {
             }
         }
     }
+#endregion
+    //salva o arquivo
+#region save file
     public void serializeSave(){
         //cria o cabeçario da apresentação
         pre = new Presentation();
@@ -543,6 +543,7 @@ public class SerializerManager : MonoBehaviour {
         SerializeOp.Serialize(pre, path);
         //if(File.Exists(path)) Debug.Log("XML SAVE"); else Debug.LogError("XML NOT SAVE");
     }
+#endregion
     public void DeleteFiles() {
         string filePath;
         for(int i = 1; i <= 5; i++) {
@@ -552,6 +553,7 @@ public class SerializerManager : MonoBehaviour {
         }
     }
     //carregamento com atrasos propositais
+    #region Late loads
     private IEnumerator chooseFileLate(GameObject ob, string src) {
         yield return new WaitForSeconds(1);
         int index = ob.transform.Find("EditMenu/FolderDropdown").GetComponent<Dropdown>().options.FindIndex((option) => { return option.text.Equals(src); });
@@ -570,19 +572,35 @@ public class SerializerManager : MonoBehaviour {
         ob.transform.Find("EditMenu/End/EndMediaDropdown").GetComponent<Dropdown>().value = index;
     }
     private IEnumerator chooseMuteVolumeLate(GameObject ob, bool mute, string volume) {
-        yield return new WaitForSeconds(1);
-        if(mute)
+        yield return new WaitForSeconds(1.5f);
+        if (mute) {
             ob.transform.Find("EditMenu/MuteToggle").GetComponent<Toggle>().isOn = true;
-        else {
+            if (pre.Media[i].type.Equals("AUDIO3D"))
+                ob.GetComponent<AudioSettings>().setMute();
+            if (pre.Media[i].type.Equals("VIDEO2D"))
+                ob.GetComponent<Video2DSettings>().setMute();
+            //if (pre.Media[i].type.Equals("VIDEO360"))
+                //ob.GetComponent<Video360Settings>().setMute();
+            if (pre.Media[i].type.Equals("PIP"))
+                ob.GetComponent<PIPSettings>().setMute();
+        } else {
             ob.transform.Find("EditMenu/MuteToggle").GetComponent<Toggle>().isOn = false;
             ob.transform.Find("EditMenu/VolumeSlider").GetComponent<Slider>().value = float.Parse(volume);
         }
     }
     private IEnumerator chooseLoopLate(GameObject ob, bool op) {
-        yield return new WaitForSeconds(1);
-        if(op) 
+        yield return new WaitForSeconds(1.5f);
+        if(op) {
             ob.transform.Find("EditMenu/LoopToggle").GetComponent<Toggle>().isOn = true;
-        else
+            if (pre.Media[i].type.Equals("AUDIO3D"))
+                ob.GetComponent<AudioSettings>().setLoop();
+            if (pre.Media[i].type.Equals("VIDEO2D"))
+                ob.GetComponent<Video2DSettings>().setLoop();
+            if (pre.Media[i].type.Equals("VIDEO360"))
+                ob.GetComponent<Video360Settings>().setLoop();
+            if (pre.Media[i].type.Equals("PIP"))
+                ob.GetComponent<PIPSettings>().setLoop();
+        } else
             ob.transform.Find("EditMenu/LoopToggle").GetComponent<Toggle>().isOn = false;
     }
     private IEnumerator chooseInteractLate(GameObject ob, string op) {
@@ -590,4 +608,5 @@ public class SerializerManager : MonoBehaviour {
         int index = ob.transform.Find("EditMenu/Interact/ChooseTargetDropdown").GetComponent<Dropdown>().options.FindIndex((option) => { return option.text.Equals(op); });
         ob.transform.Find("EditMenu/Interact/ChooseTargetDropdown").GetComponent<Dropdown>().value = index;
     }
+    #endregion
 }

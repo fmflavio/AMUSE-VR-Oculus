@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
-using UnityEngine.Video;
 using System.IO;
 using System.Linq;
-using UnityEditor;
-using System;
-using System.Collections;
-using UnityEngine.Networking;
 
 public class AudioSettings: MonoBehaviour {
     /// <summary>
@@ -374,8 +369,8 @@ public class AudioSettings: MonoBehaviour {
             audioSource.volume = volumeSlider.value;
     }
     public void setMute() {
-        if(loopToggle.gameObject.activeSelf &&audioSource.isPlaying)
-            audioSource.mute = muteToggle.isOn;
+        if(loopToggle.gameObject.activeSelf && audioSource.isPlaying) 
+            audioSource.mute = muteToggle.isOn;       
     }
     public void interact() {
         //respostas aos cliques
