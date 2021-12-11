@@ -29,7 +29,6 @@ public class SerializerManager : MonoBehaviour {
         }
     }
     public bool fileExists() {
-        Debug.LogError("endereço: "+path);
         if (!File.Exists(path))
             return false;
         else {

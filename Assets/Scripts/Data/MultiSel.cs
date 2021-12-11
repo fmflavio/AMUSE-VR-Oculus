@@ -1292,6 +1292,6 @@ public class MultiSel : MonoBehaviour{
             File.Delete(folder + "/" + "projeto.xml");
             Debug.Log("File projeto.xml erased");
         } else
-            Debug.LogError("File projeto.xml not erased!");
+            Debug.LogError("File projeto.xml not erased or dosen't exist!");
     }
 }

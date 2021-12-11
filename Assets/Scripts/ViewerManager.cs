@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ViewerManager : MonoBehaviour {
@@ -10,6 +11,11 @@ public class ViewerManager : MonoBehaviour {
     private List<GameObject> medias;
     private bool hide = true;
     static float minutesLocal = -1, secondsLocal = -1;
+
+    public void Start() {
+        if (SceneManager.GetActiveScene().name.StartsWith("Presentation")) 
+            viewer.SetActive(true);
+    }
 
     void Update() {
         hideAllMedias(); 
