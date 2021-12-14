@@ -5,16 +5,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+//[RequireComponent(typeof(SceneManagement))]
+//[RequireComponent(typeof(InstantiateMidia))]
 public class SerializerManager : MonoBehaviour {
-    private string path;
+    public string path;
     private Presentation pre;
     private Media media;
     public SceneManagement sceneManager;
     public InstantiateMidia instantiate;
     private static int i = 0;
-    public void Awake() {
-        if (!Directory.Exists(Application.persistentDataPath + "/temp/"))
-            Directory.CreateDirectory(Application.persistentDataPath + "/temp/");
+
+    private void Start() {
         path = Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml";
     }
     void Update() {
@@ -22,7 +23,7 @@ public class SerializerManager : MonoBehaviour {
             //serializeSave();
         }
         if(Input.GetKeyDown(KeyCode.L)) {
-            //serializeLoader();
+            serializeLoader();
         }
         if(Input.GetKeyDown(KeyCode.C)) {
             //DeleteFiles();
@@ -37,10 +38,17 @@ public class SerializerManager : MonoBehaviour {
             if (pre.Media.Count > 0) return true; else return false;
         }
     }
+    public void serializeLoader(string newPatch) {
+        path = Application.persistentDataPath + "/temp/" + newPatch + ".xml";
+        serializeLoader();
+    }
     //carrega do arquivo
-#region Loader file
+    #region Loader file
     public void serializeLoader() {
-        pre = SerializeOp.Deserialize<Presentation>(Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml");
+        if(path.Equals("") || path == null) //verifica se o endereço foi carregado
+            pre = SerializeOp.Deserialize<Presentation>(Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml");
+        else 
+            pre = SerializeOp.Deserialize<Presentation>(path);
         //if(File.Exists(path)) Debug.Log("XML FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE");
         for(int i=0; i< pre.Media.Count; i++) { //lista todas as mídias encontradas no arquivo
             if(pre.Media[i].type.Equals("AUDIO3D")) { //individualmente carrega cada uma seguindo as caracteristicas do tipo

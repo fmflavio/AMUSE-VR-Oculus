@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using Wacki;
 using System.Linq;
-using System.IO;
-using System;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+//[RequireComponent(typeof(SceneManagement))]
 public class ControllerMode : MonoBehaviour {
     
-    public GameObject menuEdit, menuDelete, MiniMenuEdit, MiniMenuDelete, ViwerMenu, LeftControl, RightControl;
+    public GameObject menuMainHand, menuPresentation, menuEdit, menuDelete, MiniMenuEdit,
+        MiniMenuDelete, ViwerMenu, LeftControl, RightControl;
     public Canvas rightMessage;
     public Text sceneTitleMenu1, sceneTitleMenu2;
     public Button previus1, previus2, next1, next2;
@@ -20,9 +17,8 @@ public class ControllerMode : MonoBehaviour {
     private List<GameObject> listMidias = new List<GameObject>();
     public SceneManagement sceneManager;
 
-    public void Start() {
-        string scene = SceneManager.GetActiveScene().name;
-        if (!scene.Equals("Main")) {
+    public void startControl(string scene) {
+        if (scene.StartsWith("Scene")) { //caso for uma cena de autoria
             sceneTitleMenu1.text = sceneTitleMenu2.text = scene;
             if (scene.Last() == '1') {
                 previus1.gameObject.SetActive(false);
@@ -38,6 +34,12 @@ public class ControllerMode : MonoBehaviour {
                     next2.gameObject.SetActive(true);
                 }
             }
+        }
+        if (scene.StartsWith("Presentation")) { //caso for um cenário presentation (player de projeto)
+            menuMainHand.transform.localScale = new Vector3(0f, 0f, 0f);
+            controllerLeftOnOff();
+            menuPresentation.SetActive(true);
+            rightMessage.GetComponentInChildren<Text>().text = "Interact";
         }
     }
     public int getMode() {

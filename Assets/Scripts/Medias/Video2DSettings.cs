@@ -199,15 +199,15 @@ public class Video2DSettings: MonoBehaviour {
             }
             //para gerar as midias e cenas no interact
             if(isInteractToggle.isOn && chooseTargetDropdown.options.Count != (sceneManager.getMidias().Count + 3) && updateInteract) {
+                chooseTargetDropdown.ClearOptions();
                 listMidias = sceneManager.getMidias();
                 tempList = new List<string>();
-                foreach(GameObject namesMedia in listMidias) {
-                    if(!namesMedia.name.Equals(this.gameObject.name))
+                for (int i = 1; i <= 5; i++)
+                    tempList.Add("Scene " + i);
+                foreach (GameObject namesMedia in listMidias) {
+                    if (!namesMedia.name.Equals(this.gameObject.name))
                         tempList.Add(namesMedia.name);
                 }
-                chooseTargetDropdown.ClearOptions();
-                for(int i = 1; i <= 5; i++)
-                    tempList.Add("Scene " + i);
                 tempList.Remove(SceneManager.GetActiveScene().name);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
@@ -388,7 +388,7 @@ public class Video2DSettings: MonoBehaviour {
     public void interactiveWaitStart() {
         if (isInteractToggle.isOn && startTargetToggle.isOn) {
             string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
-            if (!target.StartsWith("Scene"))  //tratar-se de interação com outra mídia
+            if (!target.StartsWith("Scene") || !target.Equals(""))  //tratar-se de interação com outra mídia
                 foreach (GameObject namesMedia in sceneManager.getMidias())
                     if (target.Equals(namesMedia.name)) {//altera para o valor Not Defined
                         namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 3;
@@ -426,8 +426,12 @@ public class Video2DSettings: MonoBehaviour {
         if (controller.getMode() == controller.VIEWER && isInteractToggle.isOn) {
             string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
             if (target.StartsWith("Scene")) { //se tratar-se de interação com cena
-                serializerManager.serializeSave(); //salva a cena atual
-                SceneManager.LoadScene(target); //carrega a cena
+                if (SceneManager.GetActiveScene().name.StartsWith("Presentation")) //trata-se de apresentação
+                    SceneManager.LoadScene("Presentation " + target.Split(' ')[1]); //carrega a cena da apresentação
+                else {
+                    serializerManager.serializeSave(); //salva a cena atual
+                    SceneManager.LoadScene(target); //carrega a cena
+                }
             } else
                 foreach (GameObject namesMedia in sceneManager.getMidias())
                     if (target.Equals(namesMedia.name))

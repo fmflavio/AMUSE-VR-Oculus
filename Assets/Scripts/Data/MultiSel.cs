@@ -8,12 +8,10 @@ public class MultiSel : MonoBehaviour{
     private Presentation pre;
     private Media media;
     private GameObject ob;
-
+    
     private void Start() {
         folder = Application.persistentDataPath;
         file = "projeto.xml";
-        if (!Directory.Exists(folder))
-            Directory.CreateDirectory(folder);
     }
     void Update() {
         /*
@@ -24,6 +22,10 @@ public class MultiSel : MonoBehaviour{
             importProject();
         }
         */
+    }
+    public void setURLs(string mainFolder, string fileProject) {
+        folder = mainFolder;
+        file = fileProject;
     }
     //le o arquivo xml multisel
     public void importProject() {

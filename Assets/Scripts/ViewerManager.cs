@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+//[RequireComponent(typeof(GameObject))]
+//[RequireComponent(typeof(SerializerManager))]
 public class ViewerManager : MonoBehaviour {
     public Text globalMinutes, globalSeconds;
     public GameObject viewer;
@@ -11,11 +13,6 @@ public class ViewerManager : MonoBehaviour {
     private List<GameObject> medias;
     private bool hide = true;
     static float minutesLocal = -1, secondsLocal = -1;
-
-    public void Start() {
-        if (SceneManager.GetActiveScene().name.StartsWith("Presentation")) 
-            viewer.SetActive(true);
-    }
 
     void Update() {
         hideAllMedias(); 
@@ -25,6 +22,9 @@ public class ViewerManager : MonoBehaviour {
     //controla a exibição ou não da tela de preview
     public void switchPreviewerModeOnOff() {
         viewer.SetActive(!viewer.activeSelf);
+    }
+    public void setPreview(bool active) {
+        viewer.SetActive(active);
     }
     //esconde todas as midias para exibir somente as agendadas para o modo preview
     public void hideAllMedias() {
@@ -98,7 +98,7 @@ public class ViewerManager : MonoBehaviour {
                             localMedias.GetComponentInChildren<Video2DSettings>().setVideo2D();
                         //oculta todos os menus de edição
                         localMedias.transform.Find("EditMenu").gameObject.SetActive(false);
-                    } else {
+                    } else
                         //gerencia o termino da midia
                         if(tempEndMinutes == minutes && tempEndSeconds == seconds && localMedias.activeSelf) {
                             //oculta as midias especiais e limpa da apresentação
@@ -109,7 +109,6 @@ public class ViewerManager : MonoBehaviour {
                             //termina a midia comum
                             localMedias.SetActive(false);
                         }
-                    }
                 }
             }
         }

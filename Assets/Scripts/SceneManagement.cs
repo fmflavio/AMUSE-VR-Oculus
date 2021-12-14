@@ -5,12 +5,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(InstantiateMidia))]
+//[RequireComponent(typeof(InstantiateMidia))]
 public class SceneManagement: MonoBehaviour {
     public List<GameObject> audio3D, images2D, image360, interact, pip, sELight,
         sESteam, sEWind, video2D, video360, textMessage = new List<GameObject>();
     public InstantiateMidia instantiateMidia;
-    public List<GameObject> getMidias() {
+    public List<GameObject> getMidias() { //retorna todas as midias da cena
         List<GameObject> tempList = new List<GameObject>();
         if (video360.Count > 0) tempList.Add(video360[0]);
         if (image360.Count > 0) tempList.Add(image360[0]);
@@ -25,7 +25,7 @@ public class SceneManagement: MonoBehaviour {
         if (interact.Count > 0) foreach (GameObject midia in interact) tempList.Add(midia);
         return tempList;
     }
-    public void deleteSpecial(string midia) {
+    public void deleteSpecial(string midia) {//apaga as midias especiais
         if (midia.Equals("Video360")) {
             video360.Clear(); 
             Camera.main.clearFlags = CameraClearFlags.Color;
@@ -39,7 +39,7 @@ public class SceneManagement: MonoBehaviour {
         if (midia.Equals("PIP"))
             pip.Clear();
     }
-    public bool deleteMidia(GameObject obj) {
+    public bool deleteMidia(GameObject obj) { //deletas as demais midias
             audio3D.Remove(obj);
             images2D.Remove(obj);
             interact.Remove(obj);
@@ -51,7 +51,7 @@ public class SceneManagement: MonoBehaviour {
             return true;
     }
     //editar midias especiais
-    public void editSpecial(string midia) {
+    public void editSpecial(string midia) { //permite a edição de midias especiais
         if (midia.Equals("Video360"))
             if (video360.Count == 0) instantiateMidia.intantiateVideo360();
         if (midia.Equals("Image360"))

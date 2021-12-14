@@ -907,69 +907,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265852986}
   m_CullTransparentMesh: 0
---- !u!1 &320325864
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 320325865}
-  - component: {fileID: 320325866}
-  m_Layer: 0
-  m_Name: Controller Mode Management
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &320325865
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 320325864}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1593704628}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &320325866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 320325864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d05604a1e08194b4faaa8da1fbabae00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuEdit: {fileID: 0}
-  menuDelete: {fileID: 0}
-  MiniMenuEdit: {fileID: 0}
-  MiniMenuDelete: {fileID: 0}
-  ViwerMenu: {fileID: 0}
-  LeftControl: {fileID: 0}
-  RightControl: {fileID: 0}
-  rightMessage: {fileID: 0}
-  sceneTitleMenu1: {fileID: 0}
-  sceneTitleMenu2: {fileID: 0}
-  previus1: {fileID: 0}
-  previus2: {fileID: 0}
-  next1: {fileID: 0}
-  next2: {fileID: 0}
-  NOME: 0
-  EDIT: 1
-  DELETE: 2
-  VIEWER: 3
-  controllerHand: 1
-  sceneManager: {fileID: 0}
 --- !u!1 &361519336
 GameObject:
   m_ObjectHideFlags: 0
@@ -2266,6 +2203,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1628245183}
+        m_MethodName: importProject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1960148495}
         m_MethodName: LoadPresentation
         m_Mode: 1
@@ -2960,6 +2908,71 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348768739}
   m_CullTransparentMesh: 0
+--- !u!1 &1362711279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1362711280}
+  - component: {fileID: 1362711281}
+  m_Layer: 0
+  m_Name: Controller Mode Management
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1362711280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362711279}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1593704628}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1362711281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362711279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d05604a1e08194b4faaa8da1fbabae00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuMainHand: {fileID: 0}
+  menuPresentation: {fileID: 0}
+  menuEdit: {fileID: 0}
+  menuDelete: {fileID: 0}
+  MiniMenuEdit: {fileID: 0}
+  MiniMenuDelete: {fileID: 0}
+  ViwerMenu: {fileID: 0}
+  LeftControl: {fileID: 0}
+  RightControl: {fileID: 0}
+  rightMessage: {fileID: 0}
+  sceneTitleMenu1: {fileID: 0}
+  sceneTitleMenu2: {fileID: 0}
+  previus1: {fileID: 0}
+  previus2: {fileID: 0}
+  next1: {fileID: 0}
+  next2: {fileID: 0}
+  NOME: 0
+  EDIT: 1
+  DELETE: 2
+  VIEWER: 3
+  controllerHand: 1
+  sceneManager: {fileID: 0}
 --- !u!1 &1391703569
 GameObject:
   m_ObjectHideFlags: 0
@@ -3521,8 +3534,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1960148494}
-  - {fileID: 320325865}
   - {fileID: 1628245182}
+  - {fileID: 1362711280}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3556,6 +3569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12aab19107d20734c95a8820759afc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  path: 
   sceneManager: {fileID: 0}
   instantiate: {fileID: 0}
 --- !u!4 &1628245182
@@ -3570,7 +3584,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1593704628}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1628245183
 MonoBehaviour:
@@ -4038,6 +4052,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1960148494}
+  - component: {fileID: 1960148496}
   - component: {fileID: 1960148495}
   m_Layer: 0
   m_Name: Scene Management
@@ -4073,6 +4088,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializerManager: {fileID: 1628245181}
+--- !u!114 &1960148496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960148493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81982decf2f5d80428dceae6fe0c2c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewerManager: {fileID: 0}
+  serializerManager: {fileID: 0}
+  controllerMode: {fileID: 1362711281}
+  multiSel: {fileID: 1628245183}
 --- !u!1 &1968927589
 GameObject:
   m_ObjectHideFlags: 0
@@ -4515,7 +4546,7 @@ PrefabInstance:
         type: 3}
       propertyPath: controllerModeManager
       value: 
-      objectReference: {fileID: 320325866}
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2098804515, guid: 2e858471c17637b498c034b32f793e3b, type: 3}
     - {fileID: 338708463, guid: 2e858471c17637b498c034b32f793e3b, type: 3}

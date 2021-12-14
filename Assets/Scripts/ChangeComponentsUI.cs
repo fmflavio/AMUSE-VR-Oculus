@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-public class ChangeComponentsUI : MonoBehaviour
-{
+//não é mais utilizado
+public class ChangeComponentsUI : MonoBehaviour {
     public Text text;
     private float num;
     void Start() {

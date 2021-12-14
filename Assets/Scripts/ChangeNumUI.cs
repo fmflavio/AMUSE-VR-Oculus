@@ -21,6 +21,7 @@ public class ChangeNumUI : MonoBehaviour {
     [Tooltip("The step increment used to increment / decrement the step value")]
     private int _step = 1;
 
+    //não é utilizado
     void Start() {
         //this.gameObject.GetComponent<Stepper>().value = int.Parse(text.text);
         if (_value < 10 && _value > 0)

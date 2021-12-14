@@ -138,10 +138,10 @@ public class Image2DSettings : MonoBehaviour {
             else
                 durationSteppers.SetActive(true);
     }
-    public void interactiveWaitStart() {
+    public void interactiveWaitStart() { //altera pra not defined
         if(isInteractToggle.isOn && startTargetToggle.isOn) {
             string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
-            if (!target.StartsWith("Scene"))  //tratar-se de interação com outra mídia
+            if (!target.StartsWith("Scene") || !target.Equals(""))  //tratar-se de interação com outra mídia
                 foreach (GameObject namesMedia in sceneManager.getMidias()) 
                     if (target.Equals(namesMedia.name)) {//altera para o valor Not Defined
                         namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 3;
@@ -213,12 +213,12 @@ public class Image2DSettings : MonoBehaviour {
                 chooseTargetDropdown.ClearOptions();
                 listMidias = sceneManager.getMidias();
                 tempList = new List<string>();
+                for (int i = 1; i <= 5; i++)
+                    tempList.Add("Scene " + i);
                 foreach (GameObject namesMedia in listMidias) {
                     if (!namesMedia.name.Equals(this.gameObject.name))
                         tempList.Add(namesMedia.name);
                 }
-                for (int i = 1; i <= 5; i++)
-                    tempList.Add("Scene " + i);
                 tempList.Remove(SceneManager.GetActiveScene().name);
                 chooseTargetDropdown.AddOptions(tempList);
                 chooseTargetDropdown.RefreshShownValue();
@@ -390,8 +390,12 @@ public class Image2DSettings : MonoBehaviour {
         if (controller.getMode() == controller.VIEWER && isInteractToggle.isOn) {
             string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
             if (target.StartsWith("Scene")) { //se tratar-se de interação com cena
-                serializerManager.serializeSave(); //salva a cena atual
-                SceneManager.LoadScene(target); //carrega a cena
+                if (SceneManager.GetActiveScene().name.StartsWith("Presentation")) //trata-se de apresentação
+                    SceneManager.LoadScene("Presentation " + target.Split(' ')[1]); //carrega a cena da apresentação
+                else {
+                    serializerManager.serializeSave(); //salva a cena atual
+                    SceneManager.LoadScene(target); //carrega a cena
+                }  
             } else //se nao, carrega mídia
                 foreach (GameObject namesMedia in sceneManager.getMidias())
                     if (target.Equals(namesMedia.name))
