@@ -45,6 +45,6 @@ public class SceneStartsSettings : MonoBehaviour {
         //inicia os dados do multisel
         //multiSel.setURLs(mainFolder, fileProject);
         //inicia os controles
-        controllerMode.startControl(SceneManager.GetActiveScene().name);
+        //controllerMode.startControl(SceneManager.GetActiveScene().name);
     }
 }

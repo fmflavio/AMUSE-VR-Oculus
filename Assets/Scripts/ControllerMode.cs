@@ -17,7 +17,12 @@ public class ControllerMode : MonoBehaviour {
     private List<GameObject> listMidias = new List<GameObject>();
     public SceneManagement sceneManager;
 
+    public void Start() {
+        startControl(SceneManager.GetActiveScene().name);
+    }
     public void startControl(string scene) {
+        if (scene == null || scene.Equals(""))
+            scene = SceneManager.GetActiveScene().name;
         if (scene.StartsWith("Scene")) { //caso for uma cena de autoria
             sceneTitleMenu1.text = sceneTitleMenu2.text = scene;
             if (scene.Last() == '1') {

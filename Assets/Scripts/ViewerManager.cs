@@ -67,7 +67,7 @@ public class ViewerManager : MonoBehaviour {
     }
     //nucleo do controlador de agendamento de exibição de midias
     private void showMidiasInTime() {
-        if((secondsLocal+(minutesLocal*60)) < (seconds+(minutes*60))) {
+        if((secondsLocal + (minutesLocal * 60)) < (seconds + (minutes * 60))) {
             minutesLocal = minutes;
             secondsLocal = seconds;
             if(viewer.activeSelf) {
