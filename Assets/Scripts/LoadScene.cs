@@ -40,27 +40,13 @@ public class LoadScene: MonoBehaviour {
         SceneManager.LoadScene("Scene 1");
     }
     public void loadProjectAuthor() { //carrega projeto multisel salvo
-        if (File.Exists(Application.persistentDataPath + "/projeto.xml")) //verifica se existe projeto
-            SceneManager.LoadScene("Scene 1");
-        else { //mensagem de erro
-            menuMessage = this.transform.Find("/MainMenu/MainMenuCanvas/MessageMenuCanvas").gameObject;
-            menuMessage.transform.Find("MessageHeader").GetComponent<Text>().text =
-                menuMessage.transform.Find("MessageHeader").GetComponent<Text>().text + " " + Application.persistentDataPath;
-            menuMessage.SetActive(true);
-        }
+        SceneManager.LoadScene("Scene 1");
     }
     public void LoadMain() { // retorna ao menu principal
         SceneManager.LoadScene("Main");
     }
     public void LoadPresentation() { //inicia o modo apresentação
-        if (File.Exists(Application.persistentDataPath + "/projeto.xml")) //verifica se existe projeto
-            SceneManager.LoadScene("Presentation 1");
-        else { //mensagem de erro
-            menuMessage = this.transform.Find("/MainMenu/MainMenuCanvas/MessageMenuCanvas").gameObject;
-            menuMessage.transform.Find("MessageHeader").GetComponent<Text>().text =
-                menuMessage.transform.Find("MessageHeader").GetComponent<Text>().text + " " + Application.persistentDataPath;
-            menuMessage.SetActive(true);
-        }
+        SceneManager.LoadScene("Presentation 1");
     }
     public void exit() { //fecha a aplicação
         Application.Quit();

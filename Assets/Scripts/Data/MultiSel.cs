@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Xml;
 using System.IO;
+using System;
+using System.Globalization;
 
 public class MultiSel : MonoBehaviour{
     private string folder, file;
@@ -28,7 +30,7 @@ public class MultiSel : MonoBehaviour{
         file = fileProject;
     }
     //le o arquivo xml multisel
-    public void importProject() {
+    public void importProject(string file) {
         //na importação é necessário criar arquivos de cena        
         XmlDocument doc = new XmlDocument();//cria o documento xml
         if (File.Exists(folder + "/" + file)) {
@@ -1283,8 +1285,9 @@ public class MultiSel : MonoBehaviour{
         foreach (XmlElement ro in relacoesExternas) 
             elementBody.AppendChild(ro);
         //salvamento do arquivo
-        doc.Save(folder + "/" + file);
-        if (File.Exists(folder + "/" + "projeto.xml"))
+        string newFile = "projeto" + DateTime.Now.ToString("yyMMddHHmm") + ".xml";
+        doc.Save(folder + "/" + newFile);
+        if (File.Exists(folder + "/" + newFile))
             Debug.Log("File projeto.xml written");
         else
             Debug.LogError("File projeto.xml not written!");

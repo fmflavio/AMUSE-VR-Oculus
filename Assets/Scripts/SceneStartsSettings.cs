@@ -15,7 +15,7 @@ public class SceneStartsSettings : MonoBehaviour {
     [SerializeField]
     [Tooltip("Required to Multisel file managements")]
     public MultiSel multiSel;
-    private string tempPatch, mainFolder, fileProject = "projeto.xml";
+    private string tempPatch, mainFolder;
 
     // verifica que a cena corrente e realiza os precarregamentos
     public void Awake() { 

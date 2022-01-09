@@ -4408,6 +4408,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewerManager: {fileID: 273720880}
   serializerManager: {fileID: 192999005}
+  controllerMode: {fileID: 0}
+  multiSel: {fileID: 0}
 --- !u!1 &273839147
 GameObject:
   m_ObjectHideFlags: 0
@@ -14095,28 +14097,6 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 273720879}
         m_MethodName: LoadMain
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 192999005}
-        m_MethodName: DeleteFiles
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 192999003}
-        m_MethodName: deleteProject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
