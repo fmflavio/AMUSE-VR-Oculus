@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class InstantiateMidia: MonoBehaviour {
     private GameObject ob;
     public GameObject sceneManger, parentMidias, image2DPrefab, video2DPrefab, textMessagePrefab,
-        audioPrefab, interactPrefab, sEWindPrefab, sESteamPrefab, sELightPrefab, pIPPrefab, image360Prefab, video360Prefab;
+        audioPrefab, interactPrefab, sEHeatPrefab, sEScentPrefab, sEWindPrefab, sESteamPrefab, sELightPrefab, pIPPrefab, image360Prefab, video360Prefab;
     private float distance = 5;
 
     public void Start() {
@@ -66,6 +66,22 @@ public class InstantiateMidia: MonoBehaviour {
         ob.name = "Interact - " + (list.Count + 1);
         ob.transform.Find("EditMenu/MenuHeader").GetComponent<Text>().text = "Edit Interact - " + (list.Count + 1);
         sceneManger.GetComponent<SceneManagement>().interact.Add(ob);
+    }
+    public void intantiateSEHeat() {
+        ob = Instantiate(sEHeatPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
+        ob.transform.SetParent(parentMidias.transform, false);
+        List<GameObject> list = sceneManger.GetComponent<SceneManagement>().sEHeat;
+        ob.name = "SEHeat - " + (list.Count + 1);
+        ob.transform.Find("EditMenu/MenuHeader").GetComponent<Text>().text = "Edit Sensory Effects Heat - " + (list.Count + 1);
+        sceneManger.GetComponent<SceneManagement>().sEHeat.Add(ob);
+    }
+    public void intantiateSEScent() {
+        ob = Instantiate(sEScentPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
+        ob.transform.SetParent(parentMidias.transform, false);
+        List<GameObject> list = sceneManger.GetComponent<SceneManagement>().sEScent;
+        ob.name = "SEScent - " + (list.Count + 1);
+        ob.transform.Find("EditMenu/MenuHeader").GetComponent<Text>().text = "Edit Sensory Effects Scent - " + (list.Count + 1);
+        sceneManger.GetComponent<SceneManagement>().sEScent.Add(ob);
     }
     public void intantiateSESteam() {
         ob = Instantiate(sESteamPrefab, Camera.main.transform.forward * distance, Quaternion.identity);

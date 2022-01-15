@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 //[RequireComponent(typeof(InstantiateMidia))]
 public class SceneManagement: MonoBehaviour {
-    public List<GameObject> audio3D, images2D, image360, interact, pip, sELight,
+    public List<GameObject> audio3D, images2D, image360, interact, pip, sEHeat, sEScent, sELight,
         sESteam, sEWind, video2D, video360, textMessage = new List<GameObject>();
     public InstantiateMidia instantiateMidia;
     public List<GameObject> getMidias() { //retorna todas as midias da cena
@@ -19,6 +19,8 @@ public class SceneManagement: MonoBehaviour {
         if (images2D.Count>0) foreach (GameObject midia in images2D) tempList.Add(midia);
         if (audio3D.Count > 0) foreach (GameObject midia in audio3D) tempList.Add(midia);
         if (textMessage.Count > 0) foreach (GameObject midia in textMessage) tempList.Add(midia);
+        if (sELight.Count > 0) foreach (GameObject midia in sEHeat) tempList.Add(midia);
+        if (sELight.Count > 0) foreach (GameObject midia in sEScent) tempList.Add(midia);
         if (sELight.Count > 0) foreach (GameObject midia in sELight) tempList.Add(midia);
         if (sESteam.Count > 0) foreach (GameObject midia in sESteam) tempList.Add(midia);
         if (sEWind.Count > 0) foreach (GameObject midia in sEWind) tempList.Add(midia);
@@ -40,15 +42,17 @@ public class SceneManagement: MonoBehaviour {
             pip.Clear();
     }
     public bool deleteMidia(GameObject obj) { //deletas as demais midias
-            audio3D.Remove(obj);
-            images2D.Remove(obj);
-            interact.Remove(obj);
-            sELight.Remove(obj);
-            sESteam.Remove(obj);
-            sEWind.Remove(obj);
-            video2D.Remove(obj);
-            textMessage.Remove(obj);
-            return true;
+        audio3D.Remove(obj);
+        images2D.Remove(obj);
+        interact.Remove(obj);
+        sEHeat.Remove(obj);
+        sEScent.Remove(obj);
+        sELight.Remove(obj);
+        sESteam.Remove(obj);
+        sEWind.Remove(obj);
+        video2D.Remove(obj);
+        textMessage.Remove(obj);
+        return true;
     }
     //editar midias especiais
     public void editSpecial(string midia) { //permite a edição de midias especiais

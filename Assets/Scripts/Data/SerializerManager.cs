@@ -8,7 +8,7 @@ using UnityEngine.UI;
 //[RequireComponent(typeof(SceneManagement))]
 //[RequireComponent(typeof(InstantiateMidia))]
 public class SerializerManager : MonoBehaviour {
-    public string path;
+    private string path;
     private Presentation pre;
     private Media media;
     public SceneManagement sceneManager;
