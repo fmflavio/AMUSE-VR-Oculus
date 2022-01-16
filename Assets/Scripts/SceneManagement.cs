@@ -19,8 +19,8 @@ public class SceneManagement: MonoBehaviour {
         if (images2D.Count>0) foreach (GameObject midia in images2D) tempList.Add(midia);
         if (audio3D.Count > 0) foreach (GameObject midia in audio3D) tempList.Add(midia);
         if (textMessage.Count > 0) foreach (GameObject midia in textMessage) tempList.Add(midia);
-        if (sELight.Count > 0) foreach (GameObject midia in sEHeat) tempList.Add(midia);
-        if (sELight.Count > 0) foreach (GameObject midia in sEScent) tempList.Add(midia);
+        if (sEHeat.Count > 0) foreach (GameObject midia in sEHeat) tempList.Add(midia);
+        if (sEScent.Count > 0) foreach (GameObject midia in sEScent) tempList.Add(midia);
         if (sELight.Count > 0) foreach (GameObject midia in sELight) tempList.Add(midia);
         if (sESteam.Count > 0) foreach (GameObject midia in sESteam) tempList.Add(midia);
         if (sEWind.Count > 0) foreach (GameObject midia in sEWind) tempList.Add(midia);

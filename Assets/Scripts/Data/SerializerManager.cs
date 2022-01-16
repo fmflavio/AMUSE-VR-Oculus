@@ -8,7 +8,7 @@ using UnityEngine.UI;
 //[RequireComponent(typeof(SceneManagement))]
 //[RequireComponent(typeof(InstantiateMidia))]
 public class SerializerManager : MonoBehaviour {
-    private string path;
+    public string path;
     private Presentation pre;
     private Media media;
     public SceneManagement sceneManager;
@@ -49,7 +49,7 @@ public class SerializerManager : MonoBehaviour {
             pre = SerializeOp.Deserialize<Presentation>(Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml");
         else 
             pre = SerializeOp.Deserialize<Presentation>(path);
-        //if(File.Exists(path)) Debug.Log("XML FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE");
+        if(File.Exists(path)) Debug.Log("XML " + path + " FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE - " + path);
         for(int i=0; i< pre.Media.Count; i++) { //lista todas as mídias encontradas no arquivo
             if(pre.Media[i].type.Equals("AUDIO3D")) { //individualmente carrega cada uma seguindo as caracteristicas do tipo
                 instantiate.intantiateAudio3D();
@@ -245,7 +245,81 @@ public class SerializerManager : MonoBehaviour {
                     }
                 }
             }
-            if(pre.Media[i].type.Equals("SELIGHT")) {
+            if (pre.Media[i].type.Equals("SEHEAT")) {
+                instantiate.intantiateSEHeat();
+                foreach (GameObject ob in sceneManager.getMidias()) {
+                    if (ob.name.Equals(pre.Media[i].name)) {
+                        //ob.SetActive(true);//ativar o edit
+                        //Relacionamento Start e End
+                        if (pre.Media[i].rStart.Equals("OnBegin")) {
+                            ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 1;
+                            StartCoroutine(chooseStartMediaLate(ob, pre.Media[i].rMediaStart));
+                        } else if (pre.Media[i].rStart.Equals("OnEnd")) {
+                            ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 2;
+                            StartCoroutine(chooseStartMediaLate(ob, pre.Media[i].rMediaStart));
+                        }
+                        if (pre.Media[i].rEnd.Equals("OnBegin")) {
+                            ob.transform.Find("EditMenu/End/EndDropdown").GetComponent<Dropdown>().value = 1;
+                            StartCoroutine(chooseEndMediaLate(ob, pre.Media[i].rMediaEnd));
+                        } else if (pre.Media[i].rEnd.Equals("OnEnd")) {
+                            ob.transform.Find("EditMenu/End/EndDropdown").GetComponent<Dropdown>().value = 2;
+                            StartCoroutine(chooseEndMediaLate(ob, pre.Media[i].rMediaEnd));
+                        }
+                        //position
+                        ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
+                        //para o duração
+                        ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
+                        ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
+                        //para o delay
+                        ob.transform.Find("EditMenu/Start/DelaySteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDelay.ToString();
+                        ob.transform.Find("EditMenu/Start/DelaySteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDelay.ToString();
+                        //para o loop
+                        StartCoroutine(chooseLoopLate(ob, pre.Media[i].loop));
+                        //para intensidade
+                        ob.transform.Find("EditMenu/IntensitySlider").GetComponent<Slider>().value = float.Parse(pre.Media[i].intensity);
+                    }
+                }
+            }
+            if (pre.Media[i].type.Equals("SESCENT")) {
+                instantiate.intantiateSEScent();
+                foreach (GameObject ob in sceneManager.getMidias()) {
+                    if (ob.name.Equals(pre.Media[i].name)) {
+                        //ob.SetActive(true);//ativar o edit
+                        //Relacionamento Start e End
+                        if (pre.Media[i].rStart.Equals("OnBegin")) {
+                            ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 1;
+                            StartCoroutine(chooseStartMediaLate(ob, pre.Media[i].rMediaStart));
+                        } else if (pre.Media[i].rStart.Equals("OnEnd")) {
+                            ob.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 2;
+                            StartCoroutine(chooseStartMediaLate(ob, pre.Media[i].rMediaStart));
+                        }
+                        if (pre.Media[i].rEnd.Equals("OnBegin")) {
+                            ob.transform.Find("EditMenu/End/EndDropdown").GetComponent<Dropdown>().value = 1;
+                            StartCoroutine(chooseEndMediaLate(ob, pre.Media[i].rMediaEnd));
+                        } else if (pre.Media[i].rEnd.Equals("OnEnd")) {
+                            ob.transform.Find("EditMenu/End/EndDropdown").GetComponent<Dropdown>().value = 2;
+                            StartCoroutine(chooseEndMediaLate(ob, pre.Media[i].rMediaEnd));
+                        }
+                        //position
+                        ob.transform.position = new Vector3(pre.Media[i].px, pre.Media[i].py, pre.Media[i].pz);
+                        //para o LookAt
+                        ob.transform.Find("EditMenu/LookAt").GetComponent<Toggle>().isOn = pre.Media[i].lookAt;
+                        //para o duração
+                        ob.transform.Find("EditMenu/DurationSteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDuration.ToString();
+                        ob.transform.Find("EditMenu/DurationSteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDuration.ToString();
+                        //para o delay
+                        ob.transform.Find("EditMenu/Start/DelaySteppers/StepperMinutes/TimeMinutesText").GetComponent<Text>().text = pre.Media[i].mDelay.ToString();
+                        ob.transform.Find("EditMenu/Start/DelaySteppers/StepperSeconds/TimeSecondText").GetComponent<Text>().text = pre.Media[i].sDelay.ToString();
+                        //para o loop
+                        StartCoroutine(chooseLoopLate(ob, pre.Media[i].loop));
+                        //para intensidade
+                        ob.transform.Find("EditMenu/IntensitySlider").GetComponent<Slider>().value = float.Parse(pre.Media[i].intensity);
+                    }
+                }
+            }
+            if (pre.Media[i].type.Equals("SELIGHT")) {
                 instantiate.intantiateSELight();
                 foreach(GameObject ob in sceneManager.getMidias()) {
                     if(ob.name.Equals(pre.Media[i].name)) {
@@ -501,7 +575,7 @@ public class SerializerManager : MonoBehaviour {
                 string type = ob.transform.Find("EditMenu/Hide/MediaType").GetComponent<Text>().text;
                 media.type = type;
                 media.name = ob.name;
-                if(!type.Equals("INTERACT") && !type.Equals("SELIGHT") && !type.Equals("SESTEAM") && !type.Equals("SEWIND") && !type.Equals("TEXTMESSAGE")) {
+                if(!type.Equals("INTERACT") && !type.Equals("SEHEAT") && !type.Equals("SESCENT") && !type.Equals("SELIGHT") && !type.Equals("SESTEAM") && !type.Equals("SEWIND") && !type.Equals("TEXTMESSAGE")) {
                     string temp = ob.transform.Find("EditMenu/FolderDropdown").GetComponent<Dropdown>().options[ob.transform.Find("EditMenu/FolderDropdown").GetComponent<Dropdown>().value].text;
                     if(temp.StartsWith("Choose ")) media.src = "null"; else media.src = temp;
                 }
@@ -539,7 +613,7 @@ public class SerializerManager : MonoBehaviour {
                         media.interactiveTarget = ob.transform.Find("EditMenu/Interact/ChooseTargetDropdown").GetComponent<Dropdown>().options[ob.transform.Find("EditMenu/Interact/ChooseTargetDropdown").GetComponent<Dropdown>().value].text;
                     }
                 }
-                if(type.Equals("SELIGHT") || type.Equals("SESTEAM") || type.Equals("SEWIND"))
+                if(type.Equals("SELIGHT") || type.Equals("SEHEAT") || type.Equals("SESCENT") || type.Equals("SESTEAM") || type.Equals("SEWIND"))
                     media.intensity = ob.transform.Find("EditMenu/IntensitySlider").GetComponent<Slider>().value.ToString();
                 if(type.Equals("TEXTMESSAGE"))
                     media.textMessage = ob.transform.Find("Canvas/Button/Text").GetComponent<Text>().text;
