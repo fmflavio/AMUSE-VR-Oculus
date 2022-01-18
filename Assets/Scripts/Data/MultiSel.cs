@@ -13,7 +13,7 @@ public class MultiSel : MonoBehaviour{
     
     private void Start() {
         folder = Application.persistentDataPath;
-        file = "projeto.xml";
+        file = "Project.xml";
     }
     void Update() {
         /*
@@ -35,9 +35,9 @@ public class MultiSel : MonoBehaviour{
         XmlDocument doc = new XmlDocument();//cria o documento xml
         if (File.Exists(folder + "/" + file)) {
             doc.Load(folder + "/" + file);//carrega o arquivo
-            Debug.Log("Projeto " + file + " MultiSel carregado!");
+            Debug.Log("Project " + file + " MultiSel carregado!");
         } else {
-            Debug.LogError("Projeto " + file + " MultiSel não encontrado");
+            Debug.LogError("Project " + file + " MultiSel não encontrado");
             return;
         }
         //carrega o no body e cria-se a lista de nos filhos
@@ -1431,7 +1431,7 @@ public class MultiSel : MonoBehaviour{
         foreach (XmlElement ro in relacoesExternas) 
             elementBody.AppendChild(ro);
         //salvamento do arquivo
-        string newFile = "projeto" + DateTime.Now.ToString("yyMMddHHmm") + ".xml";
+        string newFile = "Project" + DateTime.Now.ToString("yyMMddHHmm") + ".xml";
         doc.Save(folder + "/" + newFile);
         if (File.Exists(folder + "/" + newFile))
             Debug.Log("File " + newFile + " written");
@@ -1439,10 +1439,10 @@ public class MultiSel : MonoBehaviour{
             Debug.LogError("File " + newFile + " not written!");
     }
     public void deleteProject() {
-        if (File.Exists(folder + "/" + "projeto.xml")) {
-            File.Delete(folder + "/" + "projeto.xml");
-            Debug.Log("File projeto.xml erased");
+        if (File.Exists(folder + "/" + "Project.xml")) {
+            File.Delete(folder + "/" + "Project.xml");
+            Debug.Log("File Project.xml erased");
         } else
-            Debug.LogError("File projeto.xml not erased or dosen't exist!");
+            Debug.LogError("File Project.xml not erased or dosen't exist!");
     }
 }

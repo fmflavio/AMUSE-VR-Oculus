@@ -74,7 +74,7 @@ namespace UnityEngine.UI.Extensions
 			var canvas = gameObject.GetComponent<Canvas>();
 			
 			if (canvas.renderMode != RenderMode.ScreenSpaceOverlay) {
-				throw new System.Exception("SelectionBox component must be placed on a canvas in Screen Space Overlay mode.");
+				//throw new System.Exception("SelectionBox component must be placed on a canvas in Screen Space Overlay mode.");
 			}
 			
 			var canvasScaler = gameObject.GetComponent<CanvasScaler>();

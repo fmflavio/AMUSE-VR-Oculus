@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace VrGrabber {
 
@@ -448,16 +449,20 @@ namespace VrGrabber {
         }
         //exibir ou ocultar o menu principal ao arrastar objetos
         public void menusOn() {
-            if (controllerModeManager.controllerHand) 
-                CompactMenu.SetActive(true);
-            else 
-                FrontCompactMenu.SetActive(true);
+            if (!SceneManager.GetActiveScene().name.Equals("Main")) {
+                if (controllerModeManager.controllerHand)
+                    CompactMenu.SetActive(true);
+                else
+                    FrontCompactMenu.SetActive(true);
+            }
         }
         public void menusOff() {
-            if (controllerModeManager.controllerHand) 
-                CompactMenu.SetActive(false);
-            else
-                FrontCompactMenu.SetActive(false);
+            if (!SceneManager.GetActiveScene().name.Equals("Main")) {
+                if (controllerModeManager.controllerHand)
+                    CompactMenu.SetActive(false);
+                else
+                    FrontCompactMenu.SetActive(false);
+            }
         }
     }
 }

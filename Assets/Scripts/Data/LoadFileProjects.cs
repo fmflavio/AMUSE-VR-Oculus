@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-public class LoadFileProjects : MonoBehaviour {
+public class LoadFileProjects : MonoBehaviour { 
+    //para carregar o dropbox dos projetos
     private string path;
     private DirectoryInfo folder;
     private FileInfo[] files;
@@ -27,7 +28,7 @@ public class LoadFileProjects : MonoBehaviour {
             names.Add(data.Name);
         folderDropdown.AddOptions(names);
     }
-    public void setMode(int mode) {
+    public void setMode(int mode) { //se é modo player ou autor
         MODE = mode;
     }
     private FileInfo[] GetFolderFiles() { //gera e filtra os arquivos da pasta

@@ -23,7 +23,7 @@ public class SerializerManager : MonoBehaviour {
             //serializeSave();
         }
         if(Input.GetKeyDown(KeyCode.L)) {
-            serializeLoader();
+            //serializeLoader();
         }
         if(Input.GetKeyDown(KeyCode.C)) {
             //DeleteFiles();
@@ -45,11 +45,13 @@ public class SerializerManager : MonoBehaviour {
     //carrega do arquivo
     #region Loader file
     public void serializeLoader() {
-        if(path.Equals("") || path == null) //verifica se o endereço foi carregado
+        //if (File.Exists(path)) Debug.Log("XML " + path + " FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE - " + path);
+        if (!File.Exists(path)) return;
+        if (path.Equals("") || path == null) //verifica se o endereço foi carregado
             pre = SerializeOp.Deserialize<Presentation>(Application.persistentDataPath + "/temp/" + SceneManager.GetActiveScene().name + ".xml");
         else 
             pre = SerializeOp.Deserialize<Presentation>(path);
-        if(File.Exists(path)) Debug.Log("XML " + path + " FOUNDED"); else Debug.LogError("NOT FOUNDED XML FILE - " + path);
+        
         for(int i=0; i< pre.Media.Count; i++) { //lista todas as mídias encontradas no arquivo
             if(pre.Media[i].type.Equals("AUDIO3D")) { //individualmente carrega cada uma seguindo as caracteristicas do tipo
                 instantiate.intantiateAudio3D();
