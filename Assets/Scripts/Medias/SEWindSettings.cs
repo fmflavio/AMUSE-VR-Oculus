@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
+using Uduino;
 
 public class SEWindSettings: MonoBehaviour {
     /// <summary>
@@ -22,19 +23,22 @@ public class SEWindSettings: MonoBehaviour {
     public Canvas canvas, setings;
     private SceneManagement sceneManager;
     private GameObject start, end, durationSteppers;
-    private RawImage rawImage;
+    private Button playButton;
     private Toggle lookAt, loopToggle;
     private Stepper stepperDurationMinutes, stepperDurationSeconds, stepperDelayMinutes, stepperDelaySecond;
-    private Dropdown chooseSceneDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
+    private Dropdown startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider intensitySlider;
-    private Vector3 originalMenuScale;
+    public int pin = 11;
+    private ParticleSystem PS;
 
     void Start() {
         //Settings Getters
         folderMidia = "Icon/";
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
-        rawImage = canvas.GetComponentInChildren<RawImage>();
+        playButton = setings.transform.Find("PlayButton").GetComponent<Button>();
+        PS = canvas.transform.Find("Particle System").GetComponent<ParticleSystem>();
+        PS.Pause();
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
         durationSteppers = setings.transform.Find("DurationSteppers").gameObject;
@@ -65,6 +69,17 @@ public class SEWindSettings: MonoBehaviour {
             durationSteppers.SetActive(false);
         else
             durationSteppers.SetActive(true);
+    }
+    public void setPlaySE() {
+        if (playButton.GetComponentInChildren<Text>().text.Equals("Play")) {
+            playButton.GetComponentInChildren<Text>().text = "Stop";
+            UduinoManager.Instance.digitalWrite(pin, State.HIGH);
+            PS.Play();
+        } else {
+            playButton.GetComponentInChildren<Text>().text = "Play";
+            UduinoManager.Instance.digitalWrite(pin, State.LOW);
+            PS.Pause();
+        }
     }
     public void updateShowComponents() {
         if (sceneManager.getMidias().Count < 2) {//verifica se há mais de uma mídia
