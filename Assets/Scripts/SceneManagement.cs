@@ -5,9 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-//[RequireComponent(typeof(InstantiateMidia))]
 public class SceneManagement: MonoBehaviour {
-    public List<GameObject> audio3D, images2D, image360, interact, pip, sEHeat, sEScent, sELight,
+    public List<GameObject> audio3D, images2D, image360, interact, pip, sEHeat, sEScent, sEVibration, sELight,
         sESteam, sEWind, video2D, video360, textMessage = new List<GameObject>();
     public InstantiateMidia instantiateMidia;
     public List<GameObject> getMidias() { //retorna todas as midias da cena
@@ -21,6 +20,7 @@ public class SceneManagement: MonoBehaviour {
         if (textMessage.Count > 0) foreach (GameObject midia in textMessage) tempList.Add(midia);
         if (sEHeat.Count > 0) foreach (GameObject midia in sEHeat) tempList.Add(midia);
         if (sEScent.Count > 0) foreach (GameObject midia in sEScent) tempList.Add(midia);
+        if (sEVibration.Count > 0) foreach (GameObject midia in sEVibration) tempList.Add(midia);
         if (sELight.Count > 0) foreach (GameObject midia in sELight) tempList.Add(midia);
         if (sESteam.Count > 0) foreach (GameObject midia in sESteam) tempList.Add(midia);
         if (sEWind.Count > 0) foreach (GameObject midia in sEWind) tempList.Add(midia);
@@ -47,6 +47,7 @@ public class SceneManagement: MonoBehaviour {
         interact.Remove(obj);
         sEHeat.Remove(obj);
         sEScent.Remove(obj);
+        sEVibration.Remove(obj);
         sELight.Remove(obj);
         sESteam.Remove(obj);
         sEWind.Remove(obj);

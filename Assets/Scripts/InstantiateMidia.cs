@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class InstantiateMidia: MonoBehaviour {
     private GameObject ob;
     public GameObject sceneManger, parentMidias, image2DPrefab, video2DPrefab, textMessagePrefab,
-        audioPrefab, interactPrefab, sEHeatPrefab, sEScentPrefab, sEWindPrefab, sESteamPrefab, sELightPrefab, pIPPrefab, image360Prefab, video360Prefab;
+        audioPrefab, interactPrefab, sEHeatPrefab, sEScentPrefab, sEVibrationPrefab,
+        sEWindPrefab, sESteamPrefab, sELightPrefab, pIPPrefab, image360Prefab, video360Prefab;
     private float distance = 5;
 
     public void Start() {
@@ -82,6 +83,14 @@ public class InstantiateMidia: MonoBehaviour {
         ob.name = "SEScent - " + (list.Count + 1);
         ob.transform.Find("EditMenu/MenuHeader").GetComponent<Text>().text = "Edit Sensory Effects Scent - " + (list.Count + 1);
         sceneManger.GetComponent<SceneManagement>().sEScent.Add(ob);
+    }
+    public void intantiateSEVibration() {
+        ob = Instantiate(sEVibrationPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
+        ob.transform.SetParent(parentMidias.transform, false);
+        List<GameObject> list = sceneManger.GetComponent<SceneManagement>().sEVibration;
+        ob.name = "SEVibration - " + (list.Count + 1);
+        ob.transform.Find("EditMenu/MenuHeader").GetComponent<Text>().text = "Edit Sensory Effects Vibration - " + (list.Count + 1);
+        sceneManger.GetComponent<SceneManagement>().sEVibration.Add(ob);
     }
     public void intantiateSESteam() {
         ob = Instantiate(sESteamPrefab, Camera.main.transform.forward * distance, Quaternion.identity);
