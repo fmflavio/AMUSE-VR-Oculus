@@ -11444,7 +11444,8 @@ MonoBehaviour:
     type: 3}
   sEScentPrefab: {fileID: 5807140391711488362, guid: 61538898b4a23b848a19ae2985a77087,
     type: 3}
-  sEVibrationPrefab: {fileID: 0}
+  sEVibrationPrefab: {fileID: 7827745467899066600, guid: da3f0308a8280d8479eab8c15d1c9464,
+    type: 3}
   sEWindPrefab: {fileID: 7879905311599570526, guid: 4b0368f938de09e4bae07ee0ddc431dd,
     type: 3}
   sESteamPrefab: {fileID: 6384728204338628853, guid: dca5d0541b92dae4bbb14ac1471bca32,
