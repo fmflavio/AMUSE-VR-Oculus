@@ -45,7 +45,6 @@ public class SEVibrationSettings : MonoBehaviour {
         stepperDelaySecond = setings.transform.Find("Start/DelaySteppers/StepperSeconds").GetComponent<Stepper>();
         endDropdown = setings.transform.Find("End/EndDropdown").GetComponent<Dropdown>();
         endMediaDropdown = setings.transform.Find("End/EndMediaDropdown").GetComponent<Dropdown>();
-        //Settings Setters
     }
     public void Update() {
         updateShowComponents();
@@ -54,6 +53,11 @@ public class SEVibrationSettings : MonoBehaviour {
         if (lookAt.isOn) {
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
+        }
+        //manter vibrando o controle enquanto não tiver o menu de edição aberto
+        if (!setings.isActiveAndEnabled) {
+            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.LTouch);
         }
     }
     public void setToogleLoop() {
@@ -68,6 +72,8 @@ public class SEVibrationSettings : MonoBehaviour {
             InvokeRepeating("vibrate", 0.0f, 0.1f);
         } else {
             playButton.GetComponentInChildren<Text>().text = "Play";
+            OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.LTouch);
         }
             
     }/*

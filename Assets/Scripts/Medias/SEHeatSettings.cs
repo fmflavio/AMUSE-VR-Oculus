@@ -63,6 +63,11 @@ public class SEHeatSettings: MonoBehaviour {
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
         }
+        //manter efeito enquanto não tiver o menu de edição aberto
+        if (!setings.isActiveAndEnabled) {
+            UduinoManager.Instance.digitalWrite(pin, State.HIGH);
+            PS.Play();
+        }
     }
     public void setToogleLoop() {
         if (loopToggle.isOn)
