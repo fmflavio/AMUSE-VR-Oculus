@@ -130,4 +130,9 @@ public class ControllerMode : MonoBehaviour {
     public void controllerOnHand(bool value) {
         controllerHand = value;
     }
+    
+    public void showPassthrough() {
+        
+        
+    }
 }
