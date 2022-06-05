@@ -68,7 +68,7 @@ public class SEHeatSettings: MonoBehaviour {
             transform.Rotate(0, 180, 0);
         }
         //manter efeito enquanto não tiver o menu de edição aberto
-        if (!setings.isActiveAndEnabled) {
+        if (!setings.isActiveAndEnabled && ) {
             //UduinoManager.Instance.digitalWrite(pin, State.HIGH);
             //uduino.digitalWrite(pin, State.HIGH);
             PS.Play();
