@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using Uduino;
+using System.IO.Ports;
 
 public class SEHeatSettings: MonoBehaviour {
     /// <summary>
@@ -30,12 +31,16 @@ public class SEHeatSettings: MonoBehaviour {
     private Slider intensitySlider;
     public int pin = 10;
     private ParticleSystem PS;
+    //private UduinoManager uduino;
+    private ArduinoControl arduino;
 
     void Start() {
         //Settings Getters
         folderMidia = "Icon/";
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
+        //uduino = GameObject.Find("/Management/Uduino").GetComponent<UduinoManager>();
+        arduino = GameObject.Find("/Management/Instantiate Midia Management").GetComponent<ArduinoControl>();
         playButton = setings.transform.Find("PlayButton").GetComponent<Button>();
         PS = canvas.transform.Find("Particle System").GetComponent<ParticleSystem>();
         PS.Pause();
@@ -53,7 +58,6 @@ public class SEHeatSettings: MonoBehaviour {
         stepperDelaySecond = setings.transform.Find("Start/DelaySteppers/StepperSeconds").GetComponent<Stepper>();
         endDropdown = setings.transform.Find("End/EndDropdown").GetComponent<Dropdown>();
         endMediaDropdown = setings.transform.Find("End/EndMediaDropdown").GetComponent<Dropdown>();
-        //Settings Setters
     }
     public void Update() {
         updateShowComponents();
@@ -65,8 +69,10 @@ public class SEHeatSettings: MonoBehaviour {
         }
         //manter efeito enquanto não tiver o menu de edição aberto
         if (!setings.isActiveAndEnabled) {
-            UduinoManager.Instance.digitalWrite(pin, State.HIGH);
+            //UduinoManager.Instance.digitalWrite(pin, State.HIGH);
+            //uduino.digitalWrite(pin, State.HIGH);
             PS.Play();
+            arduino.setMessage(arduino.AQUECEDOR, arduino.LIGAR);
         }
     }
     public void setToogleLoop() {
@@ -78,12 +84,16 @@ public class SEHeatSettings: MonoBehaviour {
     public void setPlaySE() {
         if (playButton.GetComponentInChildren<Text>().text.Equals("Play")) {
             playButton.GetComponentInChildren<Text>().text = "Stop";
-            UduinoManager.Instance.digitalWrite(pin, State.HIGH);
+            //UduinoManager.Instance.digitalWrite(pin, State.HIGH);
+            //uduino.digitalWrite(pin, State.HIGH);
             PS.Play();
+            arduino.setMessage(arduino.AQUECEDOR, arduino.LIGAR);
         } else {
             playButton.GetComponentInChildren<Text>().text = "Play";
-            UduinoManager.Instance.digitalWrite(pin, State.LOW);
+            //UduinoManager.Instance.digitalWrite(pin, State.LOW);
+            //uduino.digitalWrite(pin, State.LOW);
             PS.Pause();
+            arduino.setMessage(arduino.AQUECEDOR, arduino.DESLIGAR);
         }
     }
     public void updateShowComponents() {
