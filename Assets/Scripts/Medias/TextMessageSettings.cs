@@ -32,6 +32,7 @@ public class TextMessageSettings: MonoBehaviour {
     private Dropdown chooseTargetDropdown, startDropdown, startMediaDropdown, endDropdown, endMediaDropdown;
     private Slider scaleSlider;
     private SerializerManager serializerManager;
+    private ArduinoControl arduino;
 
     void Start() {
         //Settings Getters
@@ -60,6 +61,7 @@ public class TextMessageSettings: MonoBehaviour {
         scaleSlider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
         buttonCanvas = canvas.transform.Find("Button").GetComponent<Button>();
         isInteractToggle = setings.transform.Find("Interact/IsInteractToggle").GetComponent<Toggle>();
+        arduino = GameObject.Find("/Management/Instantiate Midia Management").GetComponent<ArduinoControl>();
         //adiciona a primeira lista de cenas ao interact, removendo a cena atual
         tempList = new List<string>();
         for (int i = 1; i <= 5; i++)
@@ -85,12 +87,16 @@ public class TextMessageSettings: MonoBehaviour {
     public void interactiveWaitStart() {
         if (isInteractToggle.isOn && startTargetToggle.isOn) {
             string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
-            if (!target.StartsWith("Scene") || !target.Equals(""))  //tratar-se de interação com outra mídia
+            if (!target.StartsWith("Scene") || !target.Equals("")) {  //tratar-se de interação com outra mídia
+                //destroi a porta de serial dos atuadores
+                arduino.desligaatuadores();
+                arduino.destroirPorta();
                 foreach (GameObject namesMedia in sceneManager.getMidias())
                     if (target.Equals(namesMedia.name)) {//altera para o valor Not Defined
                         namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().value = 3;
                         namesMedia.transform.Find("EditMenu/Start/StartDropdown").GetComponent<Dropdown>().RefreshShownValue();
                     }
+            }
         }
     }
     public void showKeyBoard() {

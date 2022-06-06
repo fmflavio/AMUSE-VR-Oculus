@@ -36,6 +36,7 @@ public class Image2DSettings : MonoBehaviour {
     private Slider scaleSlider;
     private SerializerManager serializerManager;
     private Text buttonMessage;
+    private ArduinoControl arduino;
 
     void Start() {
         folderMidia = "Image2D/";
@@ -68,6 +69,7 @@ public class Image2DSettings : MonoBehaviour {
         scaleSlider = setings.transform.Find("ScaleSlider").GetComponent<Slider>();
         buttonCanvas = canvas.transform.Find("Button").GetComponent<Button>();
         buttonMessage = canvas.GetComponentInChildren<Text>();
+        arduino = GameObject.Find("/Management/Instantiate Midia Management").GetComponent<ArduinoControl>();
         //Folder File Manager
         names = new List<string>();
         completPaths = new List<string>();
@@ -390,6 +392,9 @@ public class Image2DSettings : MonoBehaviour {
         if (controller.getMode() == controller.VIEWER && isInteractToggle.isOn) {
             string target = chooseTargetDropdown.options[chooseTargetDropdown.value].text;
             if (target.StartsWith("Scene")) { //se tratar-se de interação com cena
+                //destroi a porta de serial dos atuadores
+                arduino.desligaatuadores();
+                arduino.destroirPorta();
                 if (SceneManager.GetActiveScene().name.StartsWith("Presentation")) //trata-se de apresentação
                     SceneManager.LoadScene("Presentation " + target.Split(' ')[1]); //carrega a cena da apresentação
                 else {

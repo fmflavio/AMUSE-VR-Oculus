@@ -711,6 +711,8 @@ public class SerializerManager : MonoBehaviour {
     private IEnumerator chooseLoopLate(GameObject ob, bool op) {
         yield return new WaitForSeconds(1.5f);
         if(op) {
+            ///////////////////////////CORRIGIR NO FUTURO////////////////////////////////////////
+            /*
             ob.transform.Find("EditMenu/LoopToggle").GetComponent<Toggle>().isOn = true;
             if (pre.Media[i].type.Equals("AUDIO3D"))
                 ob.GetComponent<AudioSettings>().setLoop();
@@ -720,6 +722,7 @@ public class SerializerManager : MonoBehaviour {
                 ob.GetComponent<Video360Settings>().setLoop();
             if (pre.Media[i].type.Equals("PIP"))
                 ob.GetComponent<PIPSettings>().setLoop();
+            */
         } else
             ob.transform.Find("EditMenu/LoopToggle").GetComponent<Toggle>().isOn = false;
     }
