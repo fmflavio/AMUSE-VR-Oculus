@@ -85,15 +85,7 @@ public class AudioSettings: MonoBehaviour {
     public void setAudio() {
         audioSource.Stop();
         if (folderDropdown.value > 0) {
-            //clip = Resources.Load(folderMidia + names[folderDropdown.value].Substring(0, names[folderDropdown.value].Length - 4)) as AudioClip;
-            //audioSource.Play();
-            //StartCoroutine(GetAudioClip());
-
             StartCoroutine(LoadAudio());
-
-            //Text temp = setings.transform.Find("Temp").GetComponent<Text>();
-            //temp.text = completPaths[folderDropdown.value - 1];
-
             loopToggle.gameObject.SetActive(true);
             volumeSlider.gameObject.SetActive(true);
             muteToggle.gameObject.SetActive(true);
@@ -114,29 +106,6 @@ public class AudioSettings: MonoBehaviour {
         audioSource.clip = request.GetAudioClip();
         audioSource.Play();
     }
-    /*
-    IEnumerator GetAudioClip() {
-        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(completPaths[folderDropdown.value - 1], AudioType.MPEG)) {
-            yield return www.SendWebRequest();
-            AudioClip myClip = DownloadHandlerAudioClip.GetContent(www);
-            audioSource.clip = myClip;
-            audioSource.Play();
-        }
-    }
-    private IEnumerator LoadAudio(string soundPath, string  audioName) {
-        WWW request = GetAudioFromFile(soundPath, audioName);
-        yield return request;
-        clip = request.GetAudioClip();
-        clip.name = audioName;
-        audioSource.clip = clip;
-        audioSource.Play();
-    }
-    private WWW GetAudioFromFile(string soundPath, string filename) {
-        string audioToLoad = string.Format(soundPath + "{0}", filename);
-        WWW request = new WWW(audioToLoad);
-        return request;
-    }
-    */
     private FileInfo[] GetFolderFiles() {
         //path = Application.dataPath + "/Resources/" + folderMidia;
         path = Application.persistentDataPath;
@@ -150,11 +119,8 @@ public class AudioSettings: MonoBehaviour {
     public IEnumerator showTextFuntion() {
         uploadButton.transform.Find("Message").gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
-        //uploadFile = EditorUtility.OpenFilePanel("Open your audio", "", "mp3,wav");
         if (!uploadFile.Equals("")) {
             FileInfo fileinfo = new FileInfo(uploadFile);
-            //FileUtil.CopyFileOrDirectory(uploadFile, Application.dataPath + "/Resources/" + folderMidia + fileinfo.Name);
-            //AssetDatabase.Refresh();
             yield return new WaitForSeconds(1);
             folderDropdown.options.Clear();
             names.Add(fileinfo.Name);

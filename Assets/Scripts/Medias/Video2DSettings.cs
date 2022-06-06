@@ -9,9 +9,6 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class Video2DSettings: MonoBehaviour {
-    /// <summary>
-    /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
-    /// </summary>
 
     string mediaType = "VIDEO2D";
     private FileInfo[] files;
@@ -122,7 +119,6 @@ public class Video2DSettings: MonoBehaviour {
             interativeGroup.SetActive(true);
             volumeSlider.gameObject.SetActive(true);
             muteToggle.gameObject.SetActive(true);
-            
         } else {
             videoPlayer.Stop();
             loopToggle.gameObject.SetActive(false);
@@ -140,7 +136,6 @@ public class Video2DSettings: MonoBehaviour {
         return videoPlayer.isPlaying;
     }
     private FileInfo[] GetFolderFiles() {
-        //path = Application.dataPath + "/Resources/" + folderMidia;
         path = Application.persistentDataPath;
         folder = new DirectoryInfo(@path);
         FileInfo[] Files = folder.GetFiles().Where(f => f.Extension == ".mp4" || f.Extension == ".avi").ToArray(); ;

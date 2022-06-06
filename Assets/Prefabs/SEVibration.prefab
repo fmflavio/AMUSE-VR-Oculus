@@ -1152,7 +1152,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Play
+  m_Text: Stop
 --- !u!1 &1962054593748819016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,7 +1672,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7827745467899066603}
-        m_MethodName: setPlaySE
+        m_MethodName: setPlaySEButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

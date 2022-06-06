@@ -1,14 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
-using Uduino;
 
 public class SEScentSettings: MonoBehaviour {
-    /// <summary>
-    /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
-    /// </summary>
 
     string mediaType = "SESCENT";
     private List<string> tempList;
@@ -32,7 +27,6 @@ public class SEScentSettings: MonoBehaviour {
     private ParticleSystem PS;
 
     void Start() {
-        //Settings Getters
         folderMidia = "Icon/";
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
@@ -53,7 +47,6 @@ public class SEScentSettings: MonoBehaviour {
         stepperDelaySecond = setings.transform.Find("Start/DelaySteppers/StepperSeconds").GetComponent<Stepper>();
         endDropdown = setings.transform.Find("End/EndDropdown").GetComponent<Dropdown>();
         endMediaDropdown = setings.transform.Find("End/EndMediaDropdown").GetComponent<Dropdown>();
-        //Settings Setters
     }
     public void Update() {
         updateShowComponents();
@@ -73,11 +66,9 @@ public class SEScentSettings: MonoBehaviour {
     public void setPlaySE() {
         if (playButton.GetComponentInChildren<Text>().text.Equals("Play")) {
             playButton.GetComponentInChildren<Text>().text = "Stop";
-            UduinoManager.Instance.digitalWrite(pin, State.HIGH);
             PS.Play();
         } else {
             playButton.GetComponentInChildren<Text>().text = "Play";
-            UduinoManager.Instance.digitalWrite(pin, State.LOW);
             PS.Pause();
         }
     }

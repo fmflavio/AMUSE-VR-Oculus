@@ -27,8 +27,6 @@ public class SceneStartsSettings : MonoBehaviour {
         //verifica se existe a pasta de arquivos temporarios como de serialização, caso não haja, cria
         if (!Directory.Exists(tempPatch))
             Directory.CreateDirectory(tempPatch);
-        //retorna o endereço para serialização
-        //serializerManager.path = tempPatch + SceneManager.GetActiveScene().name + ".xml";
         //verifica que tipo de cena foi iniciada
         if (SceneManager.GetActiveScene().name.Equals("Main")) {
             //nao faz nada
@@ -42,9 +40,5 @@ public class SceneStartsSettings : MonoBehaviour {
             //converte o nome presentation para scene relacionado e carrega as midias
             serializerManager.serializeLoader("Scene " + SceneManager.GetActiveScene().name.Split(' ')[1]);
         }
-        //inicia os dados do multisel
-        //multiSel.setURLs(mainFolder, fileProject);
-        //inicia os controles
-        //controllerMode.startControl(SceneManager.GetActiveScene().name);
     }
 }

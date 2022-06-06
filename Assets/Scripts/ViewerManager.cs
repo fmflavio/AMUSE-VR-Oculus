@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-//[RequireComponent(typeof(GameObject))]
-//[RequireComponent(typeof(SerializerManager))]
 public class ViewerManager : MonoBehaviour {
     public Text globalMinutes, globalSeconds;
     public GameObject viewer;
@@ -13,6 +11,11 @@ public class ViewerManager : MonoBehaviour {
     private List<GameObject> medias;
     private bool hide = true;
     static float minutesLocal = -1, secondsLocal = -1;
+    private ArduinoControl arduino;
+
+    void Start() {
+        arduino = GameObject.Find("/Management/Instantiate Midia Management").GetComponent<ArduinoControl>();
+    }
 
     void Update() {
         hideAllMedias(); 
@@ -30,11 +33,17 @@ public class ViewerManager : MonoBehaviour {
     public void hideAllMedias() {
         if (viewer.activeSelf && hide) {
             medias = this.GetComponent<SceneManagement>().getMidias();
-            foreach (GameObject localMedias in medias)
+            foreach (GameObject localMedias in medias) {
+                if (localMedias.name.Equals("SEVibration")) {
+                    OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.RTouch);
+                    OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.LTouch);
+                }
                 localMedias.SetActive(false);
+            }
             Camera.main.clearFlags = CameraClearFlags.Color;
             Camera.main.backgroundColor = Color.black;
             hide = false;
+            arduino.desligaatuadores();
         } else
             if (!viewer.activeSelf)
             hide = true;
@@ -46,6 +55,15 @@ public class ViewerManager : MonoBehaviour {
             foreach(GameObject localMedias in medias) {
                 localMedias.SetActive(false);
                 localMedias.SetActive(true);
+                //iniciar os efeitos sensoriais
+                if (localMedias.name.StartsWith("SEHeat"))
+                    arduino.setMessage(arduino.AQUECEDOR, arduino.LIGAR);
+                if (localMedias.name.StartsWith("SEWind"))
+                    arduino.setMessage(arduino.VENTILADOR, arduino.LIGAR);
+                if (localMedias.name.Equals("SEVibration")) {
+                    OVRInput.SetControllerVibration(0.3f, 0.3f, OVRInput.Controller.RTouch);
+                    OVRInput.SetControllerVibration(0.3f, 0.3f, OVRInput.Controller.LTouch);
+                }
             }
         }
     }
@@ -96,19 +114,34 @@ public class ViewerManager : MonoBehaviour {
                             localMedias.GetComponentInChildren<PIPSettings>().setPIP();
                         if(localMedias.name.StartsWith("Video2D"))
                             localMedias.GetComponentInChildren<Video2DSettings>().setVideo2D();
+                        //iniciar os efeitos sensoriais
+                        if (localMedias.name.StartsWith("SEHeat"))
+                            arduino.setMessage(arduino.AQUECEDOR, arduino.LIGAR);
+                        if (localMedias.name.StartsWith("SEWind"))
+                            arduino.setMessage(arduino.VENTILADOR, arduino.LIGAR);
                         //oculta todos os menus de edição
                         localMedias.transform.Find("EditMenu").gameObject.SetActive(false);
-                    } else
+                    } else {
                         //gerencia o termino da midia
-                        if(tempEndMinutes == minutes && tempEndSeconds == seconds && localMedias.activeSelf) {
+                        if (tempEndMinutes == minutes && tempEndSeconds == seconds && localMedias.activeSelf) {
                             //oculta as midias especiais e limpa da apresentação
-                            if(localMedias.name.Equals("Image360") || localMedias.name.Equals("Video360")) {
+                            if (localMedias.name.Equals("Image360") || localMedias.name.Equals("Video360")) {
                                 Camera.main.clearFlags = CameraClearFlags.Color;
                                 Camera.main.backgroundColor = Color.black;
+                            }
+                            //parar os efeitos sensoriais
+                            if (localMedias.name.StartsWith("SEHeat"))
+                                arduino.setMessage(arduino.AQUECEDOR, arduino.DESLIGAR);
+                            if (localMedias.name.StartsWith("SEWind"))
+                                arduino.setMessage(arduino.VENTILADOR, arduino.DESLIGAR);
+                            if (localMedias.name.Equals("SEVibration")) {
+                                OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.RTouch);
+                                OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.LTouch);
                             }
                             //termina a midia comum
                             localMedias.SetActive(false);
                         }
+                    }
                 }
             }
         }

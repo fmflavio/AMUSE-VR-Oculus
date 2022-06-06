@@ -2,7 +2,7 @@
 using System.IO.Ports;
 
 public class ArduinoControl : MonoBehaviour {
-    public int AQUECEDOR = 10, VENTILADOR = 11, LIGAR = 1, DESLIGAR = 2, frequencia = 9600;
+    public int AQUECEDOR = 10, VENTILADOR = 11, LIGAR = 1, DESLIGAR = 0, frequencia = 9600;
     public string portaCom = "\\\\.\\COM6";
     private static SerialPort porta;
 
@@ -65,9 +65,20 @@ public class ArduinoControl : MonoBehaviour {
             } else
                 porta.Write("d");
         }
-        //if (portaEscolhida == VENTILADOR && acao == DESLIGAR) porta.Write("d");
     }
     public void destroirPorta() {
         porta.Close();
+    }
+    public void desligaatuadores() {
+        if (porta.IsOpen) {
+            try {
+                porta.Write("b");
+                porta.Write("d");
+                OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.RTouch);
+                OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.LTouch);
+            } catch (System.Exception e) {
+                Debug.LogError("Deu ruim ao desligar: " + e.ToString());
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
@@ -54,10 +53,10 @@ public class SEVibrationSettings : MonoBehaviour {
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
         }
-        //manter vibrando o controle enquanto não tiver o menu de edição aberto
-        if (!setings.isActiveAndEnabled) {
-            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.LTouch);
+        //mantem vibrando enquanto estiver ativo
+        if (canvas.gameObject.activeSelf && playButton.GetComponentInChildren<Text>().text.Equals("Stop")) {
+            OVRInput.SetControllerVibration(0.3f, 0.3f, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(0.3f, 0.3f, OVRInput.Controller.LTouch);
         }
     }
     public void setToogleLoop() {
@@ -66,36 +65,15 @@ public class SEVibrationSettings : MonoBehaviour {
         else
             durationSteppers.SetActive(true);
     }
-    public void setPlaySE() {
+    public void setPlaySEButton() {
         if (playButton.GetComponentInChildren<Text>().text.Equals("Play")) {
             playButton.GetComponentInChildren<Text>().text = "Stop";
-            InvokeRepeating("vibrate", 0.0f, 0.1f);
+            OVRInput.SetControllerVibration(0.3f, 0.3f, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(0.3f, 0.3f, OVRInput.Controller.LTouch);
         } else {
             playButton.GetComponentInChildren<Text>().text = "Play";
             OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.RTouch);
             OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.LTouch);
-        }
-            
-    }/*
-    public void setPlaySE() {
-        if (playButton.GetComponentInChildren<Text>().text.Equals("Play")) {
-            playButton.GetComponentInChildren<Text>().text = "Stop";
-            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.LTouch);  
-        } else {
-            playButton.GetComponentInChildren<Text>().text = "Play";
-            OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.LTouch);
-        }
-    }*/
-    void vibrate() {
-        if (playButton.GetComponentInChildren<Text>().text.Equals("Stop")) {
-            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(1.0f, 1.0f, OVRInput.Controller.LTouch);  
-        } else {
-            OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(0.0f, 0.0f, OVRInput.Controller.LTouch);
-            return;
         }
     }
     public void updateShowComponents() {

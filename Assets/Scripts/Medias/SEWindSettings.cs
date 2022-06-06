@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
-using Uduino;
-using System.IO.Ports;
 
 public class SEWindSettings: MonoBehaviour {
-    /// <summary>
-    /// para transladar a camera transform.Translate(Time.deltaTime, 0, 0, Camera.main.transform);
-    /// </summary>
 
     string mediaType = "SEWIND";
     private List<string> tempList;
@@ -31,19 +26,17 @@ public class SEWindSettings: MonoBehaviour {
     private Slider intensitySlider;
     public int pin = 11;
     private ParticleSystem PS;
-    //private UduinoManager uduino;
     private ArduinoControl arduino;
 
     void Start() {
-        //Settings Getters
         folderMidia = "Icon/";
         controller = GameObject.Find("/Management/Controller Mode Management").GetComponent<ControllerMode>();
         sceneManager = GameObject.Find("/Management/Scene Management").GetComponent<SceneManagement>();
-        //uduino = GameObject.Find("/Management/Uduino").GetComponent<UduinoManager>();
         arduino = GameObject.Find("/Management/Instantiate Midia Management").GetComponent<ArduinoControl>();
         playButton = setings.transform.Find("PlayButton").GetComponent<Button>();
         PS = canvas.transform.Find("Particle System").GetComponent<ParticleSystem>();
-        PS.Pause();
+        PS.Play();
+        StartCoroutine(startSELate());
         start = setings.transform.Find("Start").gameObject;
         end = setings.transform.Find("End").gameObject;
         durationSteppers = setings.transform.Find("DurationSteppers").gameObject;
@@ -67,13 +60,6 @@ public class SEWindSettings: MonoBehaviour {
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
         }
-        //manter efeito enquanto não tiver o menu de edição aberto
-        if (!setings.isActiveAndEnabled) {
-            //UduinoManager.Instance.digitalWrite(pin, State.HIGH);
-            //uduino.digitalWrite(pin, State.HIGH);
-            PS.Play();
-            arduino.setMessage(arduino.VENTILADOR, arduino.LIGAR);
-        }
     }
     public void setToogleLoop() {
         if (loopToggle.isOn)
@@ -81,17 +67,13 @@ public class SEWindSettings: MonoBehaviour {
         else
             durationSteppers.SetActive(true);
     }
-    public void setPlaySE() {
+    public void setPlaySEButton() {
         if (playButton.GetComponentInChildren<Text>().text.Equals("Play")) {
             playButton.GetComponentInChildren<Text>().text = "Stop";
-            //UduinoManager.Instance.digitalWrite(pin, State.HIGH);
-            //uduino.digitalWrite(pin, State.HIGH);
             PS.Play();
             arduino.setMessage(arduino.VENTILADOR, arduino.LIGAR);
         } else {
             playButton.GetComponentInChildren<Text>().text = "Play";
-            //UduinoManager.Instance.digitalWrite(pin, State.LOW);
-            //uduino.digitalWrite(pin, State.LOW);
             PS.Pause();
             arduino.setMessage(arduino.VENTILADOR, arduino.DESLIGAR);
         }
@@ -281,5 +263,9 @@ public class SEWindSettings: MonoBehaviour {
                     sceneManager.deleteMidia(namesMedia);
                     Destroy(gameObject);
                 }
+    }
+    private IEnumerator startSELate() {
+        yield return new WaitForSeconds(0.5f);
+        arduino.setMessage(arduino.VENTILADOR, arduino.LIGAR);
     }
 }

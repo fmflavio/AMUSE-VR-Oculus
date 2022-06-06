@@ -6,11 +6,7 @@ using UnityEngine.UI;
 public class LoadScene: MonoBehaviour {
     public SerializerManager serializerManager;
     private GameObject menuMessage;
-    /*
-    public void Awake() {
-        //serializerManager.serializeLoader();
-    }
-    */
+
     //carrega a proxima cena do modo autor
     public void nextScene() {
         serializerManager.serializeSave();
