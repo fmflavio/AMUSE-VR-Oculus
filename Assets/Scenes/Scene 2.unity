@@ -16918,12 +16918,12 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Tarefas - construir uma apresenta\xE7\xE3o interativa da cidade do RJ:\r\n1
-    - Inserir um v\xEDdeo 360 na primeira cena.\r\n2 - Inserir um v\xEDdeo 360 na
-    segunda cena.\r\n3 - Inserir na primeira cena uma imagem 2D com atraso (Delay)
-    de apenas 01 segundo.\r\n4 \u2013 Editar a imagem 2D da primeira cena relacionando-a
-    com o in\xEDcio da segunda cena.\r\n5 - Na cena 2, incluir algum efeito sensorial
-    como calor ou vento com dura\xE7\xE3o de apenas 03 segundos.\r\n6 - Entrar em
-    modo de pr\xE9-visualiza\xE7\xE3o (Previewer mode), para apresenta-la.\r"
+    - Inserir um v\xEDdeo 360 na primeira cena.\n2 - Inserir outro v\xEDdeo 360 na
+    segunda cena.\n3 - Inserir na primeira cena uma imagem 2D com atraso (Delay)
+    de 01 segundo.\n4 \u2013 Editar a imagem 2D da primeira cena, tornando-a interativa
+    para iniciar a segunda cena.\n5 - Na segunda cena, incluir algum efeito sensorial
+    como calor ou vento com dura\xE7\xE3o de 03 segundos.\n6 - Na primeira cena,
+    entrar em modo de pr\xE9-visualiza\xE7\xE3o (Preview mode), para testar sua aplica\xE7\xE3o."
 --- !u!222 &1518180892
 CanvasRenderer:
   m_ObjectHideFlags: 0
